@@ -818,8 +818,8 @@
           <button onclick="openLeaderboardModal()" class="flex-1 sm:flex-initial px-5 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 font-game font-bold text-xs sm:text-sm tracking-wide shadow-md shadow-amber-500/25 hover:scale-105 active:scale-95 transition cursor-pointer">
             <i class="fa-solid fa-trophy mr-1.5 text-amber-900"></i> Papan Peringkat
           </button>
-          <button onclick="openReferensiModal()" class="flex-1 sm:flex-initial px-5 py-3.5 rounded-2xl bg-teal-50 hover:bg-teal-100 text-teal-800 font-semibold text-xs sm:text-sm border border-teal-300 transition cursor-pointer">
-            <i class="fa-solid fa-book-open-reader mr-1.5 text-teal-600"></i> Sumber Referensi
+          <button onclick="openReferensiModal()" class="flex-1 sm:flex-initial px-5 py-3.5 rounded-2xl bg-teal-50 hover:bg-teal-100 text-teal-800 font-semibold text-xs sm:text-sm border border-teal-300 transition cursor-pointer" title="Daftar Pustaka & Referensi Lengkap">
+            <i class="fa-solid fa-book-open-reader mr-1.5 text-teal-600"></i> Daftar Pustaka
           </button>
           <button onclick="openLearningGoalsModal()" class="flex-1 sm:flex-initial px-5 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm border border-slate-300 transition cursor-pointer">
             <i class="fa-solid fa-book-bookmark text-emerald-700 mr-1.5"></i> Refleksi CP & TP
@@ -831,46 +831,77 @@
   </main>
 
   <!-- MODAL: INFO PENGEMBANG -->
-  <div id="modalDeveloper" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="bg-white border border-emerald-200 max-w-md w-full rounded-3xl p-6 sm:p-8 shadow-2xl relative">
-      <button onclick="closeModal('modalDeveloper')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 text-xl cursor-pointer">
+  <div id="modalDeveloper" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white border-2 border-emerald-300 max-w-lg w-full rounded-3xl p-6 sm:p-7 shadow-2xl relative max-h-[88vh] overflow-y-auto">
+      <button onclick="closeModal('modalDeveloper')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 text-xl cursor-pointer" aria-label="Tutup Info Pengembang">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
       <div class="text-center space-y-4">
-        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white flex items-center justify-center text-3xl mx-auto shadow-md shadow-emerald-500/30">
-          <i class="fa-solid fa-code"></i>
+        <!-- Foto Profil Pengembang (Proporsi Potret Setengah Badan Terlihat Jelas) -->
+        <div class="relative w-36 h-48 sm:w-44 sm:h-56 mx-auto">
+          <div class="w-full h-full rounded-3xl overflow-hidden border-4 border-emerald-400 shadow-xl shadow-emerald-700/20 bg-emerald-50">
+            <img 
+              src="https://raw.githubusercontent.com/agisacademy17/asetgiminvestigasipasarnusantara/main/IMG-20250804-WA0017.jpg" 
+              alt="Foto Agis Kusmawan, S.Pd., Gr." 
+              class="w-full h-full object-cover object-[center_15%] transition-transform duration-300 hover:scale-105"
+              loading="eager"
+              onerror="this.onerror=null; this.src='https://github.com/agisacademy17/asetgiminvestigasipasarnusantara/raw/main/IMG-20250804-WA0017.jpg';"
+            />
+          </div>
+          <div class="absolute -bottom-2 -right-2 w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-base shadow-md border-2 border-white" title="Pendidik & Pengembang">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
         </div>
 
         <div>
-          <h3 class="font-game text-xl font-bold text-slate-800">Informasi Pengembang</h3>
-          <p class="text-xs text-slate-500 mt-0.5">Media Gim Pembelajaran Matematika SMP Fase D</p>
+          <h3 class="font-game text-xl sm:text-2xl font-bold text-slate-800">Informasi Pengembang</h3>
+          <p class="text-xs text-emerald-700 font-semibold mt-0.5">Media Gim Edukasi Matematika SMP Fase D</p>
         </div>
 
-        <div class="bg-emerald-50/80 rounded-2xl p-4 border border-emerald-200 text-left space-y-2 text-xs sm:text-sm text-slate-700">
-          <div class="flex justify-between items-center py-1 border-b border-emerald-100">
-            <span class="text-slate-500">Materi:</span>
-            <span class="font-bold text-emerald-800">Perbandingan (Rasio) Kelas 7</span>
+        <!-- Profil Utama Pengembang -->
+        <div class="bg-emerald-50/80 rounded-2xl p-4 border border-emerald-200 text-left space-y-2 text-xs sm:text-sm text-slate-700 shadow-xs">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1 border-b border-emerald-100 gap-0.5">
+            <span class="text-slate-500 text-xs">Nama Pengembang:</span>
+            <span class="font-bold text-emerald-950 font-game text-sm sm:text-base">Agis Kusmawan, S.Pd., Gr.</span>
           </div>
-          <div class="flex justify-between items-center py-1 border-b border-emerald-100">
-            <span class="text-slate-500">Kurikulum:</span>
-            <span class="font-bold text-emerald-800">Kurikulum Merdeka (Fase D)</span>
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1 border-b border-emerald-100 gap-0.5">
+            <span class="text-slate-500 text-xs">Instansi:</span>
+            <span class="font-bold text-slate-800">SMP Negeri 1 Bogor</span>
           </div>
-          <div class="flex justify-between items-center py-1 border-b border-emerald-100">
-            <span class="text-slate-500">Desain Integratif:</span>
-            <span class="font-semibold text-slate-800">Ekologi Konservasi & Logika Numerasi</span>
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1 border-b border-emerald-100 gap-0.5">
+            <span class="text-slate-500 text-xs">Mata Pelajaran:</span>
+            <span class="font-semibold text-emerald-800">Matematika</span>
           </div>
-          <div class="flex justify-between items-center py-1">
-            <span class="text-slate-500">Arsitektur:</span>
-            <span class="font-semibold text-slate-800">Web Interaktif (Single File Application)</span>
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1 gap-0.5">
+            <span class="text-slate-500 text-xs">Tahun Pembuatan:</span>
+            <span class="font-bold text-amber-700 font-mono">2026</span>
           </div>
+        </div>
+
+        <!-- Prestasi & Pengalaman -->
+        <div class="bg-amber-50/80 rounded-2xl p-4 border border-amber-200 text-left space-y-2.5">
+          <h4 class="font-game text-xs sm:text-sm font-bold text-amber-900 flex items-center gap-2">
+            <i class="fa-solid fa-award text-amber-500 text-sm"></i>
+            <span>Prestasi & Pengalaman:</span>
+          </h4>
+          <ul class="space-y-2 text-xs text-slate-700">
+            <li class="flex items-start gap-2 leading-relaxed">
+              <i class="fa-solid fa-circle-check text-emerald-600 mt-1 text-[11px] shrink-0"></i>
+              <span>Terpilih <b>135 Konten Pembelajaran Interaktif Terbaik</b> Kategori Gim Edukasi Direktorat PNFI.</span>
+            </li>
+            <li class="flex items-start gap-2 leading-relaxed">
+              <i class="fa-solid fa-book-bookmark text-teal-600 mt-1 text-[11px] shrink-0"></i>
+              <span>Penulis Buku <i>Smart Book: Matematika 11 untuk SMA/MA/SMK/MAK</i> diterbitkan oleh <b>Intan Pariwara</b>.</span>
+            </li>
+          </ul>
         </div>
 
         <p class="text-xs text-slate-500 leading-relaxed italic">
           "Menghubungkan kecintaan terhadap keanekaragaman hayati nusantara dengan kekuatan penalaran matematika kontekstual."
         </p>
 
-        <button onclick="closeModal('modalDeveloper')" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-sm cursor-pointer">
+        <button onclick="closeModal('modalDeveloper')" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs transition shadow-sm cursor-pointer">
           Tutup Informasi
         </button>
       </div>
@@ -1099,22 +1130,33 @@
 
       <!-- Photograph & Attribution -->
       <div class="rounded-2xl overflow-hidden border border-emerald-200 bg-slate-50 mb-4 shadow-sm">
-        <div class="relative w-full h-52 sm:h-60 bg-slate-100 flex items-center justify-center overflow-hidden">
+        <div class="relative w-full h-52 sm:h-64 bg-slate-100 flex items-center justify-center overflow-hidden">
           <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Rasamala_%28Altingia_excelsa_Noronha%29.jpg" 
+            src="https://lh3.googleusercontent.com/d/1FrDzCt_Xb_rpxnJiSTaE5ns_san3EW7F" 
             alt="Pohon Rasamala (Altingia excelsa Noronha)" 
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
             loading="lazy"
             onerror="this.onerror=null; this.src='https://placehold.co/600x400/059669/ffffff?text=Pohon+Rasamala+(Altingia+excelsa)';"
           >
           <div class="absolute bottom-2 left-2 bg-black/65 backdrop-blur-sm text-white px-2.5 py-1 rounded-lg text-[10px] flex items-center gap-1.5">
             <i class="fa-solid fa-camera text-emerald-400"></i>
-            <span>Pohon Rasamala di Habitat Hutan Tropis</span>
+            <span>Pohon Rasamala (Altingia excelsa)</span>
           </div>
         </div>
         <div class="p-2.5 text-[11px] text-slate-500 bg-emerald-50/60 border-t border-emerald-100 flex flex-col sm:flex-row justify-between sm:items-center gap-1">
-          <span><b>Sumber Foto:</b> Wikimedia Commons (Dokumentasi: <i>Hiroshi sanjuro</i>)</span>
-          <span class="text-emerald-800 font-medium">Lisensi: CC BY-SA 4.0 International</span>
+          <span class="flex items-center gap-1">
+            <b>Sumber Foto:</b>
+            <a 
+              href="https://www.facebook.com/kebunraya.id/posts/pernah-dengar-tentang-pohon-rasamalapohon-rasamala-merupakan-salah-satu-anggota-/497909505002349/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="text-emerald-700 hover:text-emerald-900 underline font-semibold flex items-center gap-1"
+            >
+              <span>Kebun Raya Indonesia (@kebunraya.id)</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+            </a>
+          </span>
+          <span class="text-emerald-800 font-medium">Dokumentasi Konservasi Botani</span>
         </div>
       </div>
 
@@ -1217,6 +1259,103 @@
       <p id="alertMessage" class="text-xs text-slate-600 leading-relaxed mb-4">Pesan edukasi</p>
       <button onclick="closeModal('modalAlert')" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs transition shadow-sm cursor-pointer">
         Mengerti
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: BERHASIL & KLAIM HADIAH -->
+  <div id="modalSuccessClaim" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white border-2 border-emerald-400 max-w-md w-full rounded-3xl p-6 sm:p-7 text-center shadow-2xl relative animate-float">
+      <!-- Icon Trophy / Gift -->
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-300 text-amber-950 mx-auto mb-3 flex items-center justify-center text-3xl shadow-lg shadow-amber-500/30">
+        <i class="fa-solid fa-gift animate-bounce"></i>
+      </div>
+
+      <span class="px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold tracking-wider uppercase border border-emerald-300">
+        Tantangan Berhasil Ditaklukkan!
+      </span>
+
+      <h3 class="font-game text-2xl font-black text-slate-800 mt-2.5 mb-1" id="successModalTitle">
+        Hebat, Perhitungan Tepat!
+      </h3>
+
+      <!-- Penjelasan Konsep KaTeX -->
+      <div class="bg-emerald-50/70 rounded-2xl p-3.5 border border-emerald-200 text-left my-3.5">
+        <span class="text-[11px] font-bold text-emerald-900 block mb-1 flex items-center gap-1.5">
+          <i class="fa-solid fa-circle-check text-emerald-600"></i> Penjelasan Matematis:
+        </span>
+        <div id="successExplainText" class="text-xs text-slate-700 leading-relaxed font-medium">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+
+      <!-- Kotak Hadiah Poin & Lencana -->
+      <div class="bg-amber-50/90 rounded-2xl p-3 border-2 border-dashed border-amber-300 mb-4 flex items-center justify-around">
+        <div class="text-center">
+          <span class="text-[10px] text-amber-700 font-bold block uppercase tracking-wider">Hadiah Ekspedisi</span>
+          <span id="claimRewardPointsDisplay" class="font-game text-2xl font-black text-amber-600 mt-0.5 block">+200 Poin</span>
+        </div>
+        <div id="perfectBadgeNotify" class="text-center border-l border-amber-200 pl-3">
+          <span class="text-[10px] text-emerald-700 font-bold block uppercase tracking-wider">Bonus Prestasi</span>
+          <span class="text-xs font-bold text-emerald-800 mt-1 block flex items-center justify-center gap-1">
+            <span>⭐ Lencana Sempurna</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Tombol Klaim Hadiah & Lanjut -->
+      <button onclick="handleClaimRewardAndAdvance()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-teal-700 text-white font-game font-bold text-sm tracking-wide shadow-lg shadow-emerald-500/30 transition transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+        <i class="fa-solid fa-award text-lg"></i>
+        <span>Klaim Hadiah & Lanjut Level Berikutnya</span>
+        <i class="fa-solid fa-arrow-right ml-1"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: PERINGATAN SALAH & ULANGI TANTANGAN -->
+  <div id="modalWrongRetry" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white border-2 border-rose-400 max-w-md w-full rounded-3xl p-6 text-center shadow-2xl relative">
+      <div class="w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 mx-auto mb-3 flex items-center justify-center text-3xl shadow-md shadow-rose-500/20">
+        <i class="fa-solid fa-triangle-exclamation animate-pulse"></i>
+      </div>
+
+      <span class="px-3 py-1 rounded-full bg-rose-100 text-rose-800 text-[10px] font-bold uppercase tracking-wider border border-rose-200">
+        Perhitungan Belum Tepat
+      </span>
+
+      <h3 class="font-game text-xl sm:text-2xl font-black text-slate-800 mt-2 mb-1">
+        Aduh, Takaran Masih Keliru!
+      </h3>
+
+      <div class="bg-rose-50/80 rounded-2xl p-3.5 border border-rose-200 text-left my-3">
+        <span class="text-[11px] font-bold text-rose-900 block mb-1 flex items-center gap-1.5">
+          <i class="fa-solid fa-circle-xmark text-rose-600"></i> Evaluasi Kesalahan:
+        </span>
+        <div id="wrongExplainText" class="text-xs text-slate-700 leading-relaxed">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+
+      <!-- Info Nyawa & Penalti Poin -->
+      <div class="grid grid-cols-3 gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs mb-4">
+        <div class="text-center">
+          <span class="text-[10px] text-slate-500 block">Status</span>
+          <span id="wrongAttemptCountDisplay" class="font-bold text-slate-700">Percobaan ke-1</span>
+        </div>
+        <div class="text-center border-x border-slate-200">
+          <span class="text-[10px] text-slate-500 block">Sisa Nyawa</span>
+          <span id="wrongLivesDisplay" class="font-bold text-rose-600">2 / 3 ❤️</span>
+        </div>
+        <div class="text-center">
+          <span class="text-[10px] text-slate-500 block">Penalti</span>
+          <span id="wrongPenaltyDisplay" class="font-bold text-rose-600 font-mono">-30 Poin</span>
+        </div>
+      </div>
+
+      <!-- Tombol Ulangi -->
+      <button onclick="closeModal('modalWrongRetry')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-game font-bold text-sm tracking-wide shadow-md shadow-rose-500/20 transition transform hover:scale-102 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+        <i class="fa-solid fa-rotate-left"></i>
+        <span>Periksa Kembali & Ulangi Jawaban</span>
       </button>
     </div>
   </div>
@@ -1326,6 +1465,56 @@
             <li>
               <b>Pusat Riset Konservasi Tumbuhan, Kebun Raya - BRIN (2021).</b> <i>Strategi Konservasi Pohon Asli Pegunungan Tropis Jawa Bagian Barat</i>. Mitigasi erosi lereng dan restorasi tutupan kanopi vegetasi klimaks.
             </li>
+            <li>
+              <b>Kebun Raya Indonesia [@kebunraya.id]. (2022, 18 Mei).</b> <i>Dokumentasi Konservasi Botani: Pohon Rasamala (Altingia excelsa Noronha)</i> [Unggahan Foto Media Sosial]. Facebook. 
+              <a 
+                href="https://www.facebook.com/kebunraya.id/posts/pernah-dengar-tentang-pohon-rasamalapohon-rasamala-merupakan-salah-satu-anggota-/497909505002349/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="text-teal-700 hover:text-teal-900 underline font-semibold break-all"
+              >
+                https://www.facebook.com/kebunraya.id/posts/pernah-dengar-tentang-pohon-rasamalapohon-rasamala-merupakan-salah-satu-anggota-/497909505002349/
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Referensi Teknologi, Kecerdasan Buatan & Aset Gim -->
+        <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-2">
+          <h4 class="font-bold text-amber-900 flex items-center gap-2 text-xs sm:text-sm">
+            <i class="fa-solid fa-microchip text-amber-600"></i> 3. Teknologi, Kecerdasan Buatan (AI) & Pembuatan Aset Gim
+          </h4>
+          <ul class="list-disc pl-4 space-y-1.5 text-slate-600 text-[11px] sm:text-xs">
+            <li>
+              <b>Aset Data Gim:</b> Aset data gim berupa animasi dibuat menggunakan <b>ChatGPT</b>.
+            </li>
+            <li>
+              <b>Pengembangan Perangkat Lunak:</b> Gim ini dibangun melalui <b>Gemini AI</b> yang ditinjau, diperbaiki, dan disempurnakan oleh pengembang.
+            </li>
+            <li>
+              <b>Produksi Video Animasi:</b> Video animasi dibuat melalui <b>Google Flow AI</b>.
+            </li>
+          </ul>
+        </div>
+
+        <!-- Referensi Audio, Musik Latar & Efek Suara -->
+        <div class="p-3.5 rounded-2xl bg-rose-50/80 border border-rose-200 space-y-2">
+          <h4 class="font-bold text-rose-900 flex items-center gap-2 text-xs sm:text-sm">
+            <i class="fa-solid fa-music text-rose-600"></i> 4. Musik Latar & Efek Suara (Audio & SFX)
+          </h4>
+          <ul class="list-disc pl-4 space-y-1.5 text-slate-600 text-[11px] sm:text-xs">
+            <li>
+              <b>Pixabay. (2026).</b> <i>Koleksi Musik Latar dan Efek Suara Permainan Interaktif (Audio BGM & SFX: Instrumen Edukasi, Nada Jawaban Benar, dan Nada Peringatan Salah)</i> [Koleksi rekaman audio & efek suara digital]. Lisensi Konten Bebas Royalti Pixabay (Pixabay Content License). 
+              <a 
+                href="https://pixabay.com/id/music/search/game%20edukasi/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="text-rose-700 hover:text-rose-900 underline font-semibold break-all inline-flex items-center gap-1"
+              >
+                <span>https://pixabay.com/id/music/search/game%20edukasi/</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -1343,6 +1532,35 @@
       constructor() {
         this.ctx = null;
         this.muted = false;
+        this.bgm = null;
+        this.bgmUrl = 'https://github.com/agisacademy17/aset-gim-DR.Rasamala/raw/refs/heads/main/Musik%20latar%20gim.mp3';
+        this.bgmStarted = false;
+      }
+
+      initBgm() {
+        if (!this.bgm) {
+          this.bgm = new Audio(this.bgmUrl);
+          this.bgm.loop = true;
+          this.bgm.volume = 0.45;
+        }
+      }
+
+      playBgm() {
+        this.initBgm();
+        this.bgmStarted = true;
+        if (!this.muted && this.bgm) {
+          this.bgm.play().catch(err => {
+            console.log("Autoplay ditunda browser:", err);
+          });
+        }
+      }
+
+      stopBgm() {
+        if (this.bgm) {
+          this.bgm.pause();
+          this.bgm.currentTime = 0;
+        }
+        this.bgmStarted = false;
       }
 
       initContext() {
@@ -1360,9 +1578,15 @@
         const icon = document.getElementById('soundIcon');
         if (this.muted) {
           icon.className = 'fa-solid fa-volume-xmark text-rose-400 text-sm';
+          if (this.bgm) {
+            this.bgm.pause();
+          }
         } else {
           icon.className = 'fa-solid fa-volume-high text-sm';
           this.playSfx('click');
+          if (this.bgm && this.bgmStarted) {
+            this.bgm.play().catch(e => console.warn(e));
+          }
         }
       }
 
@@ -2091,6 +2315,7 @@
 
     function handleNavHome() {
       gameAudio.playSfx('click');
+      gameAudio.stopBgm();
       screenEnding.classList.add('hidden');
       screenLevel.classList.add('hidden');
       screenMap.classList.add('hidden');
@@ -2141,6 +2366,7 @@
 
     function goToPrologue() {
       gameAudio.playSfx('click');
+      gameAudio.playBgm();
       screenHero.classList.add('hidden');
       screenIdentity.classList.add('hidden');
       screenIntro.classList.remove('hidden');
@@ -2212,6 +2438,7 @@
 
     function backToHero() {
       gameAudio.playSfx('click');
+      gameAudio.stopBgm();
       screenIntro.classList.add('hidden');
       screenIdentity.classList.add('hidden');
       screenHero.classList.remove('hidden');
@@ -3311,8 +3538,7 @@
           rewardPoints = 60;
         }
 
-        gameState.score += rewardPoints;
-        updateHUD();
+        const isPerfect = gameState.levelAttempts === 0;
 
         const stream = document.getElementById('streamAnimation');
         stream.classList.remove('hidden');
@@ -3346,7 +3572,7 @@
         const gateKey = gameState.currentGate;
         gameState.completedLevels[gateKey][gameState.currentLevelIndex] = true;
         
-        if (gameState.levelAttempts === 0) {
+        if (isPerfect) {
           gameState.perfectBadges[gateKey][gameState.currentLevelIndex] = true;
         }
 
@@ -3364,6 +3590,11 @@
           `"Luar biasa! Tunas pepohonan kita merekah subur berkat ketepatan perhitungan perbandinganmu!"` : 
           `"Matematika membuktikan kehebatannya! Takaran perhitunganmu tepat mematikan pusat panas!"`;
         document.getElementById('quizAvatar').innerText = isReboisasi ? "🌺" : "🌲";
+
+        // Memunculkan Pop-up Berhasil & Klaim Hadiah
+        setTimeout(() => {
+          openSuccessClaimModal(rewardPoints, explainText, isPerfect);
+        }, 700);
 
       } else {
         gameAudio.playSfx('wrong');
@@ -3401,7 +3632,55 @@
           }, 800);
           return;
         }
+
+        // Memunculkan Pop-up Peringatan Salah untuk Diulang
+        setTimeout(() => {
+          openWrongRetryModal(explainText, penaltyPoints);
+        }, 500);
       }
+      triggerMathRender();
+    }
+
+    let pendingRewardPoints = 0;
+
+    function openSuccessClaimModal(rewardPoints, explainText, isPerfect) {
+      pendingRewardPoints = rewardPoints;
+      document.getElementById('claimRewardPointsDisplay').innerText = `+${rewardPoints} Poin`;
+      document.getElementById('successExplainText').innerHTML = explainText;
+
+      const badgeNotify = document.getElementById('perfectBadgeNotify');
+      if (isPerfect) {
+        badgeNotify.classList.remove('hidden');
+      } else {
+        badgeNotify.classList.add('hidden');
+      }
+
+      const modal = document.getElementById('modalSuccessClaim');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      triggerMathRender();
+    }
+
+    function handleClaimRewardAndAdvance() {
+      gameAudio.playSfx('correct');
+      gameState.score += pendingRewardPoints;
+      pendingRewardPoints = 0;
+      updateHUD();
+      closeModal('modalSuccessClaim');
+      setTimeout(() => {
+        advanceToNextLevel();
+      }, 300);
+    }
+
+    function openWrongRetryModal(explainText, penaltyPoints) {
+      document.getElementById('wrongPenaltyDisplay').innerText = `-${penaltyPoints} Poin`;
+      document.getElementById('wrongLivesDisplay').innerText = `${gameState.lives} / 3 ❤️`;
+      document.getElementById('wrongAttemptCountDisplay').innerText = `Percobaan ke-${gameState.levelAttempts}`;
+      document.getElementById('wrongExplainText').innerHTML = explainText;
+
+      const modal = document.getElementById('modalWrongRetry');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
       triggerMathRender();
     }
 
@@ -3675,6 +3954,8 @@
         closeModal('modalGameOver');
         closeModal('modalLeaderboard');
         closeModal('modalReferensi');
+        closeModal('modalSuccessClaim');
+        closeModal('modalWrongRetry');
       }
     });
 
