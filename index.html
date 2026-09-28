@@ -100,57 +100,105 @@
     .btn-3d-play:hover {
       transform: scale(1.15) translateY(-6px);
       box-shadow: 0 12px 0 #022c22, 0 22px 35px rgba(16, 185, 129, 0.7);
-    }
-    .btn-3d-play:active {
-      transform: scale(1.05) translateY(3px);
-      box-shadow: 0 4px 0 #022c22, 0 8px 15px rgba(5, 150, 105, 0.4);
-    }
-    /* Portal Gate Hover Animation */
-    .portal-gate {
-      transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.38s ease;
-    }
-    .portal-gate:hover {
-      transform: scale(1.08) translateY(-10px);
-      filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.35));
-    }
-    .portal-gate:active {
-      transform: scale(1.02) translateY(-2px);
-    }
-    /* Stats Slider Drawer Transition */
-    .stats-drawer-collapsed {
-      max-width: 0;
-      opacity: 0;
-      pointer-events: none;
-      padding-left: 0;
-      padding-right: 0;
-      margin-left: 0;
-    }
-    .stats-drawer-expanded {
-      max-width: 580px;
-      opacity: 1;
-      pointer-events: auto;
-      padding-left: 0.5rem;
-      padding-right: 0.25rem;
-    }
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #10b981;
-      border-radius: 9999px;
-    }
+    /* KaTeX adjustment */
     .katex-display {
       margin: 0.5em 0 !important;
+    }
+
+    /* Smooth Screen Transitions (Perpindahan Antar Halaman Halus & Responsif) */
+    main > section:not(.hidden) {
+      animation: screenEnter 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+      will-change: opacity, transform;
+    }
+    @keyframes screenEnter {
+      0% {
+        opacity: 0;
+        transform: translateY(14px) scale(0.99);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Sub-phase (Tab Materi vs Misi Lapangan) Smooth Transitions */
+    #phaseMateri:not(.hidden), #phaseAksi:not(.hidden) {
+      animation: phaseEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+      will-change: opacity, transform;
+    }
+    @keyframes phaseEnter {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Modal Backdrop & Dialog Box Smooth Pop-in Animations */
+    [id^="modal"]:not(.hidden) {
+      animation: backdropFadeIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
+      will-change: opacity;
+    }
+    [id^="modal"]:not(.hidden) > div {
+      animation: modalPopIn 0.28s cubic-bezier(0.34, 1.35, 0.64, 1) both;
+      will-change: opacity, transform;
+    }
+    @keyframes backdropFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes modalPopIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* Modal Smooth Exit Animation */
+    [id^="modal"].modal-closing {
+      animation: backdropFadeOut 0.18s ease-in forwards !important;
+    }
+    [id^="modal"].modal-closing > div {
+      animation: modalPopOut 0.18s ease-in forwards !important;
+    }
+    @keyframes backdropFadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes modalPopOut {
+      from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: scale(0.93) translateY(12px);
+      }
     }
   </style>
 </head>
 
 <body class="bg-gradient-to-br from-emerald-50 via-teal-50/70 to-amber-50/50 text-slate-800 min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-emerald-200">
+
+  <!-- SVG Filter untuk Eliminasi Background Hitam Gambar Karakter -->
+  <svg class="absolute w-0 h-0 pointer-events-none opacity-0" aria-hidden="true">
+    <defs>
+      <filter id="removeBlackBg" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="
+          1 0 0 0 0
+          0 1 0 0 0
+          0 0 1 0 0
+          3.2 3.2 3.2 0 -0.22" />
+      </filter>
+    </defs>
+  </svg>
 
   <!-- Background Dynamic Atmospheric Canvas -->
   <canvas id="fxCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
@@ -385,66 +433,166 @@
         <!-- Pemilihan Karakter Petualang -->
         <div class="w-full">
           <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5 flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-masks-theater text-amber-500"></i> Pilih Karakter Petualang Rimba (10 Pilihan):
+            <i class="fa-solid fa-masks-theater text-amber-500"></i> Pilih Karakter Petualang Rimba (10 Pilihan 3D):
           </label>
-          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 justify-center max-h-[315px] overflow-y-auto p-1.5 scrollbar-thin" id="characterOptionsContainer">
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 justify-center max-h-[330px] overflow-y-auto p-2 scrollbar-thin" id="characterOptionsContainer">
             
-            <div onclick="selectCharacter('rasamala_guardian', this)" class="char-card cursor-pointer p-2.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/80 hover:bg-emerald-100 flex flex-col items-center text-center transition-all duration-200 shadow-sm ring-2 ring-emerald-400">
-              <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-2xl shadow-sm mb-1.5">🌲</div>
+            <!-- Karakter 1: Penjaga Rasamala -->
+            <div onclick="selectCharacter('rasamala_guardian', this)" class="char-card char-card-3d char-3d-selected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+              <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-emerald-950 to-slate-900 border-2 border-emerald-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
+                <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-emerald-400/35 rounded-full blur-xs pointer-events-none"></div>
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1GOQuiAD9BnuPh1jyZ-1TMTtsLtYuTBnW" 
+                  alt="Penjaga Rasamala" 
+                  class="char-3d-img relative z-10 w-full h-full object-contain pointer-events-none group-hover:scale-115 group-hover:-translate-y-1.5"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/059669/ffffff?text=Char+1';"
+                />
+              </div>
               <span class="font-game text-[11px] font-bold text-emerald-900 leading-tight">Penjaga Rasamala</span>
-              <span class="text-[9px] text-slate-500 mt-0.5">Ahli Siklus Air</span>
+              <span class="text-[9px] text-emerald-700 font-semibold mt-0.5">Ahli Siklus Air</span>
             </div>
 
-            <div onclick="selectCharacter('forest_researcher', this)" class="char-card cursor-pointer p-2.5 rounded-2xl border-2 border-slate-200 bg-white hover:bg-emerald-50 flex flex-col items-center text-center transition-all duration-200 shadow-sm">
-              <div class="w-12 h-12 rounded-xl bg-teal-50 flex items-center justify-center text-2xl shadow-sm mb-1.5">🧭</div>
+            <!-- Karakter 2: Peneliti Botani -->
+            <div onclick="selectCharacter('forest_researcher', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+              <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-teal-950 to-slate-900 border-2 border-teal-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
+                <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-teal-400/35 rounded-full blur-xs pointer-events-none"></div>
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1PUqOJnfuSsA3eJyb2vw-Ff3Lkb0bn61r" 
+                  alt="Peneliti Botani" 
+                  class="char-3d-img relative z-10 w-full h-full object-contain pointer-events-none group-hover:scale-115 group-hover:-translate-y-1.5"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/0d9488/ffffff?text=Char+2';"
+                />
+              </div>
               <span class="font-game text-[11px] font-bold text-slate-800 leading-tight">Peneliti Botani</span>
               <span class="text-[9px] text-slate-500 mt-0.5">Analisis Rasio</span>
             </div>
 
-            <div onclick="selectCharacter('sky_ranger', this)" class="char-card cursor-pointer p-2.5 rounded-2xl border-2 border-slate-200 bg-white hover:bg-emerald-50 flex flex-col items-center text-center transition-all duration-200 shadow-sm">
-              <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-2xl shadow-sm mb-1.5">🦅</div>
+            <!-- Karakter 3: Ranger Elang -->
+            <div onclick="selectCharacter('sky_ranger', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+              <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-amber-950 to-slate-900 border-2 border-amber-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
+                <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-amber-400/35 rounded-full blur-xs pointer-events-none"></div>
+                <img 
+                  src="https://lh3.googleusercontent.com/d/11maMj4I9NyXBCfcgz5XpOZPVXHKUZtGC" 
+                  alt="Ranger Elang" 
+                  class="char-3d-img relative z-10 w-full h-full object-contain pointer-events-none group-hover:scale-115 group-hover:-translate-y-1.5"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/d97706/ffffff?text=Char+3';"
+                />
+              </div>
               <span class="font-game text-[11px] font-bold text-slate-800 leading-tight">Ranger Elang</span>
               <span class="text-[9px] text-slate-500 mt-0.5">Navigasi Skala</span>
             </div>
 
-            <div onclick="selectCharacter('green_sprout', this)" class="char-card cursor-pointer p-2.5 rounded-2xl border-2 border-slate-200 bg-white hover:bg-emerald-50 flex flex-col items-center text-center transition-all duration-200 shadow-sm">
-              <div class="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center text-2xl shadow-sm mb-1.5">🌱</div>
+            <!-- Karakter 4: Tunas Cilik -->
+            <div onclick="selectCharacter('green_sprout', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+              <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-rose-950 to-slate-900 border-2 border-rose-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
+                <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-rose-400/35 rounded-full blur-xs pointer-events-none"></div>
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1mv4tgCBHuo0XOhkMPA9Irbn_UbM--ZFu" 
+                  alt="Tunas Cilik" 
+                  class="char-3d-img relative z-10 w-full h-full object-contain pointer-events-none group-hover:scale-115 group-hover:-translate-y-1.5"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/e11d48/ffffff?text=Char+4';"
+                />
+              </div>
               <span class="font-game text-[11px] font-bold text-slate-800 leading-tight">Tunas Cilik</span>
               <span class="text-[9px] text-slate-500 mt-0.5">Penyubur Tanah</span>
             </div>
 
-            <div onclick="selectCharacter('myco_master', this)" class="char-card cursor-pointer p-2.5 rounded-2xl border-2 border-slate-200 bg-white hover:bg-emerald-50 flex flex-col items-center text-center transition-all duration-200 shadow-sm">
-              <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-2xl shadow-sm mb-1.5">🍄</div>
+            <!-- Karakter 5: Ahli Mikoriza -->
+            <div onclick="selectCharacter('myco_master', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+              <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-purple-950 to-slate-900 border-2 border-purple-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
+                <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-purple-400/35 rounded-full blur-xs pointer-events-none"></div>
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1rlSlvYIrJszLzg3L5Fd1Taq7sumF-faS" 
+                  alt="Ahli Mikoriza" 
+                  class="char-3d-img relative z-10 w-full h-full object-contain pointer-events-none group-hover:scale-115 group-hover:-translate-y-1.5"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/9333ea/ffffff?text=Char+5';"
+                />
+              </div>
               <span class="font-game text-[11px] font-bold text-slate-800 leading-tight">Ahli Mikoriza</span>
               <span class="text-[9px] text-slate-500 mt-0.5">Jaringan Hifa</span>
             </div>
 
-            <div onclick="selectCharacter('river_otter', this)" class="char-card cursor-pointer p-2.5 rounded-2xl border-2 border-slate-200 bg-white hover:bg-emerald-50 flex flex-col items-center text-center transition-all duration-200 shadow-sm">
-              <div class="w-12 h-12 rounded-xl bg-cyan-50 flex items-center justify-center text-2xl shadow-sm mb-1.5">🦦</div>
+            <!-- Karakter 6: Berang Sungai -->
+            <div onclick="selectCharacter('river_otter', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+              <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-cyan-950 to-slate-900 border-2 border-cyan-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
+                <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-cyan-400/35 rounded-full blur-xs pointer-events-none"></div>
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1aZSdgDBdYnw5x-tfk_SdDzdu7hUAv3Ay" 
+                  alt="Berang Sungai" 
+                  class="char-3d-img relative z-10 w-full h-full object-contain pointer-events-none group-hover:scale-115 group-hover:-translate-y-1.5"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/0891b2/ffffff?text=Char+6';"
+                />
+              </div>
               <span class="font-game text-[11px] font-bold text-slate-800 leading-tight">Berang Sungai</span>
               <span class="text-[9px] text-slate-500 mt-0.5">Debit Aliran Pompa</span>
             </div>
 
-            <div onclick="selectCharacter('wise_owl', this)" class="char-card cursor-pointer p-2.5 rounded-2xl border-2 border-slate-200 bg-white hover:bg-emerald-50 flex flex-col items-center text-center transition-all duration-200 shadow-sm">
-              <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-2xl shadow-sm mb-1.5">🦉</div>
+            <!-- Karakter 7: Ksatria Hantu -->
+            <div onclick="selectCharacter('wise_owl', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+              <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-900 border-2 border-indigo-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
+                <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-indigo-400/35 rounded-full blur-xs pointer-events-none"></div>
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1Q0J01DGfNBAHuJbpQ62SN5s-4spmHVA2" 
+                  alt="Ksatria Hantu" 
+                  class="char-3d-img relative z-10 w-full h-full object-contain pointer-events-none group-hover:scale-115 group-hover:-translate-y-1.5"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/4f46e5/ffffff?text=Char+7';"
+                />
+              </div>
               <span class="font-game text-[11px] font-bold text-slate-800 leading-tight">Ksatria Hantu</span>
               <span class="text-[9px] text-slate-500 mt-0.5">Logika Berhitung</span>
             </div>
 
-            <div onclick="selectCharacter('mountain_tiger', this)" class="char-card cursor-pointer p-2.5 rounded-2xl border-2 border-slate-200 bg-white hover:bg-emerald-50 flex flex-col items-center text-center transition-all duration-200 shadow-sm">
-              <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-2xl shadow-sm mb-1.5">🐅</div>
+            <!-- Karakter 8: Harimau Rimba -->
+            <div onclick="selectCharacter('mountain_tiger', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+              <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-orange-950 to-slate-900 border-2 border-orange-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
+                <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-orange-400/35 rounded-full blur-xs pointer-events-none"></div>
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1vyL5lnbhDfCXNsstDn5-IPqywlvIdquv" 
+                  alt="Harimau Rimba" 
+                  class="char-3d-img relative z-10 w-full h-full object-contain pointer-events-none group-hover:scale-115 group-hover:-translate-y-1.5"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/ea580c/ffffff?text=Char+8';"
+                />
+              </div>
               <span class="font-game text-[11px] font-bold text-slate-800 leading-tight">Harimau Rimba</span>
               <span class="text-[9px] text-slate-500 mt-0.5">Penjaga Lereng</span>
             </div>
 
-            <div onclick="selectCharacter('golden_deer', this)" class="char-card cursor-pointer p-2.5 rounded-2xl border-2 border-slate-200 bg-white hover:bg-emerald-50 flex flex-col items-center text-center transition-all duration-200 shadow-sm">
-              <div class="w-12 h-12 rounded-xl bg-yellow-50 flex items-center justify-center text-2xl shadow-sm mb-1.5">🦌</div>
+            <!-- Karakter 9: Rusa Kencana -->
+            <div onclick="selectCharacter('golden_deer', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+              <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-yellow-950 to-slate-900 border-2 border-yellow-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
+                <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-yellow-400/35 rounded-full blur-xs pointer-events-none"></div>
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1J5jjMAoZ_jdv2BB7E0DdLu6533bWEQKo" 
+                  alt="Rusa Kencana" 
+                  class="char-3d-img relative z-10 w-full h-full object-contain pointer-events-none group-hover:scale-115 group-hover:-translate-y-1.5"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/ca8a04/ffffff?text=Char+9';"
+                />
+              </div>
               <span class="font-game text-[11px] font-bold text-slate-800 leading-tight">Rusa Kencana</span>
               <span class="text-[9px] text-slate-500 mt-0.5">Pelindung Tunas</span>
             </div>
 
-            <div onclick="selectCharacter('geo_badger', this)" class="char-card cursor-pointer p-2.5 rounded-2xl border-2 border-slate-200 bg-white hover:bg-emerald-50 flex flex-col items-center text-center transition-all duration-200 shadow-sm">
-              <div class="w-12 h-12 rounded-xl bg-stone-50 flex items-center justify-center text-2xl shadow-sm mb-1.5">🦡</div>
+            <!-- Karakter 10: Musang Tanah -->
+            <div onclick="selectCharacter('geo_badger', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+              <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-stone-950 to-slate-900 border-2 border-stone-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
+                <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-stone-400/35 rounded-full blur-xs pointer-events-none"></div>
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1sp6M1fu530-e44rk51iTLf_miVZbKpPQ" 
+                  alt="Musang Tanah" 
+                  class="char-3d-img relative z-10 w-full h-full object-contain pointer-events-none group-hover:scale-115 group-hover:-translate-y-1.5"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/78716c/ffffff?text=Char+10';"
+                />
+              </div>
               <span class="font-game text-[11px] font-bold text-slate-800 leading-tight">Musang Tanah</span>
               <span class="text-[9px] text-slate-500 mt-0.5">Arsitek Parit Sekat</span>
             </div>
@@ -738,8 +886,8 @@
               <button id="submitAnswerBtn" onclick="evaluateAnswer()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-game font-bold text-sm shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
                 <i class="fa-solid fa-water mr-1"></i> Guyur Air & Padamkan!
               </button>
-              <button id="nextLevelBtn" onclick="advanceToNextLevel()" class="hidden flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-600 hover:to-emerald-600 text-white font-game font-bold text-sm shadow-md transition cursor-pointer">
-                <span>Lanjut Pos Berikutnya</span> <i class="fa-solid fa-forward ml-1"></i>
+              <button id="nextLevelBtn" onclick="returnToMapAfterCompletion()" class="hidden flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-600 hover:to-emerald-600 text-white font-game font-bold text-sm shadow-md transition cursor-pointer">
+                <span>Buka Peta Perjalanan</span> <i class="fa-solid fa-map-location-dot ml-1"></i>
               </button>
             </div>
           </div>
@@ -838,16 +986,26 @@
       </button>
 
       <div class="text-center space-y-4">
-        <!-- Foto Profil Pengembang (Proporsi Potret Setengah Badan Terlihat Jelas) -->
-        <div class="relative w-36 h-48 sm:w-44 sm:h-56 mx-auto">
-          <div class="w-full h-full rounded-3xl overflow-hidden border-4 border-emerald-400 shadow-xl shadow-emerald-700/20 bg-emerald-50">
+        <!-- Foto Profil Pengembang (Proporsi Potret Setengah Badan Jernih Full HD) -->
+        <div class="relative w-44 h-60 sm:w-52 sm:h-72 mx-auto">
+          <div class="w-full h-full rounded-3xl overflow-hidden border-4 border-emerald-400 shadow-xl shadow-emerald-700/25 bg-emerald-950/5 relative group">
             <img 
+              id="developerPhotoImg"
               src="https://raw.githubusercontent.com/agisacademy17/asetgiminvestigasipasarnusantara/main/IMG-20250804-WA0017.jpg" 
+              srcset="https://raw.githubusercontent.com/agisacademy17/asetgiminvestigasipasarnusantara/main/IMG-20250804-WA0017.jpg 1x, https://cdn.jsdelivr.net/gh/agisacademy17/asetgiminvestigasipasarnusantara@main/IMG-20250804-WA0017.jpg 2x"
               alt="Foto Agis Kusmawan, S.Pd., Gr." 
-              class="w-full h-full object-cover object-[center_15%] transition-transform duration-300 hover:scale-105"
+              class="w-full h-full object-cover object-[center_12%] transition-transform duration-500 group-hover:scale-105"
+              style="image-rendering: -webkit-optimize-contrast; transform: translateZ(0); -webkit-backface-visibility: hidden; filter: contrast(104%) brightness(101%) saturate(102%);"
               loading="eager"
-              onerror="this.onerror=null; this.src='https://github.com/agisacademy17/asetgiminvestigasipasarnusantara/raw/main/IMG-20250804-WA0017.jpg';"
+              fetchpriority="high"
+              decoding="sync"
+              onerror="this.onerror=null; this.src='https://cdn.jsdelivr.net/gh/agisacademy17/asetgiminvestigasipasarnusantara@main/IMG-20250804-WA0017.jpg';"
             />
+            <!-- Badge Indikator Kualitas Full HD -->
+            <div class="absolute top-2.5 left-2.5 bg-black/65 backdrop-blur-sm text-emerald-300 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold flex items-center gap-1 border border-white/20 shadow-sm pointer-events-none">
+              <i class="fa-solid fa-circle-check text-emerald-400 text-[8px]"></i>
+              <span>Full HD</span>
+            </div>
           </div>
           <div class="absolute -bottom-2 -right-2 w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-base shadow-md border-2 border-white" title="Pendidik & Pengembang">
             <i class="fa-solid fa-user-graduate"></i>
@@ -1306,8 +1464,8 @@
       <!-- Tombol Klaim Hadiah & Lanjut -->
       <button onclick="handleClaimRewardAndAdvance()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-teal-700 text-white font-game font-bold text-sm tracking-wide shadow-lg shadow-emerald-500/30 transition transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
         <i class="fa-solid fa-award text-lg"></i>
-        <span>Klaim Hadiah & Lanjut Level Berikutnya</span>
-        <i class="fa-solid fa-arrow-right ml-1"></i>
+        <span>Klaim Hadiah & Lanjutkan Perjalanan</span>
+        <i class="fa-solid fa-map-location-dot ml-1"></i>
       </button>
     </div>
   </div>
@@ -2407,9 +2565,11 @@
       gameAudio.playSfx('click');
       playerProfile.character = charKey;
       document.querySelectorAll('.char-card').forEach(card => {
-        card.className = "char-card cursor-pointer p-2.5 rounded-2xl border-2 border-slate-200 bg-white hover:bg-emerald-50 flex flex-col items-center text-center transition-all duration-200 shadow-sm";
+        card.classList.remove('char-3d-selected');
+        card.classList.add('char-3d-unselected');
       });
-      cardEl.className = "char-card cursor-pointer p-2.5 rounded-2xl border-2 border-emerald-500 bg-emerald-50/80 hover:bg-emerald-100 flex flex-col items-center text-center transition-all duration-200 shadow-sm ring-2 ring-emerald-400";
+      cardEl.classList.remove('char-3d-unselected');
+      cardEl.classList.add('char-3d-selected');
     }
 
     function submitIdentityAndGoToGates() {
@@ -3668,8 +3828,40 @@
       updateHUD();
       closeModal('modalSuccessClaim');
       setTimeout(() => {
-        advanceToNextLevel();
+        returnToMapAfterCompletion();
       }, 300);
+    }
+
+    function returnToMapAfterCompletion() {
+      gameAudio.playSfx('levelComplete');
+      const levelList = getCurrentLevelList();
+      
+      // Jika menyelesaikan level terakhir (Pos 5)
+      if (gameState.currentLevelIndex >= levelList.length - 1) {
+        if (gameState.currentGate === 'pemadaman') {
+          gameState.gate1Completed = true;
+          showCustomAlert(
+            "Gerbang Pemadaman Tuntas!",
+            "Seluruh 5 pos bara api telah berhasil dipadamkan. Mikoriza menyadari kekhilafannya dan bertekad memulihkan rimba. Gerbang II: Reboisasi Rimba kini TERBUKA!"
+          );
+          screenLevel.classList.add('hidden');
+          screenGates.classList.remove('hidden');
+          renderGatesStatus();
+        } else {
+          gameState.reboisasiCompleted = true;
+          triggerEndingSequence();
+        }
+      } else {
+        // Kembali ke peta perjalanan agar murid dapat memilih pulau pos berikutnya
+        screenLevel.classList.add('hidden');
+        screenMap.classList.remove('hidden');
+        renderJourneyMap();
+      }
+      triggerMathRender();
+    }
+
+    function advanceToNextLevel() {
+      returnToMapAfterCompletion();
     }
 
     function openWrongRetryModal(explainText, penaltyPoints) {
@@ -3940,8 +4132,13 @@
     function closeModal(modalId) {
       gameAudio.playSfx('click');
       const modal = document.getElementById(modalId);
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+      if (!modal) return;
+      modal.classList.add('modal-closing');
+      setTimeout(() => {
+        modal.classList.remove('modal-closing');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }, 180);
     }
 
     window.addEventListener('keydown', (e) => {
