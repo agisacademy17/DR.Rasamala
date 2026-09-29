@@ -100,9 +100,59 @@
     .btn-3d-play:hover {
       transform: scale(1.15) translateY(-6px);
       box-shadow: 0 12px 0 #022c22, 0 22px 35px rgba(16, 185, 129, 0.7);
-    /* KaTeX adjustment */
-    .katex-display {
-      margin: 0.5em 0 !important;
+    }
+    .btn-3d-play:active {
+      transform: scale(1.05) translateY(3px);
+      box-shadow: 0 4px 0 #022c22, 0 8px 15px rgba(5, 150, 105, 0.4);
+    }
+
+    /* Penanda & Efek 3D Karakter Terpilih */
+    .char-card-3d {
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .char-3d-selected {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%) !important;
+      border: 3px solid #059669 !important;
+      transform: translateY(-5px) scale(1.06) !important;
+      box-shadow: 0 12px 24px -4px rgba(5, 150, 105, 0.4), 0 0 0 3px rgba(16, 185, 129, 0.35) !important;
+    }
+    .char-3d-unselected {
+      background: rgba(255, 255, 255, 0.92);
+      border: 2px solid #e2e8f0;
+      opacity: 0.8;
+    }
+    .char-3d-unselected:hover {
+      opacity: 1;
+      transform: translateY(-2px) scale(1.02);
+      border-color: #6ee7b7;
+    }
+
+    /* Portal Gate Hover Animation */
+    .portal-gate {
+      transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.38s ease;
+    }
+
+    /* Stats Slider Drawer Transition */
+    .stats-drawer-collapsed {
+      max-width: 0 !important;
+      width: 0 !important;
+      min-width: 0 !important;
+      opacity: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      pointer-events: none;
+      visibility: hidden;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .stats-drawer-expanded {
+      max-width: 600px !important;
+      opacity: 1 !important;
+      pointer-events: auto;
+      visibility: visible;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     /* Smooth Screen Transitions (Perpindahan Antar Halaman Halus & Responsif) */
@@ -185,7 +235,10 @@
   </style>
 </head>
 
-<body class="bg-gradient-to-br from-emerald-50 via-teal-50/70 to-amber-50/50 text-slate-800 min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-emerald-200">
+<body class="bg-slate-950 text-slate-800 min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-emerald-200">
+
+  <!-- Lapisan Latar Belakang Global Layar Penuh (True Fullscreen 100vw x 100vh Tanpa Celah Hijau) -->
+  <div id="appGlobalBackground" class="fixed inset-0 w-full h-full -z-20 bg-cover bg-center bg-no-repeat transition-all duration-700 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/d/1WC77s2bQvxl7PuDJEEe2lmjNtq4pn8Rs');"></div>
 
   <!-- SVG Filter untuk Eliminasi Background Hitam Gambar Karakter -->
   <svg class="absolute w-0 h-0 pointer-events-none opacity-0" aria-hidden="true">
@@ -201,11 +254,11 @@
   </svg>
 
   <!-- Background Dynamic Atmospheric Canvas -->
-  <canvas id="fxCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+  <canvas id="fxCanvas" class="fixed inset-0 w-full h-full pointer-events-none -z-10"></canvas>
 
-  <!-- Top Navigation / Game HUD -->
+  <!-- Top Navigation / Game HUD (Sesuai Posisi Gambar Referensi: Melayang Elegan di Atas Latar) -->
   <header id="gameHeader" class="hidden relative z-30 w-full px-3 sm:px-8 pt-3 pb-1 transition-all duration-300">
-    <div class="max-w-6xl mx-auto flex items-center justify-between bg-white/90 backdrop-blur-md border border-emerald-200/80 shadow-lg shadow-emerald-950/5 rounded-2xl sm:rounded-3xl px-3 sm:px-5 py-2 sm:py-2.5">
+    <div class="max-w-6xl mx-auto flex items-center justify-between bg-white/95 backdrop-blur-md border border-emerald-200/80 shadow-lg shadow-emerald-950/10 rounded-2xl sm:rounded-3xl px-3 sm:px-5 py-2 sm:py-2.5">
       <div class="flex items-center gap-2 sm:gap-3 cursor-pointer" onclick="handleNavHome()">
         <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white border border-emerald-200/80 flex items-center justify-center shadow-md shadow-emerald-500/10 overflow-hidden p-0.5">
           <img 
@@ -230,10 +283,10 @@
         <div class="flex items-center bg-emerald-50/80 border border-emerald-200/90 rounded-2xl p-1 shadow-sm">
           <!-- Tombol Panah Slider (<) -->
           <button id="statsSliderToggleBtn" onclick="toggleStatsSlider()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center transition-all duration-300 active:scale-95 shadow-sm group cursor-pointer" title="Tampilkan Status (Level, Nyawa, Skor)" aria-label="Buka / Tutup Status">
-            <i id="statsSliderArrowIcon" class="fa-solid fa-chevron-left text-xs sm:text-sm transition-transform duration-300 group-hover:-translate-x-0.5"></i>
+            <i id="statsSliderArrowIcon" class="fa-solid fa-chevron-left text-xs sm:text-sm transition-transform duration-300 pointer-events-none"></i>
           </button>
 
-          <div id="statsSliderContent" class="stats-drawer-collapsed flex items-center gap-1.5 sm:gap-2 overflow-hidden transition-all duration-300 ease-in-out">
+          <div id="statsSliderContent" class="stats-drawer-expanded flex items-center gap-1.5 sm:gap-2 overflow-hidden transition-all duration-300 ease-in-out">
             <!-- 1. Progres Level Pill -->
             <div class="bg-white border border-emerald-200 px-2 sm:px-3 py-1 sm:py-1.5 rounded-xl flex items-center gap-1 sm:gap-1.5 shadow-xs whitespace-nowrap">
               <i class="fa-solid fa-compass text-teal-600 text-xs sm:text-sm"></i>
@@ -284,11 +337,6 @@
 
     <!-- SCREEN 1: LANDING HERO -->
     <section id="screenHero" class="relative flex flex-col items-center justify-center min-h-[85vh] sm:min-h-[90vh] pt-28 sm:pt-36 pb-8 transition-all duration-500 overflow-hidden">
-      <!-- Background Gambar Layar Penuh -->
-      <div class="fixed inset-0 -z-10 w-full h-full bg-cover bg-center bg-no-repeat transition-all duration-700 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/d/1WC77s2bQvxl7PuDJEEe2lmjNtq4pn8Rs');"></div>
-      
-      <div class="fixed inset-0 -z-10 w-full h-full bg-gradient-to-t from-black/25 via-transparent to-black/10 pointer-events-none"></div>
-
       <!-- Deretan Tombol 3 Dimensi Interaktif di Bagian Tengah -->
       <div class="z-10 flex items-center justify-center gap-3 sm:gap-5 px-3 my-auto">
 
@@ -313,7 +361,7 @@
         </div>
 
         <!-- 3. Tombol Utama (Play Mulai Petualangan) -->
-        <button onclick="goToPrologue()" title="Mulai Petualangan" aria-label="Mulai Petualangan" class="btn-3d-play w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-b from-emerald-300 via-teal-500 to-emerald-800 border-4 border-white text-white flex items-center justify-center cursor-pointer relative overflow-hidden group">
+        <button id="btnPlayHero" onclick="goToPrologue()" title="Mulai Petualangan" aria-label="Mulai Petualangan" class="btn-3d-play w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-b from-emerald-300 via-teal-500 to-emerald-800 border-4 border-white text-white flex items-center justify-center cursor-pointer relative overflow-hidden group">
           <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition duration-200 rounded-3xl pointer-events-none"></div>
           <i class="fa-solid fa-play text-3xl sm:text-4xl ml-1 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"></i>
         </button>
@@ -333,30 +381,38 @@
 
     <!-- SCREEN 2: STORY PROLOGUE -->
     <section id="screenIntro" class="relative hidden flex flex-col items-center justify-center min-h-[82vh] my-auto text-center space-y-5 py-6 transition-all duration-500 w-full mx-auto">
-      <div class="fixed inset-0 -z-10 w-full h-full bg-cover bg-center bg-no-repeat transition-all duration-700 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/d/1IzZAe6NXUGy15BgiEnozu5WD9aQutbUX');"></div>
-
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs sm:text-sm font-bold shadow-sm">
-        <i class="fa-solid fa-book-open text-emerald-600"></i> Babak Prolog • Kisah Hutan Harapan
+      <!-- Badge Babak Prolog Sesuai Gambar Referensi -->
+      <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-emerald-100/95 border-2 border-emerald-300 text-emerald-900 text-xs sm:text-sm font-bold shadow-md backdrop-blur-sm mx-auto">
+        <i class="fa-solid fa-book-open text-emerald-700"></i> Babak Prolog • Kisah Hutan Harapan
       </div>
 
-      <div class="relative w-full max-w-xl py-2 flex items-center justify-center gap-4 sm:gap-8 mx-auto">
-        <div class="flex flex-col items-center bg-white p-4 rounded-3xl border-2 border-emerald-300 shadow-xl shadow-emerald-700/10 transform -rotate-2 hover:rotate-0 transition duration-300">
-          <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-b from-emerald-100 to-emerald-200 border border-emerald-300 flex items-center justify-center text-5xl shadow-inner animate-sway">
+      <!-- Wadah Dua Kartu Karakter Rasamala VS Mikoriza Sesuai Tangkapan Layar -->
+      <div class="relative w-full max-w-xl py-3 flex items-center justify-center gap-4 sm:gap-6 mx-auto select-none">
+        
+        <!-- Kartu Kiri: Rasamala (Mint Green Interior) -->
+        <div class="w-40 sm:w-48 bg-white/95 backdrop-blur-md rounded-[2rem] p-4 sm:p-5 shadow-2xl border-4 border-white flex flex-col items-center text-center transition-transform hover:scale-105 duration-300">
+          <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-[#c6efce] border border-emerald-200/80 flex items-center justify-center text-5xl sm:text-6xl shadow-inner animate-sway">
             🌲
           </div>
-          <span class="font-game text-base font-bold mt-2 text-emerald-800">Rasamala</span>
-          <span class="text-[11px] text-slate-500 font-medium">Sang Pohon Kuno Pelindung</span>
+          <span class="font-game text-sm sm:text-base font-extrabold text-emerald-950 mt-3 leading-tight">Rasamala</span>
+          <span class="text-[10px] sm:text-[11px] text-slate-600 font-semibold mt-0.5 leading-snug">Sang Pohon Kuno Pelindung</span>
         </div>
 
-        <div class="text-3xl font-black text-amber-500 animate-bounce">VS</div>
+        <!-- Tengah: VS dengan Kupu-Kupu 🦋 -->
+        <div class="flex flex-col items-center justify-center px-1 sm:px-2">
+          <span class="text-2xl sm:text-3xl font-black text-amber-500 drop-shadow-sm font-game">VS</span>
+          <span class="text-2xl sm:text-3xl mt-1 animate-pulse filter drop-shadow">🦋</span>
+        </div>
 
-        <div class="flex flex-col items-center bg-white p-4 rounded-3xl border-2 border-rose-300 shadow-xl shadow-rose-700/10 transform rotate-2 hover:rotate-0 transition duration-300">
-          <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-b from-rose-100 to-amber-200 border border-rose-200 flex items-center justify-center text-5xl shadow-inner animate-glow-fire">
+        <!-- Kartu Kanan: Mikoriza (Peach Interior) -->
+        <div class="w-40 sm:w-48 bg-white/95 backdrop-blur-md rounded-[2rem] p-4 sm:p-5 shadow-2xl border-4 border-white ring-2 ring-rose-200/60 flex flex-col items-center text-center transition-transform hover:scale-105 duration-300">
+          <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-[#fed7c7] border border-rose-200/80 flex items-center justify-center text-5xl sm:text-6xl shadow-inner animate-glow-fire">
             🍄🔥
           </div>
-          <span class="font-game text-base font-bold mt-2 text-rose-700">Mikoriza</span>
-          <span class="text-[11px] text-slate-500 font-medium">Jamur Akar Terhasut</span>
+          <span class="font-game text-sm sm:text-base font-extrabold text-rose-700 mt-3 leading-tight">Mikoriza</span>
+          <span class="text-[10px] sm:text-[11px] text-slate-600 font-semibold mt-0.5 leading-snug">Jamur Akar Terhasut</span>
         </div>
+
       </div>
 
       <div class="max-w-2xl w-full mx-auto bg-white/95 border border-emerald-200 p-6 sm:p-8 rounded-3xl shadow-xl backdrop-blur">
@@ -385,8 +441,6 @@
 
     <!-- SCREEN 2.5: IDENTITAS & PILIH KARAKTER -->
     <section id="screenIdentity" class="relative hidden flex-col items-center justify-center min-h-[85vh] my-auto text-center space-y-5 py-6 transition-all duration-500 w-full mx-auto">
-      <div class="fixed inset-0 -z-10 w-full h-full bg-cover bg-center bg-no-repeat transition-all duration-700 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/d/1rCzLJYSokWvMhekftO26z8bIcfiui6av');"></div>
-
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs sm:text-sm font-bold shadow-sm mx-auto">
         <i class="fa-solid fa-id-card text-emerald-600"></i> Registrasi Ksatria Rimba
       </div>
@@ -430,15 +484,44 @@
           </div>
         </div>
 
+        <!-- Showcase Karakter Aktif Terpilih (Jelas Terlihat) -->
+        <div id="selectedCharacterShowcase" class="w-full bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-900 border-2 border-emerald-400/90 rounded-2xl p-3 sm:p-4 text-white shadow-xl shadow-emerald-950/25 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 transition-all duration-300">
+          <div class="flex items-center gap-3.5">
+            <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-b from-slate-900 via-emerald-950 to-slate-950 border-2 border-emerald-400 p-1 flex items-center justify-center shadow-lg shrink-0 overflow-visible">
+              <div class="absolute -bottom-1 inset-x-2 h-3 bg-emerald-400/40 rounded-full blur-xs pointer-events-none"></div>
+              <img id="showcaseCharImg" src="https://lh3.googleusercontent.com/d/1GOQuiAD9BnuPh1jyZ-1TMTtsLtYuTBnW" alt="Karakter Terpilih" class="relative z-10 w-full h-full object-contain filter drop-shadow-md animate-float">
+            </div>
+            <div class="text-left space-y-0.5">
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/30 border border-emerald-400/50 text-[10px] text-emerald-300 font-bold uppercase tracking-wider">
+                <i class="fa-solid fa-circle-check text-emerald-400"></i> Karakter Pilihanmu
+              </div>
+              <h3 id="showcaseCharName" class="font-game text-base sm:text-xl font-black text-amber-300 leading-tight">Penjaga Rasamala</h3>
+              <p id="showcaseCharRole" class="text-xs text-emerald-100 font-medium flex items-center gap-1.5">
+                <i class="fa-solid fa-wand-magic-sparkles text-emerald-400 text-[11px]"></i>
+                <span>Keahlian: Ahli Siklus Air</span>
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3.5 py-1.5 rounded-xl bg-emerald-600 text-white font-game font-bold text-xs shadow-md border border-emerald-300 animate-pulse flex items-center gap-1.5">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>SIAP BERAKSI</span>
+            </span>
+          </div>
+        </div>
+
         <!-- Pemilihan Karakter Petualang -->
         <div class="w-full">
           <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5 flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-masks-theater text-amber-500"></i> Pilih Karakter Petualang Rimba (10 Pilihan 3D):
+            <i class="fa-solid fa-masks-theater text-amber-500"></i> Klik Kartu untuk Memilih Karakter (10 Pilihan):
           </label>
           <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 justify-center max-h-[330px] overflow-y-auto p-2 scrollbar-thin" id="characterOptionsContainer">
             
             <!-- Karakter 1: Penjaga Rasamala -->
-            <div onclick="selectCharacter('rasamala_guardian', this)" class="char-card char-card-3d char-3d-selected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+            <div onclick="selectCharacter('rasamala_guardian', this)" class="char-card char-card-3d char-3d-selected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group relative">
+              <span class="char-selected-indicator absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-2 border-white shadow-md z-20 flex items-center gap-0.5">
+                <i class="fa-solid fa-check text-[8px]"></i> DIPILIH
+              </span>
               <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-emerald-950 to-slate-900 border-2 border-emerald-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
                 <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-emerald-400/35 rounded-full blur-xs pointer-events-none"></div>
                 <img 
@@ -454,7 +537,10 @@
             </div>
 
             <!-- Karakter 2: Peneliti Botani -->
-            <div onclick="selectCharacter('forest_researcher', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+            <div onclick="selectCharacter('forest_researcher', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group relative">
+              <span class="char-selected-indicator hidden absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-2 border-white shadow-md z-20 flex items-center gap-0.5">
+                <i class="fa-solid fa-check text-[8px]"></i> DIPILIH
+              </span>
               <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-teal-950 to-slate-900 border-2 border-teal-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
                 <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-teal-400/35 rounded-full blur-xs pointer-events-none"></div>
                 <img 
@@ -470,7 +556,10 @@
             </div>
 
             <!-- Karakter 3: Ranger Elang -->
-            <div onclick="selectCharacter('sky_ranger', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+            <div onclick="selectCharacter('sky_ranger', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group relative">
+              <span class="char-selected-indicator hidden absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-2 border-white shadow-md z-20 flex items-center gap-0.5">
+                <i class="fa-solid fa-check text-[8px]"></i> DIPILIH
+              </span>
               <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-amber-950 to-slate-900 border-2 border-amber-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
                 <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-amber-400/35 rounded-full blur-xs pointer-events-none"></div>
                 <img 
@@ -486,7 +575,10 @@
             </div>
 
             <!-- Karakter 4: Tunas Cilik -->
-            <div onclick="selectCharacter('green_sprout', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+            <div onclick="selectCharacter('green_sprout', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group relative">
+              <span class="char-selected-indicator hidden absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-2 border-white shadow-md z-20 flex items-center gap-0.5">
+                <i class="fa-solid fa-check text-[8px]"></i> DIPILIH
+              </span>
               <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-rose-950 to-slate-900 border-2 border-rose-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
                 <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-rose-400/35 rounded-full blur-xs pointer-events-none"></div>
                 <img 
@@ -502,7 +594,10 @@
             </div>
 
             <!-- Karakter 5: Ahli Mikoriza -->
-            <div onclick="selectCharacter('myco_master', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+            <div onclick="selectCharacter('myco_master', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group relative">
+              <span class="char-selected-indicator hidden absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-2 border-white shadow-md z-20 flex items-center gap-0.5">
+                <i class="fa-solid fa-check text-[8px]"></i> DIPILIH
+              </span>
               <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-purple-950 to-slate-900 border-2 border-purple-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
                 <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-purple-400/35 rounded-full blur-xs pointer-events-none"></div>
                 <img 
@@ -518,7 +613,10 @@
             </div>
 
             <!-- Karakter 6: Berang Sungai -->
-            <div onclick="selectCharacter('river_otter', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+            <div onclick="selectCharacter('river_otter', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group relative">
+              <span class="char-selected-indicator hidden absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-2 border-white shadow-md z-20 flex items-center gap-0.5">
+                <i class="fa-solid fa-check text-[8px]"></i> DIPILIH
+              </span>
               <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-cyan-950 to-slate-900 border-2 border-cyan-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
                 <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-cyan-400/35 rounded-full blur-xs pointer-events-none"></div>
                 <img 
@@ -534,7 +632,10 @@
             </div>
 
             <!-- Karakter 7: Ksatria Hantu -->
-            <div onclick="selectCharacter('wise_owl', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+            <div onclick="selectCharacter('wise_owl', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group relative">
+              <span class="char-selected-indicator hidden absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-2 border-white shadow-md z-20 flex items-center gap-0.5">
+                <i class="fa-solid fa-check text-[8px]"></i> DIPILIH
+              </span>
               <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-900 border-2 border-indigo-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
                 <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-indigo-400/35 rounded-full blur-xs pointer-events-none"></div>
                 <img 
@@ -550,7 +651,10 @@
             </div>
 
             <!-- Karakter 8: Harimau Rimba -->
-            <div onclick="selectCharacter('mountain_tiger', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+            <div onclick="selectCharacter('mountain_tiger', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group relative">
+              <span class="char-selected-indicator hidden absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-2 border-white shadow-md z-20 flex items-center gap-0.5">
+                <i class="fa-solid fa-check text-[8px]"></i> DIPILIH
+              </span>
               <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-orange-950 to-slate-900 border-2 border-orange-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
                 <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-orange-400/35 rounded-full blur-xs pointer-events-none"></div>
                 <img 
@@ -566,7 +670,10 @@
             </div>
 
             <!-- Karakter 9: Rusa Kencana -->
-            <div onclick="selectCharacter('golden_deer', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+            <div onclick="selectCharacter('golden_deer', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group relative">
+              <span class="char-selected-indicator hidden absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-2 border-white shadow-md z-20 flex items-center gap-0.5">
+                <i class="fa-solid fa-check text-[8px]"></i> DIPILIH
+              </span>
               <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-yellow-950 to-slate-900 border-2 border-yellow-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
                 <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-yellow-400/35 rounded-full blur-xs pointer-events-none"></div>
                 <img 
@@ -582,7 +689,10 @@
             </div>
 
             <!-- Karakter 10: Musang Tanah -->
-            <div onclick="selectCharacter('geo_badger', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group">
+            <div onclick="selectCharacter('geo_badger', this)" class="char-card char-card-3d char-3d-unselected cursor-pointer p-2.5 rounded-2xl flex flex-col items-center text-center group relative">
+              <span class="char-selected-indicator hidden absolute -top-1.5 -right-1.5 bg-emerald-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full border-2 border-white shadow-md z-20 flex items-center gap-0.5">
+                <i class="fa-solid fa-check text-[8px]"></i> DIPILIH
+              </span>
               <div class="char-podium relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-gradient-to-b from-slate-950 via-stone-950 to-slate-900 border-2 border-stone-400/80 flex items-center justify-center p-1 mb-1.5 overflow-visible">
                 <div class="absolute -bottom-1.5 inset-x-2 h-3 bg-stone-400/35 rounded-full blur-xs pointer-events-none"></div>
                 <img 
@@ -613,8 +723,6 @@
 
     <!-- SCREEN 3: DUA GERBANG PERJALANAN -->
     <section id="screenGates" class="relative hidden flex-col items-center justify-center text-center space-y-6 py-4 sm:py-8 min-h-[85vh] transition-all duration-500">
-      <div class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat transition-all duration-700 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/d/1IISjhOdEVZK9IXTT2b55CvXKjlTiFi36');"></div>
-
       <div class="space-y-1.5 max-w-lg mx-auto bg-white/90 px-6 py-3.5 rounded-3xl border border-white/60 shadow-lg">
         <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-emerald-100/90 border border-emerald-300 text-emerald-800 text-xs sm:text-sm font-bold shadow-sm">
           <i class="fa-solid fa-map-location-dot text-emerald-600"></i> Pilih Gerbang Penyelamatan
@@ -677,8 +785,6 @@
 
     <!-- SCREEN 4: PETA PERJALANAN -->
     <section id="screenMap" class="relative hidden flex-col items-center justify-center min-h-[85vh] my-auto mx-auto w-full text-center space-y-5 py-4 sm:py-6 transition-all duration-500">
-      <div class="fixed inset-0 -z-10 w-full h-full bg-cover bg-center bg-no-repeat transition-all duration-700 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');"></div>
-
       <div id="mapBadge" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100 border border-rose-300 text-rose-800 text-xs sm:text-sm font-bold shadow-sm mx-auto">
         <i class="fa-solid fa-map text-rose-600"></i> Peta Ekspedisi
       </div>
@@ -735,9 +841,6 @@
 
     <!-- SCREEN 5: LEVEL CONTAINER -->
     <section id="screenLevel" class="relative hidden flex-col space-y-6 transition-all duration-500">
-      <div id="levelCustomBg" class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat transition-all duration-700 pointer-events-none hidden"></div>
-      <div id="levelBgOverlay" class="fixed inset-0 -z-10 pointer-events-none hidden"></div>
-
       <!-- Level Header & Tabs -->
       <div class="bg-white/95 rounded-3xl border border-emerald-200 p-4 sm:p-6 shadow-xl">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-emerald-100">
@@ -898,12 +1001,6 @@
 
     <!-- SCREEN 6: EPILOGUE & CELEBRATION -->
     <section id="screenEnding" class="relative hidden flex-col items-center justify-center min-h-[85vh] my-auto mx-auto w-full text-center space-y-6 py-8 transition-all duration-500">
-      <div class="fixed inset-0 -z-10 w-full h-full bg-cover bg-center bg-no-repeat transition-all duration-700 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/d/13r915My8zJwTLZFeSZSmu1-xdAGflG0i');"></div>
-
-      <div class="w-24 h-24 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-tr from-emerald-400 to-teal-300 flex items-center justify-center text-6xl shadow-xl shadow-emerald-500/30 animate-bounce">
-        🌺
-      </div>
-
       <div class="max-w-2xl w-full mx-auto bg-white/95 border-2 border-emerald-300 p-6 sm:p-8 rounded-3xl shadow-2xl text-center flex flex-col items-center">
         <span class="inline-block px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider border border-emerald-300 mx-auto">
           Misi Paripurna • Hutan Harapan Pulih Lestari!
@@ -2395,10 +2492,11 @@
     const tabAksiBtn = document.getElementById('tabAksiBtn');
 
     const fxCanvas = document.getElementById('fxCanvas');
-    const fxCtx = fxCanvas.getContext('2d');
+    const fxCtx = fxCanvas && fxCanvas.getContext ? fxCanvas.getContext('2d') : null;
     let particles = [];
 
     function resizeCanvas() {
+      if (!fxCanvas) return;
       fxCanvas.width = window.innerWidth;
       fxCanvas.height = window.innerHeight;
     }
@@ -2410,6 +2508,7 @@
         this.reset(type);
       }
       reset(type = 'fire') {
+        if (!fxCanvas) return;
         this.x = Math.random() * fxCanvas.width;
         this.y = type === 'fire' ? fxCanvas.height + 20 : -20;
         this.size = Math.random() * 4 + 2;
@@ -2419,6 +2518,7 @@
         this.alpha = Math.random() * 0.6 + 0.3;
       }
       update() {
+        if (!fxCanvas) return;
         this.y += this.speedY;
         this.x += this.speedX;
         this.alpha -= 0.003;
@@ -2428,6 +2528,7 @@
         }
       }
       draw() {
+        if (!fxCtx) return;
         fxCtx.save();
         fxCtx.globalAlpha = Math.max(0, this.alpha);
         if (this.type === 'fire') {
@@ -2445,19 +2546,25 @@
       }
     }
 
-    for (let i = 0; i < 40; i++) {
-      particles.push(new ForestParticle('fire'));
+    if (fxCanvas) {
+      for (let i = 0; i < 40; i++) {
+        particles.push(new ForestParticle('fire'));
+      }
     }
 
     function animateFx() {
-      fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
+      if (fxCtx && fxCanvas) {
+        fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+      }
       requestAnimationFrame(animateFx);
     }
-    animateFx();
+    if (fxCtx) {
+      animateFx();
+    }
 
     function triggerMathRender() {
       if (window.renderMathInElement) {
@@ -2471,52 +2578,63 @@
       }
     }
 
+    function setAppBackground(imageUrl) {
+      const bg = document.getElementById('appGlobalBackground');
+      if (bg && imageUrl) {
+        bg.style.backgroundImage = `url('${imageUrl}')`;
+      }
+    }
+
     function handleNavHome() {
       gameAudio.playSfx('click');
       gameAudio.stopBgm();
-      screenEnding.classList.add('hidden');
-      screenLevel.classList.add('hidden');
-      screenMap.classList.add('hidden');
-      screenGates.classList.add('hidden');
-      screenIdentity.classList.add('hidden');
-      screenIntro.classList.add('hidden');
-      screenHero.classList.remove('hidden');
-      document.getElementById('gameHeader').classList.add('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/1WC77s2bQvxl7PuDJEEe2lmjNtq4pn8Rs');
+      if (screenEnding) screenEnding.classList.add('hidden');
+      if (screenLevel) screenLevel.classList.add('hidden');
+      if (screenMap) screenMap.classList.add('hidden');
+      if (screenGates) screenGates.classList.add('hidden');
+      if (screenIdentity) screenIdentity.classList.add('hidden');
+      if (screenIntro) screenIntro.classList.add('hidden');
+      if (screenHero) screenHero.classList.remove('hidden');
+      const header = document.getElementById('gameHeader');
+      if (header) header.classList.add('hidden');
     }
 
     function handleNavBack() {
       gameAudio.playSfx('click');
-      if (!screenHero.classList.contains('hidden')) return;
+      if (screenHero && !screenHero.classList.contains('hidden')) return;
 
-      if (!screenIntro.classList.contains('hidden')) {
+      if (screenIntro && !screenIntro.classList.contains('hidden')) {
         backToHero();
         return;
       }
-      if (!screenIdentity.classList.contains('hidden')) {
+      if (screenIdentity && !screenIdentity.classList.contains('hidden')) {
         backToIntro();
         return;
       }
-      if (!screenGates.classList.contains('hidden')) {
+      if (screenGates && !screenGates.classList.contains('hidden')) {
         backToIdentity();
         return;
       }
-      if (!screenMap.classList.contains('hidden')) {
+      if (screenMap && !screenMap.classList.contains('hidden')) {
         backToGates();
         return;
       }
-      if (!screenLevel.classList.contains('hidden')) {
+      if (screenLevel && !screenLevel.classList.contains('hidden')) {
         if (gameState.currentPhase === 'aksi') {
           switchPhase('materi');
         } else {
           screenLevel.classList.add('hidden');
-          screenMap.classList.remove('hidden');
+          if (screenMap) screenMap.classList.remove('hidden');
+          setAppBackground('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');
           renderJourneyMap();
         }
         return;
       }
-      if (!screenEnding.classList.contains('hidden')) {
+      if (screenEnding && !screenEnding.classList.contains('hidden')) {
         screenEnding.classList.add('hidden');
-        screenMap.classList.remove('hidden');
+        if (screenMap) screenMap.classList.remove('hidden');
+        setAppBackground('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');
         renderJourneyMap();
         return;
       }
@@ -2525,11 +2643,13 @@
     function goToPrologue() {
       gameAudio.playSfx('click');
       gameAudio.playBgm();
-      screenHero.classList.add('hidden');
-      screenIdentity.classList.add('hidden');
-      screenIntro.classList.remove('hidden');
-      screenGates.classList.add('hidden');
-      document.getElementById('gameHeader').classList.remove('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/1IzZAe6NXUGy15BgiEnozu5WD9aQutbUX');
+      if (screenHero) screenHero.classList.add('hidden');
+      if (screenIdentity) screenIdentity.classList.add('hidden');
+      if (screenIntro) screenIntro.classList.remove('hidden');
+      if (screenGates) screenGates.classList.add('hidden');
+      const header = document.getElementById('gameHeader');
+      if (header) header.classList.remove('hidden');
       triggerMathRender();
     }
 
@@ -2539,8 +2659,62 @@
       character: 'rasamala_guardian'
     };
 
+    const CHARACTERS_DATA = {
+      rasamala_guardian: {
+        name: "Penjaga Rasamala",
+        role: "Ahli Siklus Air",
+        img: "https://lh3.googleusercontent.com/d/1GOQuiAD9BnuPh1jyZ-1TMTtsLtYuTBnW"
+      },
+      forest_researcher: {
+        name: "Peneliti Botani",
+        role: "Analisis Rasio",
+        img: "https://lh3.googleusercontent.com/d/1PUqOJnfuSsA3eJyb2vw-Ff3Lkb0bn61r"
+      },
+      sky_ranger: {
+        name: "Ranger Elang",
+        role: "Navigasi Skala",
+        img: "https://lh3.googleusercontent.com/d/11maMj4I9NyXBCfcgz5XpOZPVXHKUZtGC"
+      },
+      green_sprout: {
+        name: "Tunas Cilik",
+        role: "Penyubur Tanah",
+        img: "https://lh3.googleusercontent.com/d/1mv4tgCBHuo0XOhkMPA9Irbn_UbM--ZFu"
+      },
+      myco_master: {
+        name: "Ahli Mikoriza",
+        role: "Jaringan Hifa",
+        img: "https://lh3.googleusercontent.com/d/1rlSlvYIrJszLzg3L5Fd1Taq7sumF-faS"
+      },
+      river_otter: {
+        name: "Berang Sungai",
+        role: "Debit Aliran Pompa",
+        img: "https://lh3.googleusercontent.com/d/1aZSdgDBdYnw5x-tfk_SdDzdu7hUAv3Ay"
+      },
+      wise_owl: {
+        name: "Ksatria Hantu",
+        role: "Logika Berhitung",
+        img: "https://lh3.googleusercontent.com/d/1Q0J01DGfNBAHuJbpQ62SN5s-4spmHVA2"
+      },
+      mountain_tiger: {
+        name: "Harimau Rimba",
+        role: "Penjaga Lereng",
+        img: "https://lh3.googleusercontent.com/d/1vyL5lnbhDfCXNsstDn5-IPqywlvIdquv"
+      },
+      golden_deer: {
+        name: "Rusa Kencana",
+        role: "Pelindung Tunas",
+        img: "https://lh3.googleusercontent.com/d/1J5jjMAoZ_jdv2BB7E0DdLu6533bWEQKo"
+      },
+      geo_badger: {
+        name: "Musang Tanah",
+        role: "Arsitek Parit Sekat",
+        img: "https://lh3.googleusercontent.com/d/1sp6M1fu530-e44rk51iTLf_miVZbKpPQ"
+      }
+    };
+
     function goToIdentity() {
       gameAudio.playSfx('click');
+      setAppBackground('https://lh3.googleusercontent.com/d/1rCzLJYSokWvMhekftO26z8bIcfiui6av');
       screenIntro.classList.add('hidden');
       screenIdentity.classList.remove('hidden');
       screenGates.classList.add('hidden');
@@ -2549,32 +2723,67 @@
 
     function backToIntro() {
       gameAudio.playSfx('click');
-      screenIdentity.classList.add('hidden');
-      screenIntro.classList.remove('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/1IzZAe6NXUGy15BgiEnozu5WD9aQutbUX');
+      if (screenIdentity) screenIdentity.classList.add('hidden');
+      if (screenIntro) screenIntro.classList.remove('hidden');
       triggerMathRender();
     }
 
     function backToIdentity() {
       gameAudio.playSfx('click');
-      screenGates.classList.add('hidden');
-      screenIdentity.classList.remove('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/1rCzLJYSokWvMhekftO26z8bIcfiui6av');
+      if (screenGates) screenGates.classList.add('hidden');
+      if (screenIdentity) screenIdentity.classList.remove('hidden');
       triggerMathRender();
+    }
+
+    function backToHero() {
+      gameAudio.playSfx('click');
+      gameAudio.stopBgm();
+      setAppBackground('https://lh3.googleusercontent.com/d/1WC77s2bQvxl7PuDJEEe2lmjNtq4pn8Rs');
+      if (screenIntro) screenIntro.classList.add('hidden');
+      if (screenIdentity) screenIdentity.classList.add('hidden');
+      if (screenHero) screenHero.classList.remove('hidden');
+      const header = document.getElementById('gameHeader');
+      if (header) header.classList.add('hidden');
     }
 
     function selectCharacter(charKey, cardEl) {
       gameAudio.playSfx('click');
       playerProfile.character = charKey;
+
+      const charData = CHARACTERS_DATA[charKey];
+      if (charData) {
+        const showcaseImg = document.getElementById('showcaseCharImg');
+        const showcaseName = document.getElementById('showcaseCharName');
+        const showcaseRole = document.getElementById('showcaseCharRole');
+        if (showcaseImg) showcaseImg.src = charData.img;
+        if (showcaseName) showcaseName.innerText = charData.name;
+        if (showcaseRole) {
+          showcaseRole.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles text-emerald-400 text-[11px]"></i> <span>Keahlian: ${charData.role}</span>`;
+        }
+      }
+
       document.querySelectorAll('.char-card').forEach(card => {
         card.classList.remove('char-3d-selected');
         card.classList.add('char-3d-unselected');
+        const indicator = card.querySelector('.char-selected-indicator');
+        if (indicator) indicator.classList.add('hidden');
       });
-      cardEl.classList.remove('char-3d-unselected');
-      cardEl.classList.add('char-3d-selected');
+
+      if (cardEl) {
+        cardEl.classList.remove('char-3d-unselected');
+        cardEl.classList.add('char-3d-selected');
+        const indicator = cardEl.querySelector('.char-selected-indicator');
+        if (indicator) indicator.classList.remove('hidden');
+      }
     }
 
     function submitIdentityAndGoToGates() {
-      const nameVal = document.getElementById('playerNameInput').value.trim();
-      const classVal = document.getElementById('playerClassInput').value.trim();
+      const nameInput = document.getElementById('playerNameInput');
+      const classInput = document.getElementById('playerClassInput');
+      const nameVal = nameInput ? nameInput.value.trim() : '';
+      const classVal = classInput ? classInput.value.trim() : '';
 
       if (!nameVal) {
         showCustomAlert("Identitas Diperlukan", "Silakan masukkan nama lengkap atau panggilanmu sebelum melanjutkan petualangan!");
@@ -2590,43 +2799,38 @@
       playerProfile.classGrade = classVal;
 
       gameAudio.playSfx('click');
-      screenIdentity.classList.add('hidden');
-      screenGates.classList.remove('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/1IISjhOdEVZK9IXTT2b55CvXKjlTiFi36');
+      if (screenIdentity) screenIdentity.classList.add('hidden');
+      if (screenGates) screenGates.classList.remove('hidden');
       renderGatesStatus();
       triggerMathRender();
     }
 
-    function backToHero() {
-      gameAudio.playSfx('click');
-      gameAudio.stopBgm();
-      screenIntro.classList.add('hidden');
-      screenIdentity.classList.add('hidden');
-      screenHero.classList.remove('hidden');
-      document.getElementById('gameHeader').classList.add('hidden');
-    }
-
     function goToGates() {
       gameAudio.playSfx('click');
-      screenIntro.classList.add('hidden');
-      screenIdentity.classList.add('hidden');
-      screenGates.classList.remove('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/1IISjhOdEVZK9IXTT2b55CvXKjlTiFi36');
+      if (screenIntro) screenIntro.classList.add('hidden');
+      if (screenIdentity) screenIdentity.classList.add('hidden');
+      if (screenGates) screenGates.classList.remove('hidden');
       renderGatesStatus();
       triggerMathRender();
     }
 
     function backToPrologue() {
       gameAudio.playSfx('click');
-      screenGates.classList.add('hidden');
-      screenIntro.classList.remove('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/1IzZAe6NXUGy15BgiEnozu5WD9aQutbUX');
+      if (screenGates) screenGates.classList.add('hidden');
+      if (screenIntro) screenIntro.classList.remove('hidden');
       triggerMathRender();
     }
 
     function backToGates() {
       gameAudio.playSfx('click');
-      screenMap.classList.add('hidden');
-      screenLevel.classList.add('hidden');
-      screenIdentity.classList.add('hidden');
-      screenGates.classList.remove('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/1IISjhOdEVZK9IXTT2b55CvXKjlTiFi36');
+      if (screenMap) screenMap.classList.add('hidden');
+      if (screenLevel) screenLevel.classList.add('hidden');
+      if (screenIdentity) screenIdentity.classList.add('hidden');
+      if (screenGates) screenGates.classList.remove('hidden');
       renderGatesStatus();
       triggerMathRender();
     }
@@ -2641,9 +2845,7 @@
 
       if (gameState.gate1Completed) {
         if (lockBadge) lockBadge.classList.add('hidden');
-        if (gate2Img) {
-          gate2Img.classList.remove('grayscale', 'opacity-70');
-        }
+        if (gate2Img) gate2Img.classList.remove('grayscale', 'opacity-70');
         if (gate2Label) {
           gate2Label.innerHTML = '<i class="fa-solid fa-seedling text-emerald-400 mr-1.5"></i><span>Reboisasi Rimba</span>';
         }
@@ -2651,9 +2853,7 @@
         gate2Container.classList.add('cursor-pointer');
       } else {
         if (lockBadge) lockBadge.classList.remove('hidden');
-        if (gate2Img) {
-          gate2Img.classList.add('grayscale', 'opacity-75');
-        }
+        if (gate2Img) gate2Img.classList.add('grayscale', 'opacity-75');
         if (gate2Label) {
           gate2Label.innerHTML = '<i class="fa-solid fa-lock text-amber-400 mr-1.5"></i><span>Reboisasi (Terkunci)</span>';
         }
@@ -2669,10 +2869,12 @@
       gameState.currentGate = gateKey;
       gameState.vitality = 100;
 
-      screenGates.classList.add('hidden');
-      screenLevel.classList.add('hidden');
-      screenMap.classList.remove('hidden');
-      document.getElementById('gameHeader').classList.remove('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');
+      if (screenGates) screenGates.classList.add('hidden');
+      if (screenLevel) screenLevel.classList.add('hidden');
+      if (screenMap) screenMap.classList.remove('hidden');
+      const header = document.getElementById('gameHeader');
+      if (header) header.classList.remove('hidden');
 
       if (gateKey === 'reboisasi') {
         particles.forEach(p => p.reset('leaf'));
@@ -2697,16 +2899,28 @@
       const trailPath = document.getElementById('mapTrailPath');
 
       if (isReboisasi) {
-        mapBadge.className = "inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs sm:text-sm font-bold shadow-sm";
-        mapBadge.innerHTML = '<i class="fa-solid fa-seedling text-emerald-600"></i> Peta Ekspedisi: Gerbang II Reboisasi Rimba';
-        mapTitle.innerHTML = 'Peta Jalur <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Pemulihan Hutan Lestari</span>';
-        mapDesc.innerText = 'Jelajahi pulau-pulau habitat rimba raya bersama Mikoriza yang tersadar untuk memulihkan ekosistem dari tunas bibit hingga kanopi klimaks!';
+        if (mapBadge) {
+          mapBadge.className = "inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs sm:text-sm font-bold shadow-sm mx-auto";
+          mapBadge.innerHTML = '<i class="fa-solid fa-seedling text-emerald-600"></i> Peta Ekspedisi: Gerbang II Reboisasi Rimba';
+        }
+        if (mapTitle) {
+          mapTitle.innerHTML = 'Peta Jalur <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Pemulihan Rimba Lestari</span>';
+        }
+        if (mapDesc) {
+          mapDesc.innerText = 'Selesaikan tantangan restorasi tanah, nutrisi tunas, dan alokasi kanopi bersama Mikoriza!';
+        }
         if (trailPath) trailPath.setAttribute('stroke', '#059669');
       } else {
-        mapBadge.className = "inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100 border border-rose-300 text-rose-800 text-xs sm:text-sm font-bold shadow-sm";
-        mapBadge.innerHTML = '<i class="fa-solid fa-fire text-rose-600"></i> Peta Ekspedisi: Gerbang I Pemadaman Bara';
-        mapTitle.innerHTML = 'Peta Jalur <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-amber-500">Penaklukan Bara Api</span>';
-        mapDesc.innerText = 'Padamkan amukan api pos pulau demi pos pulau dengan perhitungan rasio matematis yang jitu sebelum api membakar seluruh lereng!';
+        if (mapBadge) {
+          mapBadge.className = "inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100 border border-rose-300 text-rose-800 text-xs sm:text-sm font-bold shadow-sm mx-auto";
+          mapBadge.innerHTML = '<i class="fa-solid fa-fire text-rose-600"></i> Peta Ekspedisi: Gerbang I Pemadaman Bara';
+        }
+        if (mapTitle) {
+          mapTitle.innerHTML = 'Peta Jalur <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-amber-500">Penaklukan Bara Api</span>';
+        }
+        if (mapDesc) {
+          mapDesc.innerText = 'Padamkan titik api pos demi pos menggunakan ketepatan logika matematika perbandingan!';
+        }
         if (trailPath) trailPath.setAttribute('stroke', '#e11d48');
       }
 
@@ -2715,43 +2929,11 @@
       container.innerHTML = '';
 
       const nodePositions = [
-        { left: '14%', top: '19%' },
-        { left: '49%', top: '20%' },
-        { left: '83%', top: '23%' },
-        { left: '82%', top: '62%' },
-        { left: '49%', top: '72%' }
-      ];
-
-      const islandSvgShapes = [
-        `<svg viewBox="0 0 160 140" class="w-full h-full filter drop-shadow-xl">
-          <path d="M80 18 L138 52 L118 102 L80 132 L36 102 L20 52 Z" />
-          <polygon points="80,22 132,54 80,82 26,54" opacity="0.85" />
-          <polygon points="26,54 80,82 80,126 38,98" opacity="0.65" />
-          <polygon points="132,54 80,82 80,126 114,98" opacity="0.45" />
-        </svg>`,
-        `<svg viewBox="0 0 160 140" class="w-full h-full filter drop-shadow-xl">
-          <path d="M42 58 L54 36 L70 42 L80 24 L96 38 L114 32 L124 56 L138 74 L114 114 L80 134 L44 112 L22 74 Z" />
-          <polygon points="46,58 80,30 118,56 80,84" opacity="0.8" />
-          <polygon points="46,58 80,84 80,128 44,108" opacity="0.6" />
-          <polygon points="118,56 80,84 80,128 112,108" opacity="0.45" />
-        </svg>`,
-        `<svg viewBox="0 0 160 140" class="w-full h-full filter drop-shadow-xl">
-          <path d="M30 46 L38 46 L38 34 L48 34 L48 46 L68 46 L80 20 L92 46 L112 46 L112 34 L122 34 L122 46 L134 46 L142 66 L116 114 L80 136 L42 114 L18 66 Z" />
-          <polygon points="32,48 80,26 128,48 80,80" opacity="0.85" />
-          <polygon points="32,48 80,80 80,130 44,108" opacity="0.65" />
-          <polygon points="128,48 80,80 80,130 114,108" opacity="0.45" />
-        </svg>`,
-        `<svg viewBox="0 0 160 140" class="w-full h-full filter drop-shadow-xl">
-          <path d="M46 36 C34 46 22 62 26 78 C28 92 40 102 52 110 L80 134 L108 110 C120 102 132 92 134 78 C138 60 126 44 112 36 C100 28 88 32 80 24 C72 32 58 28 46 36 Z" />
-          <ellipse cx="80" cy="56" rx="46" ry="24" opacity="0.8" />
-          <path d="M38 68 C44 92 76 126 80 130 C84 126 116 92 122 68 Z" opacity="0.5" />
-        </svg>`,
-        `<svg viewBox="0 0 160 140" class="w-full h-full filter drop-shadow-xl">
-          <path d="M26 44 L38 44 L38 52 L50 52 L50 36 L66 36 L66 52 L94 52 L94 36 L110 36 L110 52 L122 52 L122 44 L134 44 L142 70 L118 118 L80 138 L40 118 L18 70 Z" />
-          <polygon points="28,46 80,22 132,46 80,82" opacity="0.85" />
-          <polygon points="28,46 80,82 80,132 42,112" opacity="0.6" />
-          <polygon points="132,46 80,82 80,132 116,112" opacity="0.45" />
-        </svg>`
+        { left: '16%', top: '22%' },
+        { left: '50%', top: '22%' },
+        { left: '83%', top: '25%' },
+        { left: '82%', top: '64%' },
+        { left: '50%', top: '74%' }
       ];
 
       levelList.forEach((lvl, idx) => {
@@ -2761,84 +2943,38 @@
         const pos = nodePositions[idx];
 
         const nodeEl = document.createElement('div');
-        nodeEl.className = "absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer transition-all duration-300";
+        nodeEl.className = "absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer transition-all duration-300 z-10";
         nodeEl.style.left = pos.left;
         nodeEl.style.top = pos.top;
 
-        const islandWrapper = document.createElement('div');
-        islandWrapper.className = `relative w-28 h-24 sm:w-36 sm:h-32 flex items-center justify-center transition-transform duration-300 ${
-          isActive ? 'scale-110 sm:scale-115 animate-float' : isCompleted ? 'hover:scale-108' : 'hover:scale-105'
-        }`;
+        const badgeNumColor = idx === 0 ? 'bg-rose-600' : idx === 1 ? 'bg-sky-600' : idx === 2 ? 'bg-emerald-600' : idx === 3 ? 'bg-purple-600' : 'bg-amber-600';
+        const bannerBgColor = isCompleted
+          ? 'bg-emerald-700 border-emerald-400 text-white'
+          : isActive
+            ? (isReboisasi ? 'bg-teal-700 border-teal-300 text-white shadow-lg shadow-teal-500/30' : 'bg-amber-600 border-amber-300 text-white shadow-lg shadow-amber-500/30')
+            : 'bg-slate-800/90 border-slate-600 text-slate-300';
 
-        let islandGraphicHtml = "";
-        let centerBadgeHtml = "";
-
-        if (!isUnlocked) {
-          islandGraphicHtml = `
-            <div class="w-full h-full text-black fill-black drop-shadow-[0_12px_18px_rgba(0,0,0,0.55)]">
-              ${islandSvgShapes[idx]}
-            </div>
-          `;
-          centerBadgeHtml = `
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white text-slate-800 flex items-center justify-center shadow-lg border-2 border-slate-200">
-                <i class="fa-solid fa-lock text-sm sm:text-base"></i>
-              </div>
-            </div>
-          `;
-        } else if (isCompleted) {
-          islandGraphicHtml = `
-            <div class="w-full h-full text-emerald-800 fill-emerald-600 drop-shadow-[0_14px_22px_rgba(5,150,105,0.45)] transition-transform duration-300 group-hover:scale-105">
-              ${islandSvgShapes[idx]}
-            </div>
-          `;
-          centerBadgeHtml = `
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg border-2 border-white ring-2 ring-emerald-400">
-                <i class="fa-solid fa-check text-sm sm:text-base font-black"></i>
-              </div>
-            </div>
-          `;
-        } else {
-          const activeThemeColors = isReboisasi 
-            ? 'text-teal-700 fill-emerald-500 drop-shadow-[0_15px_28px_rgba(16,185,129,0.7)]'
-            : 'text-amber-800 fill-amber-500 drop-shadow-[0_15px_28px_rgba(245,158,11,0.65)]';
-
-          islandGraphicHtml = `
-            <div class="w-full h-full ${activeThemeColors} transition-transform duration-300 group-hover:scale-105">
-              ${islandSvgShapes[idx]}
-            </div>
-          `;
-          centerBadgeHtml = `
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 text-amber-950 flex items-center justify-center shadow-xl border-2 border-white animate-bounce">
-                <i class="fa-solid fa-play text-xs sm:text-sm ml-0.5"></i>
-              </div>
-            </div>
-          `;
-        }
-
-        islandWrapper.innerHTML = islandGraphicHtml + centerBadgeHtml;
-
-        const labelPill = document.createElement('div');
-        labelPill.className = `mt-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold font-game tracking-wide whitespace-nowrap shadow-md border transition-all ${
-          isCompleted 
-            ? 'bg-emerald-700 text-white border-emerald-400' 
-            : isActive 
-              ? (isReboisasi ? 'bg-teal-700 text-white border-teal-300 ring-2 ring-teal-400/50' : 'bg-amber-600 text-white border-amber-300 ring-2 ring-amber-400/50')
-              : 'bg-slate-900/80 text-slate-300 border-slate-700'
-        }`;
-        labelPill.innerText = `Pos ${idx + 1}: ${lvl.title.length > 18 ? lvl.title.substring(0, 18) + '...' : lvl.title}`;
-
-        nodeEl.appendChild(islandWrapper);
-        nodeEl.appendChild(labelPill);
+        nodeEl.innerHTML = `
+          <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 ${isCompleted ? 'border-emerald-400 bg-emerald-100 shadow-emerald-500/30' : isActive ? 'border-amber-400 bg-amber-50 animate-pulse shadow-amber-500/40' : 'border-slate-400 bg-slate-200 grayscale opacity-75'} shadow-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+            <span class="absolute -top-3 w-8 h-8 rounded-full ${badgeNumColor} text-white font-game font-black text-sm flex items-center justify-center border-2 border-white shadow-md z-20">
+              ${idx + 1}
+            </span>
+            <span class="text-3xl sm:text-4xl drop-shadow-md">
+              ${isCompleted ? '🌲' : isActive ? (isReboisasi ? '🌱' : '🔥') : '🔒'}
+            </span>
+            ${isActive ? '<span class="absolute -inset-2 rounded-full border-2 border-amber-400/80 animate-ping pointer-events-none"></span>' : ''}
+          </div>
+          <div class="mt-2 px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-game font-bold tracking-wide border ${bannerBgColor} whitespace-nowrap shadow-md">
+            Pos ${idx + 1}: ${lvl.title.length > 16 ? lvl.title.substring(0, 16) + '...' : lvl.title}
+          </div>
+        `;
 
         if (isUnlocked) {
           nodeEl.onclick = () => selectLevelFromMap(idx);
         } else {
           nodeEl.onclick = () => {
             gameAudio.playSfx('wrong');
-            showCustomAlert("Pos Masih Terkunci", `Selesaikan tantangan di Pos ${idx} terlebih dahulu untuk membuka jalur pulau ini!`);
+            showCustomAlert("Pos Masih Terkunci", `Selesaikan tantangan di Pos ${idx} terlebih dahulu untuk membuka jalur pos ini!`);
           };
         }
 
@@ -2849,8 +2985,8 @@
     function selectLevelFromMap(index) {
       gameAudio.playSfx('click');
       gameState.currentLevelIndex = index;
-      screenMap.classList.add('hidden');
-      screenLevel.classList.remove('hidden');
+      if (screenMap) screenMap.classList.add('hidden');
+      if (screenLevel) screenLevel.classList.remove('hidden');
       loadLevel(index);
     }
 
@@ -2860,8 +2996,9 @@
 
     function restartGame() {
       gameAudio.playSfx('click');
-      screenEnding.classList.add('hidden');
-      screenGates.classList.remove('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/1IISjhOdEVZK9IXTT2b55CvXKjlTiFi36');
+      if (screenEnding) screenEnding.classList.add('hidden');
+      if (screenGates) screenGates.classList.remove('hidden');
       renderGatesStatus();
       triggerMathRender();
     }
@@ -2878,22 +3015,20 @@
       if (shouldOpen) {
         drawer.classList.remove('stats-drawer-collapsed');
         drawer.classList.add('stats-drawer-expanded');
-        icon.className = 'fa-solid fa-chevron-right text-sm transition-transform duration-300';
-        btn.classList.add('bg-emerald-200');
-        btn.title = "Sembunyikan Status Pemain";
+        icon.className = 'fa-solid fa-chevron-left text-xs sm:text-sm transition-transform duration-300 pointer-events-none';
+        if (btn) btn.classList.add('bg-emerald-600');
       } else {
         drawer.classList.remove('stats-drawer-expanded');
         drawer.classList.add('stats-drawer-collapsed');
-        icon.className = 'fa-solid fa-chevron-left text-sm transition-transform duration-300';
-        btn.classList.remove('bg-emerald-200');
-        btn.title = "Tampilkan Status (Level, Nyawa, Skor)";
+        icon.className = 'fa-solid fa-chevron-right text-xs sm:text-sm transition-transform duration-300 pointer-events-none';
+        if (btn) btn.classList.remove('bg-emerald-600');
       }
     }
 
     function updateHUD() {
       const gatePrefix = gameState.currentGate === 'reboisasi' ? 'Reboisasi' : 'Pemadaman';
-      hudLevelDisplay.innerText = `${gatePrefix}: Pos ${gameState.currentLevelIndex + 1}/5`;
-      hudScore.innerText = `${gameState.score} Poin`;
+      if (hudLevelDisplay) hudLevelDisplay.innerText = `${gatePrefix}: Pos ${gameState.currentLevelIndex + 1}/5`;
+      if (hudScore) hudScore.innerText = `${gameState.score} Poin`;
 
       for (let i = 1; i <= 3; i++) {
         const heartEl = document.getElementById(`lifeHeart${i}`);
@@ -2911,15 +3046,15 @@
       gameAudio.playSfx('click');
       gameState.currentPhase = phase;
       if (phase === 'materi') {
-        phaseMateri.classList.remove('hidden');
-        phaseAksi.classList.add('hidden');
-        tabMateriBtn.className = "flex-1 md:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition bg-emerald-600 text-white shadow-sm";
-        tabAksiBtn.className = "flex-1 md:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
+        if (phaseMateri) phaseMateri.classList.remove('hidden');
+        if (phaseAksi) phaseAksi.classList.add('hidden');
+        if (tabMateriBtn) tabMateriBtn.className = "px-4 py-2 rounded-lg transition bg-emerald-600 text-white shadow-sm";
+        if (tabAksiBtn) tabAksiBtn.className = "px-4 py-2 rounded-lg transition text-slate-600 hover:text-slate-900";
       } else {
-        phaseMateri.classList.add('hidden');
-        phaseAksi.classList.remove('hidden');
-        tabMateriBtn.className = "flex-1 md:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
-        tabAksiBtn.className = "flex-1 md:flex-initial px-4 py-2 rounded-lg text-xs font-bold transition bg-teal-600 text-white shadow-sm";
+        if (phaseMateri) phaseMateri.classList.add('hidden');
+        if (phaseAksi) phaseAksi.classList.remove('hidden');
+        if (tabMateriBtn) tabMateriBtn.className = "px-4 py-2 rounded-lg transition text-slate-600 hover:text-slate-900";
+        if (tabAksiBtn) tabAksiBtn.className = "px-4 py-2 rounded-lg transition bg-emerald-600 text-white shadow-sm";
       }
       setTimeout(triggerMathRender, 50);
     }
@@ -2930,9 +3065,6 @@
       gameState.levelSolved = false;
       gameState.levelAttempts = 0;
 
-      const levelBg = document.getElementById('levelCustomBg');
-      const levelBgOverlay = document.getElementById('levelBgOverlay');
-      
       const pemadamanBackgroundMap = {
         0: 'https://lh3.googleusercontent.com/d/14JHUHuCusZ9t8QHRQjyMtOe0-41k3ExJ',
         1: 'https://lh3.googleusercontent.com/d/1-btr5bEhlXn9CnChn0vqzHT7jAkSLq2e',
@@ -2949,19 +3081,9 @@
         4: 'https://lh3.googleusercontent.com/d/13r915My8zJwTLZFeSZSmu1-xdAGflG0i'
       };
 
-      if (levelBg) {
-        const bgMap = gameState.currentGate === 'reboisasi' ? reboisasiBackgroundMap : pemadamanBackgroundMap;
-        const bgUrl = bgMap[index];
-        if (bgUrl) {
-          levelBg.style.backgroundImage = `url('${bgUrl}')`;
-          levelBg.classList.remove('hidden');
-          if (levelBgOverlay) levelBgOverlay.classList.remove('hidden');
-        } else {
-          levelBg.style.backgroundImage = "";
-          levelBg.classList.add('hidden');
-          if (levelBgOverlay) levelBgOverlay.classList.add('hidden');
-        }
-      }
+      const bgMap = gameState.currentGate === 'reboisasi' ? reboisasiBackgroundMap : pemadamanBackgroundMap;
+      const bgUrl = bgMap[index] || 'https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS';
+      setAppBackground(bgUrl);
 
       document.getElementById('levelBadge').innerText = level.badge;
       document.getElementById('levelTitle').innerText = level.title;
@@ -3046,7 +3168,7 @@
                 <input type="number" id="inputRatioB" min="1" max="99" placeholder="b" class="w-16 h-12 text-center text-lg font-bold font-mono rounded-xl border-2 border-teal-300 focus:border-teal-600 focus:outline-none bg-white shadow-inner">
               </div>
             </div>
-            <p class="text-[11px] text-slate-500 text-center italic">Ketik angka hasil pembagian dengan FPB terbesar ($18 \\div \\text{FPB}$ dan $42 \\div \\text{FPB}$)</p>
+            <p class="text-[11px] text-slate-500 text-center italic">Bagi angka dengan FPB terbesarnya ($18 \\div 6$ dan $42 \\div 6$)</p>
           </div>
         `;
       } else if (level.challengeType === 'water_slider') {
@@ -3087,7 +3209,7 @@
         interactiveArea.innerHTML = `
           <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
             <span class="text-xs font-bold text-slate-800 block text-center">
-              <i class="fa-solid fa-crosshairs text-teal-600 mr-1"></i> Kalibrasi Jarak Helikopter ke Titik Api
+              <i class="fa-solid fa-crosshairs text-teal-600 mr-1"></i> Kalibrasi Jarak Radar ke Titik Api
             </span>
             <div class="flex items-center justify-center gap-2">
               <span class="text-xs text-slate-500 font-semibold">Jarak Sebenarnya =</span>
@@ -3183,12 +3305,6 @@
             <div class="bg-white p-3 rounded-xl border border-teal-200 shadow-sm flex items-center gap-4">
               <div class="relative w-12 h-28 bg-slate-100 rounded-xl border-2 border-teal-300 overflow-hidden flex flex-col justify-end shadow-inner p-1">
                 <div id="r2LiquidFill" class="w-full bg-gradient-to-t from-teal-500 to-emerald-400 rounded-lg transition-all duration-300 shadow" style="height: 42%;"></div>
-                <div class="absolute inset-y-1 right-1 w-2 flex flex-col justify-between text-[7px] text-slate-400 font-mono pointer-events-none">
-                  <span>-120L</span>
-                  <span>-90L</span>
-                  <span>-60L</span>
-                  <span>-30L</span>
-                </div>
               </div>
 
               <div class="flex-1 space-y-2">
@@ -3203,11 +3319,6 @@
                   <button type="button" onclick="adjustR2Nutrient(1)" class="w-8 py-2 rounded-lg bg-white hover:bg-teal-100 border border-teal-300 text-teal-800 font-bold text-xs active:scale-95 transition cursor-pointer">+1</button>
                   <button type="button" onclick="adjustR2Nutrient(10)" class="flex-1 py-2 rounded-lg bg-white hover:bg-teal-100 border border-teal-300 text-teal-800 font-bold text-xs active:scale-95 transition cursor-pointer">+10L</button>
                 </div>
-
-                <div class="text-[10px] text-slate-500 flex justify-between pt-1 border-t border-slate-100">
-                  <span>Rasio Dasar: $\\frac{12\\text{ bibit}}{18\\text{ L}} = \\frac{2}{3}$</span>
-                  <span id="r2LivePerUnit" class="font-bold text-teal-700">Rasio Saat Ini: $60 / 50$</span>
-                </div>
               </div>
             </div>
 
@@ -3215,7 +3326,6 @@
               <span class="text-slate-500 font-medium">Preset Cepat:</span>
               <div class="flex gap-1.5">
                 <button type="button" onclick="setR2Preset(60)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono cursor-pointer">60 L</button>
-                <button type="button" onclick="setR2Preset(75)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono cursor-pointer">75 L</button>
                 <button type="button" onclick="setR2Preset(90)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-100 border border-teal-300 text-teal-800 font-mono font-bold cursor-pointer">90 L</button>
                 <button type="button" onclick="setR2Preset(108)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono cursor-pointer">108 L</button>
               </div>
@@ -3237,44 +3347,27 @@
             <div class="bg-white p-3 rounded-xl border border-amber-200 shadow-sm space-y-3">
               <div class="flex items-center justify-between px-2 text-xs">
                 <div class="text-center p-2 rounded-lg bg-slate-50 border border-slate-200 w-36">
-                  <span class="text-[10px] text-slate-500 font-bold block">Beban Acuan Rimba</span>
+                  <span class="text-[10px] text-slate-500 font-bold block">Beban Acuan</span>
                   <span class="font-mono text-emerald-700 font-bold">$10 \\times 18 = 180$</span>
-                  <span class="text-[9px] text-slate-400 block">Hari-Satwa</span>
                 </div>
-
                 <div class="flex flex-col items-center">
-                  <div id="r3Needle" class="text-2xl transition-transform duration-300 transform -rotate-45">
-                    ⚖️
-                  </div>
+                  <div id="r3Needle" class="text-2xl transition-transform duration-300 transform -rotate-45">⚖️</div>
                   <span id="r3DiffLabel" class="text-[10px] font-mono text-rose-600 font-bold mt-1">-60 Beban</span>
                 </div>
-
                 <div class="text-center p-2 rounded-lg bg-amber-50 border border-amber-200 w-36">
-                  <span class="text-[10px] text-amber-800 font-bold block">Beban Regu $15$ Satwa</span>
+                  <span class="text-[10px] text-amber-800 font-bold block">Regu $15$ Satwa</span>
                   <span id="r3CurrentWorkload" class="font-mono text-amber-700 font-black">$15 \\times 8 = 120$</span>
-                  <span class="text-[9px] text-slate-400 block">Hari-Satwa</span>
                 </div>
               </div>
 
               <div class="space-y-1.5 pt-2 border-t border-slate-100">
                 <div class="flex justify-between items-center text-xs">
-                  <span class="text-slate-600 font-semibold">Durasi Kerja Regu ($15\\text{ Relawan}$):</span>
+                  <span class="text-slate-600 font-semibold">Durasi Kerja ($15\\text{ Relawan}$):</span>
                   <span id="r3DaysValDisplay" class="font-mono font-bold text-sm text-amber-800 bg-amber-100 px-2 py-0.5 rounded border border-amber-300">8 Hari</span>
                 </div>
                 <input type="range" id="r3DaysSlider" min="4" max="20" step="1" value="8" class="w-full h-3 bg-amber-200 rounded-lg appearance-none cursor-pointer accent-amber-600" oninput="updateR3Schedule(parseInt(this.value))">
-                <div class="flex justify-between text-[10px] text-slate-400 font-mono">
-                  <span>4 Hari</span>
-                  <span>10 Hari</span>
-                  <span>12 Hari</span>
-                  <span>16 Hari</span>
-                  <span>20 Hari</span>
-                </div>
               </div>
             </div>
-
-            <p class="text-[11px] text-slate-500 text-center italic">
-              Geser tuas hingga timbangan neraca tegak seimbang ($15 \\times \\text{Hari} = 180$)!
-            </p>
           </div>
         `;
       } else if (level.challengeType === 'r4_corridor_scanner') {
@@ -3289,28 +3382,24 @@
               </span>
             </div>
 
-            <div class="bg-slate-900 text-white p-3 rounded-xl space-y-2 text-xs font-mono shadow-inner">
+            <div class="bg-slate-900 text-white p-3 rounded-xl space-y-1.5 text-xs font-mono shadow-inner">
               <div class="flex items-center justify-between text-slate-300">
                 <span>1. $15\\text{ cm} \\times 40.000$:</span>
                 <span class="text-amber-300 font-bold">$600.000\\text{ cm}$</span>
               </div>
-              <div class="flex items-center justify-between text-slate-300 border-t border-slate-800 pt-1.5">
-                <span>2. Ubah ke Meter ($\\div 100$):</span>
-                <span class="text-cyan-300 font-bold">$6.000\\text{ meter}$</span>
-              </div>
-              <div class="flex items-center justify-between text-slate-300 border-t border-slate-800 pt-1.5">
-                <span>3. Ubah ke KM ($\\div 1.000$):</span>
+              <div class="flex items-center justify-between text-slate-300 border-t border-slate-800 pt-1">
+                <span>2. Ubah ke KM ($\\div 100.000$):</span>
                 <span id="r4KmOutput" class="text-emerald-400 font-bold text-sm">Pilih Pin GPS</span>
               </div>
             </div>
 
             <div class="space-y-1.5">
-              <span class="text-[11px] font-bold text-slate-700 block">Kunci Titik Checkpoint GPS (Kilometer):</span>
+              <span class="text-[11px] font-bold text-slate-700 block">Kunci Titik Checkpoint GPS:</span>
               <div class="grid grid-cols-4 gap-2">
-                <button type="button" onclick="selectR4Waypoint(0.6, this)" class="r4-btn py-2.5 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">0,6 km</button>
-                <button type="button" onclick="selectR4Waypoint(4, this)" class="r4-btn py-2.5 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">4 km</button>
-                <button type="button" onclick="selectR4Waypoint(6, this)" class="r4-btn py-2.5 rounded-xl bg-white hover:bg-teal-100 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">6 km</button>
-                <button type="button" onclick="selectR4Waypoint(60, this)" class="r4-btn py-2.5 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">60 km</button>
+                <button type="button" onclick="selectR4Waypoint(0.6, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">0,6 km</button>
+                <button type="button" onclick="selectR4Waypoint(4, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">4 km</button>
+                <button type="button" onclick="selectR4Waypoint(6, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-100 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">6 km</button>
+                <button type="button" onclick="selectR4Waypoint(60, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">60 km</button>
               </div>
             </div>
           </div>
@@ -3332,21 +3421,16 @@
                 <span class="text-[10px] font-bold text-emerald-800">1. Tajuk Tinggi</span>
                 <span class="text-xl my-1">🌲</span>
                 <span class="font-mono text-xs font-bold text-emerald-700">60 Pohon</span>
-                <span class="text-[9px] text-slate-400">Rasio 3 ($3 \\times 20$)</span>
               </div>
-
               <div class="p-2 rounded-lg bg-teal-50 border-2 border-teal-400 flex flex-col justify-between shadow-sm">
                 <span class="text-[10px] font-bold text-teal-900">2. Buah Sedang</span>
                 <span class="text-xl my-1">🌳</span>
                 <span id="r5MiddleTreeCount" class="font-mono text-sm font-black text-teal-800">40 Pohon</span>
-                <span class="text-[9px] text-teal-700 font-bold">Rasio 4 ($? \\text{ Pohon}$)</span>
               </div>
-
               <div class="p-2 rounded-lg bg-emerald-50/60 border border-emerald-200 flex flex-col justify-between">
                 <span class="text-[10px] font-bold text-emerald-800">3. Semak Bawah</span>
                 <span class="text-xl my-1">🌿</span>
                 <span class="font-mono text-xs font-bold text-emerald-700">100 Pohon</span>
-                <span class="text-[9px] text-slate-400">Rasio 5 ($5 \\times 20$)</span>
               </div>
             </div>
 
@@ -3358,7 +3442,6 @@
                   <button type="button" onclick="adjustR5Canopy(10)" class="w-8 h-8 rounded-lg bg-white hover:bg-teal-100 border border-teal-300 text-teal-800 font-bold active:scale-95 transition cursor-pointer">+10</button>
                 </div>
               </div>
-
               <div class="grid grid-cols-4 gap-1.5 pt-1">
                 <button type="button" onclick="setR5Preset(60)" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">60</button>
                 <button type="button" onclick="setR5Preset(70)" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">70</button>
@@ -3381,18 +3464,22 @@
       document.querySelectorAll('.r1-btn').forEach(btn => {
         btn.className = "r1-btn py-2 rounded-xl bg-white hover:bg-emerald-100 border-2 border-slate-200 font-bold text-xs text-slate-700 transition cursor-pointer";
       });
-      el.className = "r1-btn py-2 rounded-xl bg-emerald-600 border-2 border-emerald-700 font-bold text-xs text-white shadow-md transition cursor-pointer";
-      
+      if (el) el.className = "r1-btn py-2 rounded-xl bg-emerald-600 border-2 border-emerald-700 font-bold text-xs text-white shadow-md transition cursor-pointer";
+
       const badge = document.getElementById('r1FpbBadge');
       const preview = document.getElementById('r1PreviewBox');
       if (factor === 24) {
-        badge.className = "text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold";
-        badge.innerText = "FPB = 24 (Terbesar!)";
-        preview.innerHTML = `✨ <b>Tepat!</b> $48 \\div 24 = 2$ dan $72 \\div 24 = 3$. Sekarang pasang keping <b>2</b> dan <b>3</b> ke slot!`;
+        if (badge) {
+          badge.className = "text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold";
+          badge.innerText = "FPB = 24 (Terbesar!)";
+        }
+        if (preview) preview.innerHTML = `✨ <b>Tepat!</b> $48 \\div 24 = 2$ dan $72 \\div 24 = 3$. Sekarang pasang keping <b>2</b> dan <b>3</b> ke slot!`;
       } else {
-        badge.className = "text-[11px] font-mono px-2 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-800 font-bold";
-        badge.innerText = `FPB = ${factor}`;
-        preview.innerHTML = `Pembagi ${factor} dapat membagi keduanya, tetapi belum merupakan FPB terbesar (FPB terbesar adalah 24).`;
+        if (badge) {
+          badge.className = "text-[11px] font-mono px-2 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-800 font-bold";
+          badge.innerText = `FPB = ${factor}`;
+        }
+        if (preview) preview.innerHTML = `Pembagi ${factor} dapat membagi keduanya, tetapi belum merupakan FPB terbesar (FPB terbesar adalah 24).`;
       }
       triggerMathRender();
     }
@@ -3404,12 +3491,16 @@
 
       if (window.r2InteractiveState.r1SlotA === null) {
         window.r2InteractiveState.r1SlotA = val;
-        slotA.innerText = val;
-        slotA.className = "w-14 h-12 rounded-xl border-2 border-emerald-600 bg-emerald-100 flex items-center justify-center text-xl font-black text-emerald-900 cursor-pointer shadow-sm transition";
+        if (slotA) {
+          slotA.innerText = val;
+          slotA.className = "w-14 h-12 rounded-xl border-2 border-emerald-600 bg-emerald-100 flex items-center justify-center text-xl font-black text-emerald-900 cursor-pointer shadow-sm transition";
+        }
       } else if (window.r2InteractiveState.r1SlotB === null) {
         window.r2InteractiveState.r1SlotB = val;
-        slotB.innerText = val;
-        slotB.className = "w-14 h-12 rounded-xl border-2 border-teal-600 bg-teal-100 flex items-center justify-center text-xl font-black text-teal-900 cursor-pointer shadow-sm transition";
+        if (slotB) {
+          slotB.innerText = val;
+          slotB.className = "w-14 h-12 rounded-xl border-2 border-teal-600 bg-teal-100 flex items-center justify-center text-xl font-black text-teal-900 cursor-pointer shadow-sm transition";
+        }
       }
     }
 
@@ -3418,13 +3509,17 @@
       if (slot === 'A') {
         window.r2InteractiveState.r1SlotA = null;
         const el = document.getElementById('slotR1A');
-        el.innerText = '?';
-        el.className = "w-14 h-12 rounded-xl border-2 border-dashed border-emerald-400 bg-emerald-50 flex items-center justify-center text-lg font-black text-emerald-800 cursor-pointer hover:bg-emerald-100 transition shadow-inner";
+        if (el) {
+          el.innerText = '?';
+          el.className = "w-14 h-12 rounded-xl border-2 border-dashed border-emerald-400 bg-emerald-50 flex items-center justify-center text-lg font-black text-emerald-800 cursor-pointer hover:bg-emerald-100 transition shadow-inner";
+        }
       } else {
         window.r2InteractiveState.r1SlotB = null;
         const el = document.getElementById('slotR1B');
-        el.innerText = '?';
-        el.className = "w-14 h-12 rounded-xl border-2 border-dashed border-teal-400 bg-teal-50 flex items-center justify-center text-lg font-black text-teal-800 cursor-pointer hover:bg-teal-100 transition shadow-inner";
+        if (el) {
+          el.innerText = '?';
+          el.className = "w-14 h-12 rounded-xl border-2 border-dashed border-teal-400 bg-teal-50 flex items-center justify-center text-lg font-black text-teal-800 cursor-pointer hover:bg-teal-100 transition shadow-inner";
+        }
       }
     }
 
@@ -3442,32 +3537,34 @@
 
     function setR2Preset(vol) {
       window.r2InteractiveState.nutrientLiters = vol;
-      document.getElementById('r2VolumeDisplay').innerText = `${vol} Liter`;
-      
+      const display = document.getElementById('r2VolumeDisplay');
+      if (display) display.innerText = `${vol} Liter`;
+
+      const fill = document.getElementById('r2LiquidFill');
       const pct = Math.min(100, Math.max(10, Math.round((vol / 120) * 100)));
-      document.getElementById('r2LiquidFill').style.height = `${pct}%`;
+      if (fill) fill.style.height = `${pct}%`;
 
       const badge = document.getElementById('r2RatioStatusBadge');
-      const perUnit = document.getElementById('r2LivePerUnit');
-
-      if (vol === 90) {
-        badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
-        badge.innerText = "Proporsi Seimbang (90L)";
-        perUnit.innerHTML = `<span class="text-emerald-700 font-bold">Rasio Pas: $\\frac{60}{90} = \\frac{2}{3}$</span>`;
-      } else {
-        badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300";
-        badge.innerText = "Kalibrasi Ulang";
-        perUnit.innerHTML = `<span>Rasio Saat Ini: $60 / ${vol}$</span>`;
+      if (badge) {
+        if (vol === 90) {
+          badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
+          badge.innerText = "Proporsi Seimbang (90L)";
+        } else {
+          badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300";
+          badge.innerText = "Kalibrasi Ulang";
+        }
       }
       triggerMathRender();
     }
 
     function updateR3Schedule(days) {
       window.r2InteractiveState.scheduleDays = days;
-      document.getElementById('r3DaysValDisplay').innerText = `${days} Hari`;
+      const daysDisplay = document.getElementById('r3DaysValDisplay');
+      if (daysDisplay) daysDisplay.innerText = `${days} Hari`;
 
       const currentWorkload = 15 * days;
-      document.getElementById('r3CurrentWorkload').innerText = `$15 \\times ${days} = ${currentWorkload}$`;
+      const workloadEl = document.getElementById('r3CurrentWorkload');
+      if (workloadEl) workloadEl.innerText = `$15 \\times ${days} = ${currentWorkload}$`;
 
       const diff = currentWorkload - 180;
       const needle = document.getElementById('r3Needle');
@@ -3475,23 +3572,35 @@
       const diffLabel = document.getElementById('r3DiffLabel');
 
       if (diff === 0) {
-        needle.className = "text-2xl transition-transform duration-300 transform rotate-0";
-        pill.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
-        pill.innerText = "Seimbang Sempurna (180)";
-        diffLabel.className = "text-[10px] font-mono text-emerald-700 font-bold mt-1";
-        diffLabel.innerText = "Pas 180 Hari-Satwa";
+        if (needle) needle.className = "text-2xl transition-transform duration-300 transform rotate-0";
+        if (pill) {
+          pill.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
+          pill.innerText = "Seimbang Sempurna (180)";
+        }
+        if (diffLabel) {
+          diffLabel.className = "text-[10px] font-mono text-emerald-700 font-bold mt-1";
+          diffLabel.innerText = "Pas 180 Hari-Satwa";
+        }
       } else if (diff < 0) {
-        needle.className = "text-2xl transition-transform duration-300 transform -rotate-45";
-        pill.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300";
-        pill.innerText = "Kurang Hari";
-        diffLabel.className = "text-[10px] font-mono text-rose-600 font-bold mt-1";
-        diffLabel.innerText = `${diff} Beban`;
+        if (needle) needle.className = "text-2xl transition-transform duration-300 transform -rotate-45";
+        if (pill) {
+          pill.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300";
+          pill.innerText = "Kurang Hari";
+        }
+        if (diffLabel) {
+          diffLabel.className = "text-[10px] font-mono text-rose-600 font-bold mt-1";
+          diffLabel.innerText = `${diff} Beban`;
+        }
       } else {
-        needle.className = "text-2xl transition-transform duration-300 transform rotate-45";
-        pill.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300";
-        pill.innerText = "Kelebihan Hari";
-        diffLabel.className = "text-[10px] font-mono text-amber-600 font-bold mt-1";
-        diffLabel.innerText = `+${diff} Beban`;
+        if (needle) needle.className = "text-2xl transition-transform duration-300 transform rotate-45";
+        if (pill) {
+          pill.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300";
+          pill.innerText = "Kelebihan Hari";
+        }
+        if (diffLabel) {
+          diffLabel.className = "text-[10px] font-mono text-amber-600 font-bold mt-1";
+          diffLabel.innerText = `+${diff} Beban`;
+        }
       }
       triggerMathRender();
     }
@@ -3500,18 +3609,21 @@
       gameAudio.playSfx('click');
       window.r2InteractiveState.waypointKm = km;
       document.querySelectorAll('.r4-btn').forEach(btn => {
-        btn.className = "r4-btn py-2.5 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer";
+        btn.className = "r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer";
       });
-      el.className = "r4-btn py-2.5 rounded-xl bg-teal-600 border-2 border-teal-700 text-xs font-mono font-bold text-white shadow-md transition cursor-pointer";
+      if (el) el.className = "r4-btn py-2 rounded-xl bg-teal-600 border-2 border-teal-700 text-xs font-mono font-bold text-white shadow-md transition cursor-pointer";
 
-      document.getElementById('r4KmOutput').innerText = `${km} Kilometer`;
+      const kmOutput = document.getElementById('r4KmOutput');
+      if (kmOutput) kmOutput.innerText = `${km} Kilometer`;
       const status = document.getElementById('r4ScanStatus');
-      if (km === 6) {
-        status.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
-        status.innerText = "✅ Pos Terkunci 6 km";
-      } else {
-        status.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-100 text-rose-800 border border-rose-300";
-        status.innerText = "Koordinat Belum Tepat";
+      if (status) {
+        if (km === 6) {
+          status.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
+          status.innerText = "✅ Pos Terkunci 6 km";
+        } else {
+          status.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-100 text-rose-800 border border-rose-300";
+          status.innerText = "Koordinat Belum Tepat";
+        }
       }
     }
 
@@ -3524,17 +3636,19 @@
 
     function setR5Preset(trees) {
       window.r2InteractiveState.canopyTrees = trees;
-      document.getElementById('r5MiddleTreeCount').innerText = `${trees} Pohon`;
+      const countEl = document.getElementById('r5MiddleTreeCount');
+      if (countEl) countEl.innerText = `${trees} Pohon`;
 
       const total = 60 + trees + 100;
       const badge = document.getElementById('r5CapacityBadge');
-
-      if (total === 240) {
-        badge.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
-        badge.innerText = "Kapasitas: 240/240 (Pas!)";
-      } else {
-        badge.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-800 border border-amber-300";
-        badge.innerText = `Kapasitas: ${total}/240`;
+      if (badge) {
+        if (total === 240) {
+          badge.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
+          badge.innerText = "Kapasitas: 240/240 (Pas!)";
+        } else {
+          badge.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-800 border border-amber-300";
+          badge.innerText = `Kapasitas: ${total}/240`;
+        }
       }
     }
 
@@ -3561,15 +3675,14 @@
     function evaluateAnswer() {
       const levelList = getCurrentLevelList();
       const level = levelList[gameState.currentLevelIndex];
-      const fb = document.getElementById('answerFeedback');
       const isReboisasi = gameState.currentGate === 'reboisasi';
 
       let isCorrect = false;
       let explainText = "";
 
       if (level.challengeType === 'ratio_inputs') {
-        const valA = parseInt(document.getElementById('inputRatioA').value);
-        const valB = parseInt(document.getElementById('inputRatioB').value);
+        const valA = parseInt(document.getElementById('inputRatioA')?.value);
+        const valB = parseInt(document.getElementById('inputRatioB')?.value);
         if (isNaN(valA) || isNaN(valB)) {
           showCustomAlert("Isi Tabung Rasio", "Masukkan kedua angka rasio $a$ dan $b$ terlebih dahulu!");
           return;
@@ -3578,10 +3691,10 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Rasio $${valA} : ${valB}$ belum paling sederhana. $\\text{FPB}$ dari $18$ dan $42$ adalah $6$. Coba bagi $18 \\div 6$ dan $42 \\div 6$!`;
+          explainText = `Rasio $${valA} : ${valB}$ belum paling sederhana. $\\text{FPB}$ dari $18$ dan $42$ adalah $6$. Coba bagi $18 \\div 6 = 3$ dan $42 \\div 6 = 7$!`;
         }
       } else if (level.challengeType === 'water_slider') {
-        const val = parseInt(document.getElementById('waterPumpSlider').value);
+        const val = parseInt(document.getElementById('waterPumpSlider')?.value);
         if (val === level.quiz.correctValue) {
           isCorrect = true;
           explainText = level.quiz.explain;
@@ -3589,7 +3702,7 @@
           explainText = `Katup diatur pada $${val}\\text{ Liter}$. Karena $45\\text{ m}^2 = 3 \\times 15\\text{ m}^2$, maka debit air harus $3 \\times 60\\text{ L} = 180\\text{ Liter}$!`;
         }
       } else if (level.challengeType === 'time_stepper') {
-        const val = parseInt(document.getElementById('stepperTimeInput').value);
+        const val = parseInt(document.getElementById('stepperTimeInput')?.value);
         if (val === level.quiz.correctValue) {
           isCorrect = true;
           explainText = level.quiz.explain;
@@ -3597,7 +3710,7 @@
           explainText = `Waktu $${val}\\text{ jam}$ belum tepat. Beban total: $6 \\times 12 = 72\\text{ jam-satwa}$. Untuk $18\\text{ satwa}$, waktu $= \\frac{72}{18} = 4\\text{ jam}$!`;
         }
       } else if (level.challengeType === 'scale_converter') {
-        const val = parseFloat(document.getElementById('inputRealDistance').value);
+        const val = parseFloat(document.getElementById('inputRealDistance')?.value);
         if (isNaN(val)) {
           showCustomAlert("Masukkan Angka", "Ketik jarak sebenarnya dalam satuan kilometer!");
           return;
@@ -3609,12 +3722,12 @@
           explainText = `Jarak $${val}\\text{ km}$ belum tepat. $8\\text{ cm} \\times 25.000 = 200.000\\text{ cm} = 2\\text{ km}$!`;
         }
       } else if (level.challengeType === 'mix_balancer') {
-        const val = parseInt(document.getElementById('inputBiocharWeight').value);
+        const val = parseInt(document.getElementById('inputBiocharWeight')?.value);
         if (val === level.quiz.correctValue) {
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Massa Biochar $${val}\\text{ kg}$ belum tepat. Total rasio $= 2 + 3 + 5 = 10$. Nilai $1$ bagian $= \\frac{120}{10} = 12\\text{ kg}$. Komponen Biochar ($5$ bagian) $= 5 \\times 12 = 60\\text{ kg}$!`;
+          explainText = `Massa Biochar $${val}\\text{ kg}$ belum tepat. Total rasio $= 2 + 3 + 5 = 10$. Nilai $1$ bagian $= \\frac{120}{10} = 12\\text{ kg}$. Biochar ($5$ bagian) $= 5 \\times 12 = 60\\text{ kg}$!`;
         }
       } else if (level.challengeType === 'r1_seed_bundles') {
         const fpb = window.r2InteractiveState.fpbFactor;
@@ -3626,7 +3739,7 @@
           return;
         }
         if (fpb !== 24) {
-          explainText = `Pembagi ${fpb} bukan FPB terbesar untuk $48$ dan $72$. Cari bilangan terbesar yang membagi keduanya (yaitu $24$)!`;
+          explainText = `Pembagi ${fpb} bukan FPB terbesar untuk $48$ dan $72$. FPB terbesarnya adalah $24$!`;
         } else if (slotA === null || slotB === null) {
           showCustomAlert("Tahap 2 Belum Lengkap", "Pasang kedua keping angka rasio ke dalam Slot Rasamala dan Slot Kaliandra!");
           return;
@@ -3638,10 +3751,6 @@
         }
       } else if (level.challengeType === 'r2_nutrient_multiplier') {
         const vol = window.r2InteractiveState.nutrientLiters;
-        if (!vol) {
-          showCustomAlert("Atur Dispenser", "Gunakan tombol takaran untuk mengisi volume cairan bio-organik!");
-          return;
-        }
         if (vol === 90) {
           isCorrect = true;
           explainText = level.quiz.explain;
@@ -3650,15 +3759,11 @@
         }
       } else if (level.challengeType === 'r3_timeline_schedule') {
         const days = window.r2InteractiveState.scheduleDays;
-        if (!days) {
-          showCustomAlert("Pilih Jadwal", "Geser tuas kalender jadwal hari kerja ekspedisi!");
-          return;
-        }
         if (days === 12) {
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Dengan ${days} hari, beban kerja menjadi $15 \\times ${days} = ${15 * days}\\text{ hari-satwa}$. Beban acuan rimba adalah $10 \\times 18 = 180$. Maka $\\frac{180}{15} = 12\\text{ hari}$!`;
+          explainText = `Dengan ${days} hari, beban kerja adalah $15 \\times ${days} = ${15 * days}\\text{ hari-satwa}$. Beban acuan adalah $180$. Maka $\\frac{180}{15} = 12\\text{ hari}$!`;
         }
       } else if (level.challengeType === 'r4_corridor_scanner') {
         const km = window.r2InteractiveState.waypointKm;
@@ -3670,26 +3775,22 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Jarak ${km} km belum tepat. Pada skala $1 : 40.000$, panjang $15\\text{ cm}$ mewakili $15 \\times 40.000\\text{ cm} = 600.000\\text{ cm} = 6\\text{ km}$!`;
+          explainText = `Jarak ${km} km belum tepat. Pada skala $1 : 40.000$, $15\\text{ cm} \\times 40.000 = 600.000\\text{ cm} = 6\\text{ km}$!`;
         }
       } else if (level.challengeType === 'r5_strata_allocator') {
         const trees = window.r2InteractiveState.canopyTrees;
-        if (!trees) {
-          showCustomAlert("Atur Kuota", "Tentukan kuota pohon buah sedang untuk strata tengah!");
-          return;
-        }
         if (trees === 80) {
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Alokasi ${trees} pohon menghasilkan total ${60 + trees + 100} pohon. $1$ bagian rasio $= \\frac{240}{12} = 20\\text{ pohon}$. Maka strata buah sedang ($4$ bagian) $= 4 \\times 20 = 80\\text{ pohon}$!`;
+          explainText = `Alokasi ${trees} pohon menghasilkan total ${60 + trees + 100} pohon. $1$ bagian $= \\frac{240}{12} = 20\\text{ pohon}$. Maka strata buah sedang ($4$ bagian) $= 4 \\times 20 = 80\\text{ pohon}$!`;
         }
       }
 
       if (isCorrect) {
         gameState.levelSolved = true;
         gameAudio.playSfx('water');
-        setTimeout(() => gameAudio.playSfx('correct'), 350);
+        setTimeout(() => gameAudio.playSfx('correct'), 300);
 
         let rewardPoints = 200;
         if (gameState.levelAttempts === 1) {
@@ -3698,43 +3799,13 @@
           rewardPoints = 60;
         }
 
-        const isPerfect = gameState.levelAttempts === 0;
+        if (gameState.levelAttempts === 0) {
+          gameState.perfectBadges[gameState.currentGate][gameState.currentLevelIndex] = true;
+        }
 
-        const stream = document.getElementById('streamAnimation');
-        stream.classList.remove('hidden');
-
-        setTimeout(() => {
-          if (isReboisasi) {
-            document.getElementById('fireAura').innerText = "🌳";
-            document.getElementById('fireAura').className = "text-6xl animate-bounce";
-            document.getElementById('firePercentage').innerText = "100% Subur Tumbuh!";
-            document.getElementById('firePercentage').className = "text-emerald-700 font-bold";
-          } else {
-            document.getElementById('fireAura').innerText = "💨";
-            document.getElementById('fireAura').className = "text-5xl opacity-80";
-            document.getElementById('firePercentage').innerText = "0% (Padam!)";
-            document.getElementById('firePercentage').className = "text-emerald-600 font-bold";
-          }
-          document.getElementById('soilHealthBar').style.width = "100%";
-        }, 600);
-
-        fb.className = "block p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs leading-relaxed shadow-sm";
-        fb.innerHTML = `
-          <div class="flex items-center justify-between font-bold text-sm text-emerald-800 mb-1">
-            <span class="flex items-center gap-2">
-              <i class="fa-solid fa-circle-check text-emerald-600"></i> ${isReboisasi ? 'Penanaman & Rasio Berhasil Sempurna!' : 'Api Berhasil Dipadamkan!'}
-            </span>
-            <span class="text-xs bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-lg">+${rewardPoints} Poin</span>
-          </div>
-          <p class="font-medium">${explainText}</p>
-        `;
-
+        gameState.score += rewardPoints;
         const gateKey = gameState.currentGate;
         gameState.completedLevels[gateKey][gameState.currentLevelIndex] = true;
-        
-        if (isPerfect) {
-          gameState.perfectBadges[gateKey][gameState.currentLevelIndex] = true;
-        }
 
         if (gameState.currentLevelIndex + 1 < 5) {
           if (gameState.gateProgress[gateKey] <= gameState.currentLevelIndex + 1) {
@@ -3742,20 +3813,8 @@
           }
         }
 
-        document.getElementById('submitAnswerBtn').classList.add('hidden');
-        document.getElementById('nextLevelBtn').classList.remove('hidden');
-
-        document.getElementById('quizSpeaker').innerText = "Rasamala & Mikoriza:";
-        document.getElementById('quizStoryDialog').innerText = isReboisasi ? 
-          `"Luar biasa! Tunas pepohonan kita merekah subur berkat ketepatan perhitungan perbandinganmu!"` : 
-          `"Matematika membuktikan kehebatannya! Takaran perhitunganmu tepat mematikan pusat panas!"`;
-        document.getElementById('quizAvatar').innerText = isReboisasi ? "🌺" : "🌲";
-
-        // Memunculkan Pop-up Berhasil & Klaim Hadiah
-        setTimeout(() => {
-          openSuccessClaimModal(rewardPoints, explainText, isPerfect);
-        }, 700);
-
+        updateHUD();
+        openSuccessClaimModal(explainText, rewardPoints);
       } else {
         gameAudio.playSfx('wrong');
         gameState.levelAttempts++;
@@ -3772,64 +3831,41 @@
         gameState.vitality = Math.max(10, gameState.vitality - 15);
         updateHUD();
 
-        fb.className = "block p-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-900 text-xs leading-relaxed shadow-sm";
-        fb.innerHTML = `
-          <div class="flex items-center justify-between font-bold text-sm text-rose-700 mb-1">
-            <span class="flex items-center gap-1.5">
-              <i class="fa-solid fa-circle-xmark text-rose-600"></i> Salah Percobaan ke-${gameState.levelAttempts}! (Sisa Nyawa: ${gameState.lives})
-            </span>
-            <span class="text-xs bg-rose-200 text-rose-800 px-2 py-0.5 rounded-lg">-${penaltyPoints} Poin</span>
-          </div>
-          <p class="font-medium">${explainText}</p>
-        `;
-
-        document.getElementById('fireAura').classList.add('scale-125');
-        setTimeout(() => document.getElementById('fireAura').classList.remove('scale-125'), 400);
-
         if (gameState.lives <= 0) {
-          setTimeout(() => {
-            triggerGameOver();
-          }, 800);
-          return;
-        }
-
-        // Memunculkan Pop-up Peringatan Salah untuk Diulang
-        setTimeout(() => {
+          setTimeout(triggerGameOver, 600);
+        } else {
           openWrongRetryModal(explainText, penaltyPoints);
-        }, 500);
+        }
       }
       triggerMathRender();
     }
 
-    let pendingRewardPoints = 0;
-
-    function openSuccessClaimModal(rewardPoints, explainText, isPerfect) {
-      pendingRewardPoints = rewardPoints;
-      document.getElementById('claimRewardPointsDisplay').innerText = `+${rewardPoints} Poin`;
-      document.getElementById('successExplainText').innerHTML = explainText;
-
+    function openSuccessClaimModal(explainText, rewardPoints) {
+      const modal = document.getElementById('modalSuccessClaim');
+      const explainEl = document.getElementById('successExplainText');
+      const pointsEl = document.getElementById('claimRewardPointsDisplay');
       const badgeNotify = document.getElementById('perfectBadgeNotify');
-      if (isPerfect) {
-        badgeNotify.classList.remove('hidden');
-      } else {
-        badgeNotify.classList.add('hidden');
+
+      if (explainEl) explainEl.innerHTML = explainText;
+      if (pointsEl) pointsEl.innerText = `+${rewardPoints} Poin`;
+      if (badgeNotify) {
+        if (gameState.levelAttempts === 0) {
+          badgeNotify.classList.remove('hidden');
+        } else {
+          badgeNotify.classList.add('hidden');
+        }
       }
 
-      const modal = document.getElementById('modalSuccessClaim');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
       triggerMathRender();
     }
 
     function handleClaimRewardAndAdvance() {
-      gameAudio.playSfx('correct');
-      gameState.score += pendingRewardPoints;
-      pendingRewardPoints = 0;
-      updateHUD();
       closeModal('modalSuccessClaim');
-      setTimeout(() => {
-        returnToMapAfterCompletion();
-      }, 300);
+      returnToMapAfterCompletion();
     }
 
     function returnToMapAfterCompletion() {
@@ -3844,6 +3880,7 @@
             "Gerbang Pemadaman Tuntas!",
             "Seluruh 5 pos bara api telah berhasil dipadamkan. Mikoriza menyadari kekhilafannya dan bertekad memulihkan rimba. Gerbang II: Reboisasi Rimba kini TERBUKA!"
           );
+          setAppBackground('https://lh3.googleusercontent.com/d/1IISjhOdEVZK9IXTT2b55CvXKjlTiFi36');
           screenLevel.classList.add('hidden');
           screenGates.classList.remove('hidden');
           renderGatesStatus();
@@ -3853,6 +3890,7 @@
         }
       } else {
         // Kembali ke peta perjalanan agar murid dapat memilih pulau pos berikutnya
+        setAppBackground('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');
         screenLevel.classList.add('hidden');
         screenMap.classList.remove('hidden');
         renderJourneyMap();
@@ -3926,32 +3964,8 @@
       triggerMathRender();
     }
 
-    function advanceToNextLevel() {
-      gameAudio.playSfx('levelComplete');
-      const levelList = getCurrentLevelList();
-      
-      if (gameState.currentLevelIndex < levelList.length - 1) {
-        gameState.currentLevelIndex++;
-        loadLevel(gameState.currentLevelIndex);
-      } else {
-        if (gameState.currentGate === 'pemadaman') {
-          gameState.gate1Completed = true;
-          showCustomAlert(
-            "Gerbang Pemadaman Tuntas!",
-            "Seluruh 5 pos bara api telah berhasil dipadamkan. Mikoriza menyadari kekhilafannya dan bertekad memulihkan rimba. Gerbang II: Reboisasi Rimba kini TERBUKA!"
-          );
-          screenLevel.classList.add('hidden');
-          screenGates.classList.remove('hidden');
-          renderGatesStatus();
-        } else {
-          gameState.reboisasiCompleted = true;
-          triggerEndingSequence();
-        }
-      }
-      triggerMathRender();
-    }
-
     function triggerEndingSequence() {
+      setAppBackground('https://lh3.googleusercontent.com/d/13r915My8zJwTLZFeSZSmu1-xdAGflG0i');
       screenLevel.classList.add('hidden');
       screenMap.classList.add('hidden');
       screenGates.classList.add('hidden');
@@ -4156,9 +4170,70 @@
       }
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
+    // Explicitly expose functions to window to prevent ReferenceErrors in blob/iframe environments
+    window.goToPrologue = goToPrologue;
+    window.handleNavHome = handleNavHome;
+    window.handleNavBack = handleNavBack;
+    window.goToIdentity = goToIdentity;
+    window.backToIntro = backToIntro;
+    window.backToIdentity = backToIdentity;
+    window.selectCharacter = selectCharacter;
+    window.submitIdentityAndGoToGates = submitIdentityAndGoToGates;
+    window.backToHero = backToHero;
+    window.goToGates = goToGates;
+    window.backToPrologue = backToPrologue;
+    window.backToGates = backToGates;
+    window.startGate = startGate;
+    window.selectLevelFromMap = selectLevelFromMap;
+    window.restartGame = restartGame;
+    window.toggleStatsSlider = toggleStatsSlider;
+    window.switchPhase = switchPhase;
+    window.loadLevel = loadLevel;
+    window.selectR1Factor = selectR1Factor;
+    window.placeR1Token = placeR1Token;
+    window.clearR1Slot = clearR1Slot;
+    window.resetR1Slots = resetR1Slots;
+    window.adjustR2Nutrient = adjustR2Nutrient;
+    window.setR2Preset = setR2Preset;
+    window.updateR3Schedule = updateR3Schedule;
+    window.selectR4Waypoint = selectR4Waypoint;
+    window.adjustR5Canopy = adjustR5Canopy;
+    window.setR5Preset = setR5Preset;
+    window.adjustStepperVal = adjustStepperVal;
+    window.adjustBiocharVal = adjustBiocharVal;
+    window.evaluateAnswer = evaluateAnswer;
+    window.openSuccessClaimModal = openSuccessClaimModal;
+    window.handleClaimRewardAndAdvance = handleClaimRewardAndAdvance;
+    window.returnToMapAfterCompletion = returnToMapAfterCompletion;
+    window.advanceToNextLevel = advanceToNextLevel;
+    window.openWrongRetryModal = openWrongRetryModal;
+    window.triggerGameOver = triggerGameOver;
+    window.restartFromBeginning = restartFromBeginning;
+    window.toggleHint = toggleHint;
+    window.triggerEndingSequence = triggerEndingSequence;
+    window.renderPerfectBadges = renderPerfectBadges;
+    window.openLeaderboardModal = openLeaderboardModal;
+    window.openReferensiModal = openReferensiModal;
+    window.showCustomAlert = showCustomAlert;
+    window.openLearningGoalsModal = openLearningGoalsModal;
+    window.openPetunjukTeknisModal = openPetunjukTeknisModal;
+    window.openRasamalaInfoModal = openRasamalaInfoModal;
+    window.openDeveloperModal = openDeveloperModal;
+    window.closeModal = closeModal;
+
+    // Attach click listener directly to the play button
+    const playBtn = document.getElementById('btnPlayHero');
+    if (playBtn) {
+      playBtn.addEventListener('click', goToPrologue);
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(triggerMathRender, 300);
+      });
+    } else {
       setTimeout(triggerMathRender, 300);
-    });
+    }
   </script>
 </body>
 </html>
