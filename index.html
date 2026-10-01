@@ -49,21 +49,25 @@
   </script>
 
   <style>
-    body {
+    html, body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       user-select: none;
       -webkit-user-select: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      image-rendering: -webkit-optimize-contrast;
     }
     .font-game {
       font-family: 'Fredoka', cursive;
     }
     @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-8px) rotate(1deg); }
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
     }
     @keyframes pulseGlow {
-      0%, 100% { filter: drop-shadow(0 0 15px rgba(249, 115, 22, 0.6)); }
-      50% { filter: drop-shadow(0 0 28px rgba(239, 68, 68, 0.9)); }
+      0%, 100% { filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.65)); }
+      50% { filter: drop-shadow(0 0 24px rgba(239, 68, 68, 0.85)); }
     }
     @keyframes leafSway {
       0%, 100% { transform: rotate(-3deg); }
@@ -81,83 +85,83 @@
     }
     /* 3D Game Button Styles & Scale Animations */
     .btn-3d-game {
-      box-shadow: 0 6px 0 #064e3b, 0 10px 20px rgba(0, 0, 0, 0.4);
-      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 6px 0 #064e3b, 0 10px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      backface-visibility: hidden;
     }
     .btn-3d-game:hover {
-      transform: scale(1.12) translateY(-4px);
-      box-shadow: 0 9px 0 #064e3b, 0 16px 25px rgba(0, 0, 0, 0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 9px 0 #064e3b, 0 14px 22px rgba(0, 0, 0, 0.35);
     }
     .btn-3d-game:active {
-      transform: scale(1.02) translateY(2px);
-      box-shadow: 0 3px 0 #064e3b, 0 6px 12px rgba(0, 0, 0, 0.35);
+      transform: translateY(2px);
+      box-shadow: 0 3px 0 #064e3b, 0 6px 10px rgba(0, 0, 0, 0.25);
     }
 
     .btn-3d-play {
-      box-shadow: 0 8px 0 #022c22, 0 14px 28px rgba(5, 150, 105, 0.55);
-      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 0 #022c22, 0 14px 26px rgba(5, 150, 105, 0.45);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      backface-visibility: hidden;
     }
     .btn-3d-play:hover {
-      transform: scale(1.15) translateY(-6px);
-      box-shadow: 0 12px 0 #022c22, 0 22px 35px rgba(16, 185, 129, 0.7);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 0 #022c22, 0 20px 30px rgba(16, 185, 129, 0.55);
     }
     .btn-3d-play:active {
-      transform: scale(1.05) translateY(3px);
-      box-shadow: 0 4px 0 #022c22, 0 8px 15px rgba(5, 150, 105, 0.4);
+      transform: translateY(3px);
+      box-shadow: 0 4px 0 #022c22, 0 8px 12px rgba(5, 150, 105, 0.35);
     }
 
     /* Penanda & Efek 3D Karakter Terpilih */
     .char-card-3d {
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
       position: relative;
     }
     .char-3d-selected {
       background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%) !important;
       border: 3px solid #059669 !important;
-      transform: translateY(-5px) scale(1.06) !important;
-      box-shadow: 0 12px 24px -4px rgba(5, 150, 105, 0.4), 0 0 0 3px rgba(16, 185, 129, 0.35) !important;
+      transform: translateY(-4px) !important;
+      box-shadow: 0 10px 20px -3px rgba(5, 150, 105, 0.35), 0 0 0 3px rgba(16, 185, 129, 0.3) !important;
     }
     .char-3d-unselected {
-      background: rgba(255, 255, 255, 0.92);
+      background: #ffffff;
       border: 2px solid #e2e8f0;
-      opacity: 0.8;
+      opacity: 0.9;
     }
     .char-3d-unselected:hover {
       opacity: 1;
-      transform: translateY(-2px) scale(1.02);
+      transform: translateY(-2px);
       border-color: #6ee7b7;
     }
 
-    /* 3D Prologue Character Cards (Rasamala VS Mikoriza) */
+    /* Kartu Karakter Babak Prolog (Rasamala & Mikoriza) - Teks Tajam Tanpa Distorsi Sudut 3D */
     .prologue-perspective {
-      perspective: 1100px;
+      position: relative;
     }
     .card-3d-prologue-rasamala {
-      transform: rotateY(7deg) rotateX(3deg) translateZ(0);
-      box-shadow: 0 10px 0 #047857, 0 18px 30px rgba(4, 120, 87, 0.35), 0 0 0 3px rgba(255, 255, 255, 0.95);
-      transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 0 #047857, 0 14px 24px rgba(4, 120, 87, 0.25), 0 0 0 3px rgba(255, 255, 255, 0.95);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
     }
     .card-3d-prologue-rasamala:hover {
-      transform: translateY(-8px) scale(1.08) rotateY(0deg) rotateX(0deg);
-      box-shadow: 0 15px 0 #047857, 0 28px 40px rgba(4, 120, 87, 0.45), 0 0 0 3px #34d399;
+      transform: translateY(-6px);
+      box-shadow: 0 12px 0 #047857, 0 20px 30px rgba(4, 120, 87, 0.35), 0 0 0 3px #34d399;
     }
     .card-3d-prologue-mikoriza {
-      transform: rotateY(-7deg) rotateX(3deg) translateZ(0);
-      box-shadow: 0 10px 0 #b91c1c, 0 18px 30px rgba(185, 28, 28, 0.35), 0 0 0 3px rgba(255, 255, 255, 0.95);
-      transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 0 #b91c1c, 0 14px 24px rgba(185, 28, 28, 0.25), 0 0 0 3px rgba(255, 255, 255, 0.95);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
     }
     .card-3d-prologue-mikoriza:hover {
-      transform: translateY(-8px) scale(1.08) rotateY(0deg) rotateX(0deg);
-      box-shadow: 0 15px 0 #b91c1c, 0 28px 40px rgba(185, 28, 28, 0.45), 0 0 0 3px #fb7185;
+      transform: translateY(-6px);
+      box-shadow: 0 12px 0 #b91c1c, 0 20px 30px rgba(185, 28, 28, 0.35), 0 0 0 3px #fb7185;
     }
     .podium-3d-inner {
-      box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.14), inset 0 -3px 6px rgba(255, 255, 255, 0.6), 0 4px 10px rgba(0, 0, 0, 0.08);
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1), inset 0 -2px 5px rgba(255, 255, 255, 0.7), 0 3px 8px rgba(0, 0, 0, 0.06);
       position: relative;
     }
 
     /* Portal Gate Hover Animation */
     .portal-gate {
-      transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.38s ease;
+      transition: transform 0.25s ease, filter 0.25s ease;
     }
 
     /* Stats Slider Drawer Transition */
@@ -171,7 +175,7 @@
       pointer-events: none;
       visibility: hidden;
       overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.25s ease-in-out;
     }
     .stats-drawer-expanded {
       max-width: 600px !important;
@@ -179,49 +183,41 @@
       pointer-events: auto;
       visibility: visible;
       overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.25s ease-in-out;
     }
 
-    /* Smooth Screen Transitions (Perpindahan Antar Halaman Halus & Responsif) */
+    /* Transisi Antar Layar Bersih & Tajam (Bebas dari Efek Rasterisasi Blur) */
     main > section:not(.hidden) {
-      animation: screenEnter 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
-      will-change: opacity, transform;
+      animation: screenEnter 0.2s ease-out;
     }
     @keyframes screenEnter {
-      0% {
+      from {
         opacity: 0;
-        transform: translateY(14px) scale(0.99);
       }
-      100% {
+      to {
         opacity: 1;
-        transform: translateY(0) scale(1);
       }
     }
 
-    /* Sub-phase (Tab Materi vs Misi Lapangan) Smooth Transitions */
+    /* Sub-phase (Tab Materi vs Misi Lapangan) */
     #phaseMateri:not(.hidden), #phaseAksi:not(.hidden) {
-      animation: phaseEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
-      will-change: opacity, transform;
+      animation: phaseEnter 0.18s ease-out;
     }
     @keyframes phaseEnter {
-      0% {
+      from {
         opacity: 0;
-        transform: translateY(10px);
       }
-      100% {
+      to {
         opacity: 1;
-        transform: translateY(0);
       }
     }
 
-    /* Modal Backdrop & Dialog Box Smooth Pop-in Animations */
+    /* Modal Backdrop & Dialog Box */
     [id^="modal"]:not(.hidden) {
-      animation: backdropFadeIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
-      will-change: opacity;
+      animation: backdropFadeIn 0.2s ease-out;
     }
     [id^="modal"]:not(.hidden) > div {
-      animation: modalPopIn 0.28s cubic-bezier(0.34, 1.35, 0.64, 1) both;
-      will-change: opacity, transform;
+      animation: modalPopIn 0.22s ease-out;
     }
     @keyframes backdropFadeIn {
       from { opacity: 0; }
@@ -230,20 +226,20 @@
     @keyframes modalPopIn {
       from {
         opacity: 0;
-        transform: scale(0.92) translateY(16px);
+        transform: translateY(8px);
       }
       to {
         opacity: 1;
-        transform: scale(1) translateY(0);
+        transform: translateY(0);
       }
     }
 
-    /* Modal Smooth Exit Animation */
+    /* Modal Exit Animation */
     [id^="modal"].modal-closing {
-      animation: backdropFadeOut 0.18s ease-in forwards !important;
+      animation: backdropFadeOut 0.15s ease-in forwards !important;
     }
     [id^="modal"].modal-closing > div {
-      animation: modalPopOut 0.18s ease-in forwards !important;
+      animation: modalPopOut 0.15s ease-in forwards !important;
     }
     @keyframes backdropFadeOut {
       from { opacity: 1; }
@@ -252,11 +248,11 @@
     @keyframes modalPopOut {
       from {
         opacity: 1;
-        transform: scale(1) translateY(0);
+        transform: translateY(0);
       }
       to {
         opacity: 0;
-        transform: scale(0.93) translateY(12px);
+        transform: translateY(8px);
       }
     }
   </style>
@@ -264,7 +260,7 @@
 
 <body class="bg-slate-950 text-slate-800 min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-emerald-200">
 
-  <!-- Lapisan Latar Belakang Global Layar Penuh (True Fullscreen 100vw x 100vh Tanpa Celah Hijau) -->
+  <!-- Lapisan Latar Belakang Global Layar Penuh -->
   <div id="appGlobalBackground" class="fixed inset-0 w-full h-full -z-20 bg-cover bg-center bg-no-repeat transition-all duration-700 pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/d/1WC77s2bQvxl7PuDJEEe2lmjNtq4pn8Rs');"></div>
 
   <!-- SVG Filter untuk Eliminasi Background Hitam Gambar Karakter -->
@@ -283,11 +279,11 @@
   <!-- Background Dynamic Atmospheric Canvas -->
   <canvas id="fxCanvas" class="fixed inset-0 w-full h-full pointer-events-none -z-10"></canvas>
 
-  <!-- Top Navigation / Game HUD (Sesuai Posisi Gambar Referensi: Melayang Elegan di Atas Latar) -->
+  <!-- Top Navigation / Game HUD (Tampilan Tajam, Jelas, dan Bersih Tanpa Blur) -->
   <header id="gameHeader" class="hidden relative z-30 w-full px-3 sm:px-8 pt-3 pb-1 transition-all duration-300">
-    <div class="max-w-6xl mx-auto flex items-center justify-between bg-white/95 backdrop-blur-md border border-emerald-200/80 shadow-lg shadow-emerald-950/10 rounded-2xl sm:rounded-3xl px-3 sm:px-5 py-2 sm:py-2.5">
+    <div class="max-w-6xl mx-auto flex items-center justify-between bg-white border border-emerald-200 shadow-md shadow-emerald-950/10 rounded-2xl sm:rounded-3xl px-3 sm:px-5 py-2 sm:py-2.5">
       <div class="flex items-center gap-2 sm:gap-3 cursor-pointer" onclick="handleNavHome()">
-        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white border border-emerald-200/80 flex items-center justify-center shadow-md shadow-emerald-500/10 overflow-hidden p-0.5">
+        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white border border-emerald-200 flex items-center justify-center shadow-sm overflow-hidden p-0.5">
           <img 
             src="https://lh3.googleusercontent.com/d/1pG0PPdHHhoEXeYjXVLrdhk1zQDUBda_h" 
             alt="Logo DR. Rasamala" 
@@ -297,9 +293,9 @@
           />
         </div>
         <div>
-          <h1 class="font-game text-lg sm:text-2xl font-black tracking-wider bg-gradient-to-r from-emerald-900 via-teal-700 to-emerald-600 bg-clip-text text-transparent drop-shadow-sm flex items-center gap-1.5">
-            <span class="text-amber-500 drop-shadow-xs">DR.</span>
-            <span>Rasamala</span>
+          <h1 class="font-game text-lg sm:text-2xl font-black tracking-wider flex items-center gap-1.5">
+            <span class="text-amber-500">DR.</span>
+            <span class="text-emerald-800">Rasamala</span>
           </h1>
         </div>
       </div>
@@ -307,7 +303,7 @@
       <!-- Live Player Stats & HUD Navigation -->
       <div class="flex items-center gap-1.5 sm:gap-3">
         <!-- Retractable Stats Slider Drawer -->
-        <div class="flex items-center bg-emerald-50/80 border border-emerald-200/90 rounded-2xl p-1 shadow-sm">
+        <div class="flex items-center bg-emerald-50 border border-emerald-200 rounded-2xl p-1 shadow-xs">
           <!-- Tombol Panah Slider (<) -->
           <button id="statsSliderToggleBtn" onclick="toggleStatsSlider()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center transition-all duration-300 active:scale-95 shadow-sm group cursor-pointer" title="Tampilkan Status (Level, Nyawa, Skor)" aria-label="Buka / Tutup Status">
             <i id="statsSliderArrowIcon" class="fa-solid fa-chevron-left text-xs sm:text-sm transition-transform duration-300 pointer-events-none"></i>
@@ -412,67 +408,74 @@
 
     <!-- SCREEN 2: STORY PROLOGUE -->
     <section id="screenIntro" class="relative hidden flex-col items-center justify-center min-h-[82vh] my-auto text-center space-y-5 py-6 transition-all duration-500 w-full mx-auto">
-      <!-- Badge Babak Prolog Sesuai Gambar Referensi -->
-      <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-emerald-100/95 border-2 border-emerald-300 text-emerald-900 text-xs sm:text-sm font-bold shadow-md backdrop-blur-sm mx-auto">
+      <!-- Badge Babak Prolog -->
+      <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-emerald-100 border-2 border-emerald-300 text-emerald-900 text-xs sm:text-sm font-bold shadow-sm mx-auto">
         <i class="fa-solid fa-book-open text-emerald-700"></i> Babak Prolog • Kisah Hutan Harapan
       </div>
 
-      <!-- Wadah Dua Kartu Karakter Rasamala VS Mikoriza Berbentuk 3D -->
+      <!-- Wadah Dua Kartu Karakter Rasamala VS Mikoriza -->
       <div class="prologue-perspective relative w-full max-w-xl py-4 flex items-center justify-center gap-4 sm:gap-7 mx-auto select-none">
         
-        <!-- Kartu Kiri: Rasamala 3D (Mint Green Interior & 3D Bevel) -->
-        <div class="card-3d-prologue-rasamala w-40 sm:w-48 bg-white/95 backdrop-blur-md rounded-[2.2rem] p-4 sm:p-5 flex flex-col items-center text-center cursor-pointer group">
+        <!-- Kartu Kiri: Rasamala 3D -->
+        <div onclick="openRasamalaHabitsModal()" class="card-3d-prologue-rasamala relative w-40 sm:w-48 bg-white rounded-[2.2rem] p-4 sm:p-5 flex flex-col items-center text-center cursor-pointer group hover:ring-4 hover:ring-emerald-400/50 transition-all" title="Klik untuk membuka 7 Kebiasaan Anak Indonesia Hebat dari Rasamala!">
+          <!-- Lencana Interaktif Klik -->
+          <span class="absolute -top-2.5 -right-1 bg-gradient-to-r from-amber-500 to-emerald-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full border-2 border-white shadow-md animate-pulse z-20 flex items-center gap-1">
+            <i class="fa-solid fa-star text-[8px]"></i> 7 Kebiasaan
+          </span>
           <div class="podium-3d-inner w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-gradient-to-b from-[#e2f8e7] to-[#c6efce] border-2 border-emerald-300/80 flex items-center justify-center p-2 overflow-visible">
             <div class="absolute -bottom-2 inset-x-3 h-3 bg-emerald-600/25 rounded-full blur-xs pointer-events-none"></div>
             <img 
               src="https://lh3.googleusercontent.com/d/1bb6jdkvp4wqs9GdSVbui0-22o9QZaYBK" 
               alt="Rasamala - Sang Pohon Kuno Pelindung" 
-              class="relative z-10 w-full h-full object-contain animate-sway drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
+              class="relative z-10 w-full h-full object-contain animate-sway drop-shadow-md group-hover:scale-105 transition-transform duration-300"
               loading="eager"
               onerror="this.onerror=null; this.src='https://placehold.co/120x120/c6efce/166534?text=Rasamala';"
             />
           </div>
-          <span class="font-game text-sm sm:text-base font-black text-emerald-950 mt-3.5 leading-tight tracking-wide drop-shadow-xs">Rasamala</span>
+          <span class="font-game text-sm sm:text-base font-black text-emerald-950 mt-3.5 leading-tight tracking-wide">Rasamala</span>
           <span class="text-[10px] sm:text-[11px] text-emerald-800 font-bold mt-1 leading-snug bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Sang Pohon Kuno</span>
+          <span class="mt-1.5 text-[9px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-emerald-300">
+            <i class="fa-solid fa-hand-pointer text-[8px]"></i> Ketuk Buka Kisah
+          </span>
         </div>
 
-        <!-- Tengah: VS dengan Kupu-Kupu 🦋 Bergaya 3D -->
+        <!-- Tengah: VS dengan Kupu-Kupu 🦋 -->
         <div class="flex flex-col items-center justify-center px-1 sm:px-2 z-10">
-          <span class="text-2xl sm:text-3xl font-black bg-gradient-to-b from-amber-400 to-amber-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(217,119,6,0.5)] font-game">VS</span>
-          <span class="text-2xl sm:text-3xl mt-1 animate-pulse filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]">🦋</span>
+          <span class="text-2xl sm:text-3xl font-black bg-gradient-to-b from-amber-500 to-amber-600 bg-clip-text text-transparent font-game">VS</span>
+          <span class="text-2xl sm:text-3xl mt-1 animate-pulse filter drop-shadow">🦋</span>
         </div>
 
-        <!-- Kartu Kanan: Mikoriza 3D (Peach Interior & 3D Bevel) -->
-        <div class="card-3d-prologue-mikoriza w-40 sm:w-48 bg-white/95 backdrop-blur-md rounded-[2.2rem] p-4 sm:p-5 flex flex-col items-center text-center cursor-pointer group">
+        <!-- Kartu Kanan: Mikoriza 3D -->
+        <div class="card-3d-prologue-mikoriza w-40 sm:w-48 bg-white rounded-[2.2rem] p-4 sm:p-5 flex flex-col items-center text-center cursor-pointer group">
           <div class="podium-3d-inner w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-gradient-to-b from-[#ffede6] to-[#fed7c7] border-2 border-rose-300/80 flex items-center justify-center p-2 overflow-visible">
             <div class="absolute -bottom-2 inset-x-3 h-3 bg-rose-600/25 rounded-full blur-xs pointer-events-none"></div>
             <img 
               src="https://lh3.googleusercontent.com/d/1zsvl7BeE5c5tuQIF0HvsnkyTaIYKLDSM" 
               alt="Mikoriza - Jamur Akar Terhasut" 
-              class="relative z-10 w-full h-full object-contain animate-glow-fire drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
+              class="relative z-10 w-full h-full object-contain animate-glow-fire drop-shadow-md group-hover:scale-105 transition-transform duration-300"
               loading="eager"
               onerror="this.onerror=null; this.src='https://placehold.co/120x120/fed7c7/991b1b?text=Mikoriza';"
             />
           </div>
-          <span class="font-game text-sm sm:text-base font-black text-rose-700 mt-3.5 leading-tight tracking-wide drop-shadow-xs">Mikoriza</span>
+          <span class="font-game text-sm sm:text-base font-black text-rose-700 mt-3.5 leading-tight tracking-wide">Mikoriza</span>
           <span class="text-[10px] sm:text-[11px] text-rose-800 font-bold mt-1 leading-snug bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">Jamur Akar Terhasut</span>
         </div>
 
       </div>
 
       <!-- Wadah Video Pembuka Kisah Prolog (Aspek Rasio 16:9) -->
-      <div class="max-w-3xl w-full mx-auto bg-white/95 border border-emerald-200 p-4 sm:p-6 rounded-3xl shadow-xl backdrop-blur space-y-3.5">
+      <div class="max-w-3xl w-full mx-auto bg-white border border-emerald-200 p-4 sm:p-6 rounded-3xl shadow-xl space-y-3.5">
         <div class="text-center space-y-1">
           <h2 class="font-game text-xl sm:text-3xl font-extrabold text-slate-800">
-            Saksikan Kisah: <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-amber-500">Api Keserakahan</span>
+            Saksikan Kisah: <span class="text-rose-600">Api Keserakahan</span>
           </h2>
-          <p class="text-slate-500 text-xs sm:text-sm font-medium">
+          <p class="text-slate-600 text-xs sm:text-sm font-medium">
             Simak video pembuka petualangan sebelum memulai ekspedisi penyelamatan rimba!
           </p>
         </div>
 
         <!-- Frame Video Rasio 16:9 -->
-        <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border-2 border-emerald-300/80 bg-slate-950 flex items-center justify-center">
+        <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-xl border-2 border-emerald-300/80 bg-slate-950 flex items-center justify-center">
           <video 
             id="prologueVideo" 
             controls 
@@ -486,7 +489,7 @@
         </div>
 
         <div class="flex justify-center items-center pt-2">
-          <button onclick="goToIdentity()" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-game font-bold text-base tracking-wider shadow-lg shadow-emerald-500/30 hover:scale-105 active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer">
+          <button onclick="goToIdentity()" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-game font-bold text-base tracking-wider shadow-md hover:scale-105 active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer">
             <span>Daftar Identitas Petualang</span> <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
@@ -1177,57 +1180,127 @@
             <i class="fa-solid fa-user-graduate"></i>
           </div>
         </div>
-
         <div>
-          <h3 class="font-game text-xl sm:text-2xl font-bold text-slate-800">Informasi Pengembang</h3>
-          <p class="text-xs text-emerald-700 font-semibold mt-0.5">Media Gim Edukasi Matematika SMP Fase D</p>
+          <h3 class="font-game text-xl sm:text-2xl font-bold text-slate-800">Agis Kusmawan, S.Pd., Gr.</h3>
+          <p class="text-xs text-emerald-700 font-bold uppercase tracking-wider mt-0.5">Guru Matematika & Pengembang Gim Edukasi</p>
         </div>
+      </div>
 
-        <!-- Profil Utama Pengembang -->
-        <div class="bg-emerald-50/80 rounded-2xl p-4 border border-emerald-200 text-left space-y-2 text-xs sm:text-sm text-slate-700 shadow-xs">
-          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1 border-b border-emerald-100 gap-0.5">
-            <span class="text-slate-500 text-xs">Nama Pengembang:</span>
-            <span class="font-bold text-emerald-950 font-game text-sm sm:text-base">Agis Kusmawan, S.Pd., Gr.</span>
-          </div>
-          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1 border-b border-emerald-100 gap-0.5">
-            <span class="text-slate-500 text-xs">Instansi:</span>
-            <span class="font-bold text-slate-800">SMP Negeri 1 Bogor</span>
-          </div>
-          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1 border-b border-emerald-100 gap-0.5">
-            <span class="text-slate-500 text-xs">Mata Pelajaran:</span>
-            <span class="font-semibold text-emerald-800">Matematika</span>
-          </div>
-          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center py-1 gap-0.5">
-            <span class="text-slate-500 text-xs">Tahun Pembuatan:</span>
-            <span class="font-bold text-amber-700 font-mono">2026</span>
+      <!-- Detail Informasi Profil Pengembang -->
+      <div class="mt-4 space-y-3 text-left">
+        <div class="bg-emerald-50/80 rounded-2xl p-3.5 border border-emerald-200 space-y-2 text-xs">
+          <span class="font-game font-bold text-emerald-950 text-sm flex items-center gap-1.5 pb-1 border-b border-emerald-200">
+            <i class="fa-solid fa-id-card text-emerald-600"></i> Profil Pengembang
+          </span>
+          <div class="grid grid-cols-1 gap-1.5 text-slate-700 pt-1">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-500">Nama:</span>
+              <span class="font-bold text-slate-800">Agis Kusmawan, S.Pd., Gr.</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-500">Instansi:</span>
+              <span class="font-bold text-emerald-800">SMP Negeri 1 Bogor</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-500">Mata Pelajaran:</span>
+              <span class="font-bold text-teal-700">Matematika</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-500">Email:</span>
+              <a href="mailto:agis.kusmawan25@guru.smp.belajar.id" class="font-bold text-emerald-700 hover:text-emerald-900 underline font-mono text-[11px] sm:text-xs">agis.kusmawan25@guru.smp.belajar.id</a>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-500">Tahun Pembuatan:</span>
+              <span class="font-bold text-amber-700 font-mono">2026</span>
+            </div>
           </div>
         </div>
 
         <!-- Prestasi & Pengalaman -->
-        <div class="bg-amber-50/80 rounded-2xl p-4 border border-amber-200 text-left space-y-2.5">
-          <h4 class="font-game text-xs sm:text-sm font-bold text-amber-900 flex items-center gap-2">
-            <i class="fa-solid fa-award text-amber-500 text-sm"></i>
-            <span>Prestasi & Pengalaman:</span>
-          </h4>
-          <ul class="space-y-2 text-xs text-slate-700">
-            <li class="flex items-start gap-2 leading-relaxed">
-              <i class="fa-solid fa-circle-check text-emerald-600 mt-1 text-[11px] shrink-0"></i>
-              <span>Terpilih <b>135 Konten Pembelajaran Interaktif Terbaik</b> Kategori Gim Edukasi Direktorat PNFI.</span>
+        <div class="bg-amber-50/80 rounded-2xl p-3.5 border border-amber-200 space-y-2 text-xs">
+          <span class="font-game font-bold text-amber-950 text-sm flex items-center gap-1.5 pb-1 border-b border-amber-200">
+            <i class="fa-solid fa-award text-amber-600"></i> Prestasi & Pengalaman
+          </span>
+          <ul class="space-y-2 text-slate-700 pt-1">
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-medal text-amber-500 mt-0.5 text-sm shrink-0"></i>
+              <span><b>Terpilih 135 Konten Pembelajaran Interaktif Terbaik</b> Kategori Gim Edukasi Direktorat PNFI.</span>
             </li>
-            <li class="flex items-start gap-2 leading-relaxed">
-              <i class="fa-solid fa-book-bookmark text-teal-600 mt-1 text-[11px] shrink-0"></i>
-              <span>Penulis Buku <i>Smart Book: Matematika 11 untuk SMA/MA/SMK/MAK</i> diterbitkan oleh <b>Intan Pariwara</b>.</span>
+            <li class="flex items-start gap-2">
+              <i class="fa-solid fa-book text-emerald-600 mt-0.5 text-sm shrink-0"></i>
+              <span><b>Penulis Buku</b> <i>Smart Book: Matematika 11 untuk SMA/MA/SMK/MAK</i> diterbitkan oleh PT Intan Pariwara.</span>
             </li>
           </ul>
         </div>
+      </div>
 
-        <p class="text-xs text-slate-500 leading-relaxed italic">
-          "Menghubungkan kecintaan terhadap keanekaragaman hayati nusantara dengan kekuatan penalaran matematika kontekstual."
-        </p>
-
-        <button onclick="closeModal('modalDeveloper')" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs transition shadow-sm cursor-pointer">
+      <div class="mt-5 border-t border-slate-100 pt-4">
+        <button onclick="closeModal('modalDeveloper')" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-sm cursor-pointer">
           Tutup Informasi
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: 7 KEBIASAAN ANAK INDONESIA HEBAT (RASAMALA SLIDER) -->
+  <div id="modalRasamalaHabits" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-4">
+    <div class="bg-white border-2 border-emerald-400 max-w-2xl w-full rounded-3xl p-5 sm:p-7 max-h-[92vh] flex flex-col justify-between shadow-2xl relative overflow-hidden">
+      <!-- Tombol Tutup Silang -->
+      <button onclick="closeModal('modalRasamalaHabits')" class="absolute top-4 right-4 sm:top-5 sm:right-5 w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-lg transition z-30 cursor-pointer" aria-label="Tutup Pop-Up">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Bagian Atas Modal Header -->
+      <div class="flex items-center gap-3 pb-3 border-b border-emerald-100 pr-10">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-400 to-emerald-500 text-white flex items-center justify-center text-xl shadow-md shadow-emerald-600/20 shrink-0">
+          <i class="fa-solid fa-award"></i>
+        </div>
+        <div>
+          <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 text-[10px] font-extrabold uppercase tracking-wider">
+            <i class="fa-solid fa-star text-amber-600"></i> Keteladanan Pelindung Rimba
+          </div>
+          <h3 class="font-game text-lg sm:text-xl font-black text-slate-800 leading-tight">
+            7 Kebiasaan Anak Indonesia Hebat
+          </h3>
+          <p class="text-[11px] text-emerald-800 font-semibold">
+            Inspirasi Kehidupan Rasamala Menjaga Kelestarian Rimba Raya
+          </p>
+        </div>
+      </div>
+
+      <!-- Indikator Urutan Slide -->
+      <div class="flex items-center justify-between pt-2.5 px-1">
+        <span id="habitSlideCounter" class="text-xs font-bold font-mono px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+          Kebiasaan 1 / 7
+        </span>
+        <span class="text-[11px] text-slate-400 font-medium hidden sm:inline">
+          Gunakan tombol panah untuk berpindah kebiasaan
+        </span>
+      </div>
+
+      <!-- Konten Slide Dinamis (Diinjeksikan via JS) -->
+      <div id="habitSlideBody" class="my-3 py-1 overflow-y-auto max-h-[55vh] scrollbar-thin">
+        <!-- Rendered by renderHabitSlide() -->
+      </div>
+
+      <!-- Kontrol Slider Bawah: 7 Titik (Dots) dan Tombol Navigasi -->
+      <div class="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <!-- 7 Dots Indikator -->
+        <div id="habitDotsContainer" class="flex items-center gap-1.5 order-2 sm:order-1">
+          <!-- Injected dynamically -->
+        </div>
+
+        <!-- Tombol Sebelum & Berikutnya -->
+        <div class="flex items-center gap-2 w-full sm:w-auto order-1 sm:order-2">
+          <button id="habitPrevBtn" type="button" onclick="changeHabitSlide(-1)" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+            <i class="fa-solid fa-chevron-left text-[11px]"></i>
+            <span>Sebelumnya</span>
+          </button>
+          <button id="habitNextBtn" type="button" onclick="changeHabitSlide(1)" class="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-game font-bold text-xs tracking-wide shadow-md shadow-emerald-600/20 active:scale-95 transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <span id="habitNextBtnText">Berikutnya</span>
+            <i id="habitNextBtnIcon" class="fa-solid fa-chevron-right text-[11px]"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -3903,7 +3976,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Rasio $${valA} : ${valB}$ belum paling sederhana. $\\text{FPB}$ dari $18$ dan $42$ adalah $6$. Coba bagi $18 \\div 6 = 3$ dan $42 \\div 6 = 7$!`;
+          explainText = `Rasio $${valA} : ${valB}$ belum paling sederhana atau belum tepat. Sederhanakan kedua kuantitas dengan membaginya menggunakan FPB terbesar hingga menghasilkan rasio paling sederhana $${level.quiz.correctA} : ${level.quiz.correctB}$!`;
         }
       } else if (level.challengeType === 'water_slider') {
         const val = parseInt(document.getElementById('waterPumpSlider')?.value);
@@ -3911,7 +3984,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Katup diatur pada $${val}\\text{ Liter}$. Karena $45\\text{ m}^2 = 3 \\times 15\\text{ m}^2$, maka debit air harus $3 \\times 60\\text{ L} = 180\\text{ Liter}$!`;
+          explainText = `Katup diatur pada $${val}\\text{ Liter}$. Berdasarkan perbandingan senilai, kebutuhan pasokan air yang tepat seharusnya adalah $${level.quiz.correctValue}\\text{ Liter}$!`;
         }
       } else if (level.challengeType === 'time_stepper') {
         const val = parseInt(document.getElementById('stepperTimeInput')?.value);
@@ -3919,7 +3992,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Waktu $${val}\\text{ jam}$ belum tepat. Beban total: $6 \\times 12 = 72\\text{ jam-satwa}$. Untuk $18\\text{ satwa}$, waktu $= \\frac{72}{18} = 4\\text{ jam}$!`;
+          explainText = `Waktu $${val}\\text{ jam}$ belum tepat. Ingat bahwa banyak pekerja dan durasi berbanding terbalik ($a_1 \\times b_1 = a_2 \\times b_2$). Waktu yang tepat adalah $${level.quiz.correctValue}\\text{ jam}$!`;
         }
       } else if (level.challengeType === 'scale_converter') {
         const val = parseFloat(document.getElementById('inputRealDistance')?.value);
@@ -3931,7 +4004,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Jarak $${val}\\text{ km}$ belum tepat. $8\\text{ cm} \\times 25.000 = 200.000\\text{ cm} = 2\\text{ km}$!`;
+          explainText = `Jarak $${val}\\text{ km}$ belum tepat. Berdasarkan perkalian jarak peta dengan skala peta dan dikonversi ke satuan kilometer, jarak sebenarnya yang tepat adalah $${level.quiz.correctValue}\\text{ km}$!`;
         }
       } else if (level.challengeType === 'mix_balancer') {
         const val = parseInt(document.getElementById('inputBiocharWeight')?.value);
@@ -3939,7 +4012,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Massa Biochar $${val}\\text{ kg}$ belum tepat. Total rasio $= 2 + 3 + 5 = 10$. Nilai $1$ bagian $= \\frac{120}{10} = 12\\text{ kg}$. Biochar ($5$ bagian) $= 5 \\times 12 = 60\\text{ kg}$!`;
+          explainText = `Massa Biochar $${val}\\text{ kg}$ belum tepat. Bagilah total massa ramuan dengan total bagian rasio untuk mencari nilai 1 bagian, lalu kalikan dengan angka rasio komponen. Takaran yang tepat adalah $${level.quiz.correctValue}\\text{ kg}$!`;
         }
       } else if (level.challengeType === 'r1_seed_bundles') {
         const fpb = window.r2InteractiveState.fpbFactor;
@@ -4164,13 +4237,29 @@
         { l1: 15, air1: 60, l2: 45, ans: 180 },
         { l1: 20, air1: 80, l2: 50, ans: 200 },
         { l1: 10, air1: 40, l2: 60, ans: 240 },
-        { l1: 12, air1: 48, l2: 36, ans: 144 }
+        { l1: 10, air1: 50, l2: 30, ans: 150 }
       ];
       const pickL2 = senilaiVariantsL2[Math.floor(Math.random() * senilaiVariantsL2.length)];
       LEVELS_PEMADAMAN[1].quiz.question = `Untuk memadamkan $${pickL2.l1}\\text{ m}^2$ lahan butuh $${pickL2.air1}\\text{ liter}$ air. Geser tuas pengatur pompa ke jumlah liter air yang tepat untuk memadamkan $${pickL2.l2}\\text{ m}^2$ lahan!`;
       LEVELS_PEMADAMAN[1].quiz.dialog = `Jika $${pickL2.l1}\\text{ m}^2$ lahan terbakar butuh $${pickL2.air1}\\text{ liter}$ air, atur katup untuk memadamkan $${pickL2.l2}\\text{ m}^2$ lahan!`;
       LEVELS_PEMADAMAN[1].quiz.correctValue = pickL2.ans;
       LEVELS_PEMADAMAN[1].quiz.explain = `Luar Biasa Benar! Nilai per satuan luas: $1\\text{ m}^2 = \\frac{${pickL2.air1}}{${pickL2.l1}} = ${pickL2.air1 / pickL2.l1}\\text{ liter}$. Maka untuk $${pickL2.l2}\\text{ m}^2$ dibutuhkan $${pickL2.l2} \\times ${pickL2.air1 / pickL2.l1} = ${pickL2.ans}\\text{ Liter}$ air!`;
+      LEVELS_PEMADAMAN[1].quiz.context = `
+        <div class="bg-slate-900 p-2.5 rounded-xl text-center font-mono text-xs text-slate-300">
+          <div class="grid grid-cols-2 gap-2 border-b border-slate-800 pb-1 font-bold text-teal-400">
+            <span>Luas Terbakar</span>
+            <span>Pasokan Air</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 py-1">
+            <span>$${pickL2.l1}\\text{ m}^2$</span>
+            <span>$${pickL2.air1}\\text{ Liter}$</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 py-1 bg-emerald-950/40 rounded text-emerald-300 font-bold">
+            <span>$${pickL2.l2}\\text{ m}^2$</span>
+            <span>Atur Tuas Katup!</span>
+          </div>
+        </div>
+      `;
 
       // 3. Level 3: Perbandingan Berbalik Nilai Parit Sekat
       const berbalikVariantsL3 = [
@@ -4184,6 +4273,22 @@
       LEVELS_PEMADAMAN[2].quiz.dialog = `Jika $${pickL3.s1}$ satwa butuh $${pickL3.jam1}\\text{ jam}$, hitung berapa jam jika Rasamala mengerahkan $${pickL3.s2}$ satwa!`;
       LEVELS_PEMADAMAN[2].quiz.correctValue = pickL3.ans;
       LEVELS_PEMADAMAN[2].quiz.explain = `Brilian! Beban kerja konstan: $${pickL3.s1} \\times ${pickL3.jam1} = ${pickL3.s1 * pickL3.jam1}\\text{ jam-satwa}$. Jika dikerjakan $${pickL3.s2}$ satwa, maka waktu $= \\frac{${pickL3.s1 * pickL3.jam1}}{${pickL3.s2}} = ${pickL3.ans}\\text{ jam}$!`;
+      LEVELS_PEMADAMAN[2].quiz.context = `
+        <div class="bg-slate-900 p-2.5 rounded-xl text-center text-xs">
+          <div class="grid grid-cols-2 gap-2 text-teal-400 font-bold border-b border-slate-800 pb-1">
+            <span>Relawan Penggali</span>
+            <span>Durasi Penggalian</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 py-1 text-slate-300">
+            <span>$${pickL3.s1}\\text{ satwa}$</span>
+            <span>$${pickL3.jam1}\\text{ jam}$</span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 py-1 bg-amber-950/40 text-amber-300 font-bold rounded">
+            <span>$${pickL3.s2}\\text{ satwa}$</span>
+            <span>$? \\text{ Jam}$</span>
+          </div>
+        </div>
+      `;
 
       // 4. Level 4: Skala Citra Drone
       const skalaVariantsL4 = [
@@ -4196,6 +4301,21 @@
       LEVELS_PEMADAMAN[3].quiz.question = `Pada peta drone berskala $1 : ${pickL4.skala.toLocaleString('id-ID')}$, jarak pangkalan ke pusat api adalah $${pickL4.jp}\\text{ cm}$. Masukkan jarak sebenarnya dalam satuan kilometer ($\\text{km}$)!`;
       LEVELS_PEMADAMAN[3].quiz.correctValue = pickL4.ans;
       LEVELS_PEMADAMAN[3].quiz.explain = `Tepat Sekali! $\\text{JS} = ${pickL4.jp} \\times ${pickL4.skala.toLocaleString('id-ID')}\\text{ cm} = ${(pickL4.jp * pickL4.skala).toLocaleString('id-ID')}\\text{ cm}$. Dikonversi ke kilometer: $\\frac{${pickL4.jp * pickL4.skala}}{100.000} = ${pickL4.ans}\\text{ km}$!`;
+      LEVELS_PEMADAMAN[3].quiz.context = `
+        <div class="bg-slate-900 p-3 rounded-xl flex items-center justify-between text-xs text-white">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-crosshairs text-2xl text-teal-400"></i>
+            <div>
+              <p class="text-slate-400">Skala Layar Drone</p>
+              <p class="font-mono font-bold">$1 : ${pickL4.skala.toLocaleString('id-ID')}$</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-slate-400">Jarak Peta ($\\text{JP}$)</p>
+            <p class="font-mono font-bold text-amber-300">$${pickL4.jp}\\text{ cm}$</p>
+          </div>
+        </div>
+      `;
 
       // 5. Level 5: Perbandingan Bertingkat Komponen Gambut
       const bertingkatVariantsL5 = [
@@ -4207,12 +4327,23 @@
       LEVELS_PEMADAMAN[4].quiz.question = `Total racikan $${pickL5.total}\\text{ kg}$ dengan perbandingan $\\text{Dolomit} : \\text{Lumpur} : \\text{Biochar} = ${pickL5.rasio}$. Atur takaran massa ${pickL5.comp} murni ($\\text{kg}$) pada alat penimbang!`;
       LEVELS_PEMADAMAN[4].quiz.correctValue = pickL5.ans;
       LEVELS_PEMADAMAN[4].quiz.explain = `Sempurna! Total bagian $= ${pickL5.totalBagian}$ bagian. Nilai $1$ bagian $= \\frac{${pickL5.total}}{${pickL5.totalBagian}} = ${pickL5.total / pickL5.totalBagian}\\text{ kg}$. Rasio ${pickL5.comp} adalah $${pickL5.targetRasio}$, maka massanya $= ${pickL5.targetRasio} \\times ${pickL5.total / pickL5.totalBagian} = ${pickL5.ans}\\text{ kg}$!`;
+      LEVELS_PEMADAMAN[4].quiz.context = `
+        <div class="bg-slate-900 p-2.5 rounded-xl text-xs text-white">
+          <div class="flex justify-between items-center mb-1 text-slate-400">
+            <span>Rasio Dolomit : Lumpur : Biochar</span>
+            <span class="font-bold text-amber-400 font-mono">$${pickL5.rasio}$</span>
+          </div>
+          <div class="flex justify-between items-center text-slate-300">
+            <span>Target Total Massa Ramuan</span>
+            <span class="font-bold text-emerald-400 font-mono">$${pickL5.total}\\text{ kg}$</span>
+          </div>
+        </div>
+      `;
     }
 
     // Tombol 1: Mulai petualangan baru dari halaman depan dengan variasi soal segar
     function startNewGameWithDynamicQuestions() {
       gameAudio.playSfx('click');
-      closeModal('modalEnding');
 
       // Acak variasi soal untuk sesi belajar baru
       randomizeAllQuestions();
@@ -4470,6 +4601,219 @@
       openModal('modalLeaderboard');
     }
 
+    /* DATASET: 7 KEBIASAAN ANAK INDONESIA HEBAT (KEMENDIKDASMEN) VERSI RASAMALA */
+    const RASAMALA_7_HABITS = [
+      {
+        number: 1,
+        habit: "Bangun Pagi",
+        title: "Menyambut Fajar Pegunungan",
+        tagline: "Disiplin Waktu & Kesegaran Jiwa",
+        icon: "fa-sun",
+        iconColor: "text-amber-500",
+        bgLight: "bg-amber-50",
+        borderLight: "border-amber-200",
+        story: "Sebelum matahari terbit, daun-daun pucuk Rasamala telah membuka pori-porinya untuk menyerap kabut pagi sejuk. Bangun di awal waktu membuat Rasamala siap lebih dini menyerap energi surya dan memantau kesiapsiagaan lereng dari ancaman percikan api.",
+        moral: "Anak Indonesia Hebat selalu bangun pagi dengan penuh semangat, merapikan diri, dan menyongsong hari baru dengan tekad belajar yang kuat!"
+      },
+      {
+        number: 2,
+        habit: "Beribadah",
+        title: "Mensyukuri Rahmat Sang Pencipta",
+        tagline: "Integritas Spiritual & Kerendahan Hati",
+        icon: "fa-hands-praying",
+        iconColor: "text-emerald-600",
+        bgLight: "bg-emerald-50",
+        borderLight: "border-emerald-200",
+        story: "Meskipun bertubuh raksasa hingga setinggi 60 meter, Rasamala selalu merendahkan dahan-dahannya saat bertasbih mensyukuri nikmat tanah subur dan berkah hujan yang dikaruniakan Tuhan. Doa dan rasa syukur adalah akar keteguhan batinnya.",
+        moral: "Anak Indonesia Hebat taat beribadah sesuai agama dan keyakinannya, menghormati sesama, serta senantiasa bersyukur atas nikmat kehidupan."
+      },
+      {
+        number: 3,
+        habit: "Berolahraga",
+        title: "Memperkokoh Batang & Ranting",
+        tagline: "Kebugaran Fisik & Daya Tahan Tangguh",
+        icon: "fa-dumbbell",
+        iconColor: "text-teal-600",
+        bgLight: "bg-teal-50",
+        borderLight: "border-teal-200",
+        story: "Setiap hembusan angin lembah kencang disambut Rasamala sebagai sarana melatih kelenturan serat kayu dan kekokohan akar tunjangnya. Tubuh pohon yang senantiasa terlatih membuatnya mampu menahan hantaman badai tanpa tumbang.",
+        moral: "Anak Indonesia Hebat gemar berolahraga dan menjaga kebugaran jasmani agar berbadan sehat, tangkas, dan bugar menghadapi berbagai tantangan."
+      },
+      {
+        number: 4,
+        habit: "Makan Sehat & Bergizi",
+        title: "Asupan Alami & Air Murni",
+        tagline: "Nutrisi Berimbang untuk Pertumbuhan Maksimal",
+        icon: "fa-apple-whole",
+        iconColor: "text-rose-500",
+        bgLight: "bg-rose-50",
+        borderLight: "border-rose-200",
+        story: "Rasamala memilih nutrisi terbaik: mineral fosfor tanah yang sehat, air rembesan humus alami, dan fotosintesis murni. Rasamala menolak zat-zat polutan beracun yang dapat merusak kualitas getah damar dan menghambat pucuk mudanya.",
+        moral: "Anak Indonesia Hebat memilih makanan bergizi seimbang, gemar makan sayur dan buah lokal, serta menghindari jajanan tidak sehat."
+      },
+      {
+        number: 5,
+        habit: "Gemar Belajar",
+        title: "Menalar Rahasia Alam & Matematika",
+        tagline: "Rasa Ingin Tahu Tinggi & Berpikir Kritis",
+        icon: "fa-book-open-reader",
+        iconColor: "text-indigo-600",
+        bgLight: "bg-indigo-50",
+        borderLight: "border-indigo-200",
+        story: "Rasamala tak pernah berhenti mempelajari perubahan iklim, arah angin, dan menghitung perbandingan rasio debit air yang dibutuhkan hutan. Dengan giat belajar dan menalar, setiap masalah kebakaran dan kekeringan dapat diselesaikan secara cerdas.",
+        moral: "Anak Indonesia Hebat rajin membaca buku, antusias memecahkan persoalan matematika, dan menggunakan ilmu pengetahuan untuk memajukan bangsa."
+      },
+      {
+        number: 6,
+        habit: "Bermasyarakat / Bergotong Royong",
+        title: "Sahabat Sejati Jaringan Rimba",
+        tagline: "Kepedulian Sosial & Kolaborasi Harmonis",
+        icon: "fa-people-group",
+        iconColor: "text-cyan-600",
+        bgLight: "bg-cyan-50",
+        borderLight: "border-cyan-200",
+        story: "Rasamala tidak hidup menyendiri. Ia berbagi nutrisi dengan semak belukar, menyediakan sarang bagi burung elang, dan bergandengan tangan dengan jamur Mikoriza melalui jaringan hifa bawah tanah demi menjaga keharmonisan ekosistem.",
+        moral: "Anak Indonesia Hebat senang berteman rukun, gemar tolong-menolong, saling menghargai perbedaan, dan aktif dalam kegiatan gotong royong."
+      },
+      {
+        number: 7,
+        habit: "Tidur Cepat / Beristirahat Teratur",
+        title: "Pemulihan Alami Saat Malam Tiba",
+        tagline: "Keseimbangan Istirahat & Disiplin Malam",
+        icon: "fa-moon",
+        iconColor: "text-violet-600",
+        bgLight: "bg-violet-50",
+        borderLight: "border-violet-200",
+        story: "Ketika senja berganti gulita, Rasamala mengistirahatkan proses transpirasinya. Tidur tepat waktu memungkinkan sel-sel kayunya beregenerasi dan memulihkan getah wangi damar sehingga siap menyambut mentari esok hari dengan tenaga penuh.",
+        moral: "Anak Indonesia Hebat tidak begadang untuk hal yang sia-sia, tidur tepat waktu agar pikiran segar dan siap berprestasi kembali keesokan harinya!"
+      }
+    ];
+
+    let currentHabitSlideIndex = 0;
+
+    function renderHabitSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= RASAMALA_7_HABITS.length) index = RASAMALA_7_HABITS.length - 1;
+      currentHabitSlideIndex = index;
+
+      const habit = RASAMALA_7_HABITS[index];
+      const counterEl = document.getElementById('habitSlideCounter');
+      const bodyEl = document.getElementById('habitSlideBody');
+      const prevBtn = document.getElementById('habitPrevBtn');
+      const nextBtnText = document.getElementById('habitNextBtnText');
+      const nextBtnIcon = document.getElementById('habitNextBtnIcon');
+      const dotsContainer = document.getElementById('habitDotsContainer');
+
+      if (counterEl) counterEl.innerText = `Kebiasaan ${habit.number} / 7`;
+
+      if (bodyEl) {
+        bodyEl.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+            <!-- Left Character Image Card -->
+            <div class="md:col-span-5 flex flex-col items-center justify-center">
+              <div class="relative w-36 h-36 sm:w-44 sm:h-44 rounded-3xl ${habit.bgLight} border-2 ${habit.borderLight} p-3 flex items-center justify-center shadow-lg shadow-emerald-950/10 overflow-hidden">
+                <div class="absolute -bottom-2 inset-x-4 h-4 bg-emerald-700/20 rounded-full blur-xs pointer-events-none"></div>
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1bb6jdkvp4wqs9GdSVbui0-22o9QZaYBK" 
+                  alt="Rasamala Melakukan ${habit.habit}" 
+                  class="relative z-10 w-full h-full object-contain animate-sway drop-shadow-md"
+                  onerror="this.onerror=null; this.src='https://placehold.co/140x140/c6efce/166534?text=Rasamala';"
+                />
+                <div class="absolute top-2.5 left-2.5 w-8 h-8 rounded-xl bg-white/90 backdrop-blur-xs border border-slate-200 text-xs flex items-center justify-center shadow-xs">
+                  <i class="fa-solid ${habit.icon} ${habit.iconColor}"></i>
+                </div>
+              </div>
+              <span class="font-game text-xs font-black text-emerald-950 mt-2">Pohon Rasamala</span>
+              <span class="text-[10px] text-emerald-700 font-semibold">Pelindung Rimba Raya</span>
+            </div>
+
+            <!-- Right Narrative Description -->
+            <div class="md:col-span-7 space-y-2.5 text-left">
+              <div>
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full ${habit.bgLight} border ${habit.borderLight} text-[11px] font-bold ${habit.iconColor}">
+                  <i class="fa-solid ${habit.icon}"></i> Kebiasaan Ke-${habit.number}: ${habit.habit}
+                </div>
+                <h4 class="font-game text-lg sm:text-xl font-black text-slate-800 mt-1 leading-snug">
+                  ${habit.title}
+                </h4>
+                <p class="text-[11px] font-semibold text-slate-400 italic">${habit.tagline}</p>
+              </div>
+
+              <!-- Contextual Story Box -->
+              <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200/90 text-xs text-slate-700 leading-relaxed space-y-1">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                  <i class="fa-solid fa-tree text-emerald-600 mr-1"></i> Kehidupan Rasamala di Rimba:
+                </span>
+                <p class="italic font-medium">"${habit.story}"</p>
+              </div>
+
+              <!-- Moral Takeaway Box -->
+              <div class="p-3 rounded-2xl ${habit.bgLight} border ${habit.borderLight} text-xs text-slate-800 leading-relaxed">
+                <span class="text-[10px] font-black uppercase tracking-wider block mb-0.5 ${habit.iconColor}">
+                  <i class="fa-solid fa-award mr-1"></i> Teladan Anak Indonesia Hebat:
+                </span>
+                <p class="font-semibold">${habit.moral}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (prevBtn) {
+        prevBtn.disabled = index === 0;
+        prevBtn.classList.toggle('opacity-40', index === 0);
+        prevBtn.classList.toggle('cursor-not-allowed', index === 0);
+      }
+
+      if (nextBtnText && nextBtnIcon) {
+        if (index === RASAMALA_7_HABITS.length - 1) {
+          nextBtnText.innerText = "Tutup & Siap Beraksi";
+          nextBtnIcon.className = "fa-solid fa-check text-[11px]";
+        } else {
+          nextBtnText.innerText = "Berikutnya";
+          nextBtnIcon.className = "fa-solid fa-chevron-right text-[11px]";
+        }
+      }
+
+      if (dotsContainer) {
+        dotsContainer.innerHTML = '';
+        RASAMALA_7_HABITS.forEach((_, dIdx) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.onclick = () => goToHabitSlide(dIdx);
+          dot.className = `w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+            dIdx === index
+              ? 'bg-emerald-600 w-6 shadow-sm'
+              : 'bg-slate-300 hover:bg-slate-400'
+          }`;
+          dot.title = `Kebiasaan ${dIdx + 1}: ${RASAMALA_7_HABITS[dIdx].habit}`;
+          dotsContainer.appendChild(dot);
+        });
+      }
+    }
+
+    function openRasamalaHabitsModal() {
+      gameAudio.playSfx('click');
+      currentHabitSlideIndex = 0;
+      renderHabitSlide(0);
+      openModal('modalRasamalaHabits');
+    }
+
+    function changeHabitSlide(delta) {
+      gameAudio.playSfx('click');
+      const target = currentHabitSlideIndex + delta;
+      if (target >= RASAMALA_7_HABITS.length) {
+        closeModal('modalRasamalaHabits');
+        return;
+      }
+      renderHabitSlide(target);
+    }
+
+    function goToHabitSlide(index) {
+      gameAudio.playSfx('click');
+      renderHabitSlide(index);
+    }
+
     function showEndingScreen() {
       gameState.reboisasiCompleted = true;
       gameAudio.playSfx('levelComplete');
@@ -4544,6 +4888,9 @@
     window.goToPrologue = goToPrologue;
     window.goToIdentity = goToIdentity;
     window.goToGates = goToGates;
+    window.openRasamalaHabitsModal = openRasamalaHabitsModal;
+    window.changeHabitSlide = changeHabitSlide;
+    window.goToHabitSlide = goToHabitSlide;
     window.backToIntro = backToIntro;
     window.backToIdentity = backToIdentity;
     window.backToHero = backToHero;
