@@ -343,8 +343,12 @@
           <i class="fa-solid fa-volume-high text-xs sm:text-sm" id="soundIcon"></i>
         </button>
 
-        <!-- Navigation Controls: Info, Back, Home -->
+        <!-- Navigation Controls: Ending Screen, Info, Back, Home -->
         <div class="flex items-center gap-1 sm:gap-2 pl-1.5 sm:pl-3 border-l border-emerald-200">
+          <!-- Tombol Panah Memutar: Kembali ke Halaman Akhir (Hasil & Lencana) -->
+          <button id="navEndingBtn" onclick="handleNavToEnding()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-50 hover:bg-amber-100 active:scale-95 border border-amber-300 text-amber-700 shadow-sm flex items-center justify-center transition cursor-pointer" title="Kembali ke Halaman Akhir (Hasil & Lencana)">
+            <i class="fa-solid fa-arrow-rotate-left text-xs sm:text-sm font-bold"></i>
+          </button>
           <button onclick="openRasamalaInfoModal()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 active:scale-95 border border-emerald-200 text-emerald-800 shadow-sm flex items-center justify-center transition cursor-pointer" title="Info Pohon Rasamala">
             <i class="fa-solid fa-info text-xs sm:text-sm font-bold"></i>
           </button>
@@ -953,7 +957,16 @@
 
             <!-- Left: Rasamala -->
             <div class="relative z-10 flex flex-col items-center">
-              <div id="rasamalaSprite" class="text-6xl sm:text-7xl animate-sway transition duration-300 drop-shadow-md">🌲</div>
+              <div id="rasamalaSprite" class="w-20 h-24 sm:w-24 sm:h-28 flex items-center justify-center animate-sway transition duration-300 drop-shadow-md">
+                <img 
+                  id="rasamalaSpriteImg"
+                  src="https://lh3.googleusercontent.com/d/1bb6jdkvp4wqs9GdSVbui0-22o9QZaYBK" 
+                  alt="Rasamala Sang Pohon Kuno" 
+                  class="w-full h-full object-contain filter drop-shadow-lg"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x120/c6efce/166534?text=Rasamala';"
+                />
+              </div>
               <div class="mt-1 px-2.5 py-0.5 rounded-full bg-emerald-800 text-white text-[11px] font-bold shadow">
                 Rasamala
               </div>
@@ -1045,10 +1058,26 @@
           Mikoriza <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Kembali Bersahabat!</span>
         </h2>
 
-        <div class="flex items-center justify-center gap-6 my-3 mx-auto">
-          <div class="text-4xl sm:text-5xl animate-sway">🌲</div>
-          <i class="fa-solid fa-heart text-2xl sm:text-3xl text-rose-500 animate-pulse"></i>
-          <div class="text-4xl sm:text-5xl animate-bounce">🍄</div>
+        <div class="flex items-center justify-center gap-5 sm:gap-7 my-3 mx-auto">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center animate-sway drop-shadow-md">
+            <img 
+              src="https://lh3.googleusercontent.com/d/1bb6jdkvp4wqs9GdSVbui0-22o9QZaYBK" 
+              alt="Pohon Rasamala" 
+              class="w-full h-full object-contain filter drop-shadow-lg"
+              loading="eager"
+              onerror="this.onerror=null; this.src='https://placehold.co/100x100/c6efce/166534?text=Rasamala';"
+            />
+          </div>
+          <i class="fa-solid fa-heart text-2xl sm:text-3xl text-rose-500 animate-pulse drop-shadow-sm"></i>
+          <div class="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center animate-bounce drop-shadow-md">
+            <img 
+              src="https://lh3.googleusercontent.com/d/1zsvl7BeE5c5tuQIF0HvsnkyTaIYKLDSM" 
+              alt="Jamur Mikoriza" 
+              class="w-full h-full object-contain filter drop-shadow-lg"
+              loading="eager"
+              onerror="this.onerror=null; this.src='https://placehold.co/100x100/fed7c7/991b1b?text=Mikoriza';"
+            />
+          </div>
         </div>
 
         <p class="text-slate-600 text-xs sm:text-sm leading-relaxed text-center mb-5 max-w-xl mx-auto">
@@ -1964,6 +1993,48 @@
     }
 
     const gameAudio = new GameAudioEngine();
+
+    const TREE_BADGES = {
+      pemadaman: [
+        { title: "Tunas Busa Rasamala", img: "https://lh3.googleusercontent.com/d/1Kg-aGuzMcrcX7dugfTuH_kkjX6RB8Gqk" },
+        { title: "Pohon Pompa Hidro", img: "https://lh3.googleusercontent.com/d/1zvI4N0GlhGhI0rYlIVgf-2sqwUjddhtr" },
+        { title: "Beringin Sekat Api", img: "https://lh3.googleusercontent.com/d/1awZVikqElBZM1MkbngY63Jpe0LDG-PzX" },
+        { title: "Damar Pemantau Skala", img: "https://lh3.googleusercontent.com/d/1FwYhQjWOQZyim5Cs6vR7gPU2xixZwYTi" },
+        { title: "Rasamala Penakluk Gambut", img: "https://lh3.googleusercontent.com/d/16OgpX8PCzYO-NogwidhItt0TtMbypLn8" }
+      ],
+      reboisasi: [
+        { title: "Tunas Kaliandra Emas", img: "https://lh3.googleusercontent.com/d/1sTVPagsm2Psk5N4eXaA6Ii0UXw6ItwXc" },
+        { title: "Pohon Nutrisi Hayati", img: "https://lh3.googleusercontent.com/d/1WXcT-7ulUpWQpXzIl2p6wGl158RQjjP3" },
+        { title: "Ksatria Tanam Kilat", img: "https://lh3.googleusercontent.com/d/1myLp3ZeDAGkv_j_ft5X0P3rX8797h1WH" },
+        { title: "Pohon Koridor Satwa", img: "https://lh3.googleusercontent.com/d/1LBrLvwO8rUIK3NEfjseoPwkUX5Usmw2c" },
+        { title: "Mahkota Rimba Klimaks", img: "https://lh3.googleusercontent.com/d/1uyf1BPpNwLKd_7su2WMJcjy1hHHOv1zz" }
+      ]
+    };
+
+    async function downloadBadgeImage(url, filename) {
+      try {
+        const res = await fetch(url, { mode: 'cors' });
+        if (!res.ok) throw new Error('Fetch failed');
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename || 'lencana_pohon.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1500);
+      } catch (err) {
+        // Fallback for sandboxed iframe/cross-origin restrictions
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.download = filename || 'lencana_pohon.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    }
 
     const LEVELS_PEMADAMAN = [
       {
@@ -3169,6 +3240,20 @@
       if (hudLevelDisplay) hudLevelDisplay.innerText = `${gatePrefix}: Pos ${gameState.currentLevelIndex + 1}/5`;
       if (hudScore) hudScore.innerText = `${gameState.score} Poin`;
 
+      // Pengendalian status tampilan tombol panah memutar ke halaman akhir
+      const navEndingBtn = document.getElementById('navEndingBtn');
+      if (navEndingBtn) {
+        if (gameState.reboisasiCompleted || gameState.isReviewMode) {
+          // Status aktif menyala saat misi telah tuntas atau saat dalam mode tinjau jawaban
+          navEndingBtn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-100 hover:bg-amber-200 active:scale-95 border-2 border-amber-400 text-amber-800 shadow-md flex items-center justify-center transition cursor-pointer ring-2 ring-amber-300/60";
+          navEndingBtn.title = "Kembali ke Halaman Akhir (Hasil & Lencana)";
+        } else {
+          // Status sebelum misi selesai (tampak di header dengan visual lembut dan ramah)
+          navEndingBtn.className = "w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-95 border border-slate-200 text-slate-400 opacity-60 flex items-center justify-center transition cursor-pointer";
+          navEndingBtn.title = "Halaman Akhir (Terbuka setelah menyelesaikan seluruh misi)";
+        }
+      }
+
       for (let i = 1; i <= 3; i++) {
         const heartEl = document.getElementById(`lifeHeart${i}`);
         if (heartEl) {
@@ -3421,10 +3506,10 @@
 
               <div class="flex items-center justify-center gap-2 mt-3 pt-2 border-t border-slate-100">
                 <span class="text-[10px] text-slate-400 font-bold mr-1">Keping Angka:</span>
-                <button type="button" onclick="placeR1Token(2)" class="w-9 h-9 rounded-lg bg-emerald-600 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">2</button>
-                <button type="button" onclick="placeR1Token(3)" class="w-9 h-9 rounded-lg bg-teal-600 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">3</button>
-                <button type="button" onclick="placeR1Token(4)" class="w-9 h-9 rounded-lg bg-slate-600 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">4</button>
-                <button type="button" onclick="placeR1Token(5)" class="w-9 h-9 rounded-lg bg-slate-600 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">5</button>
+                <button type="button" onclick="placeR1Token(2)" class="w-9 h-9 rounded-lg bg-slate-700 hover:bg-slate-800 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">2</button>
+                <button type="button" onclick="placeR1Token(3)" class="w-9 h-9 rounded-lg bg-slate-700 hover:bg-slate-800 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">3</button>
+                <button type="button" onclick="placeR1Token(4)" class="w-9 h-9 rounded-lg bg-slate-700 hover:bg-slate-800 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">4</button>
+                <button type="button" onclick="placeR1Token(5)" class="w-9 h-9 rounded-lg bg-slate-700 hover:bg-slate-800 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">5</button>
                 <button type="button" onclick="resetR1Slots()" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-[10px] font-bold text-slate-600 border border-slate-300 ml-1 cursor-pointer">Reset</button>
               </div>
             </div>
@@ -3440,7 +3525,7 @@
               <span class="font-bold text-teal-900 flex items-center gap-1.5">
                 <i class="fa-solid fa-flask-vial text-teal-600"></i> Dispenser Nutrisi Bio-Organik
               </span>
-              <span id="r2RatioStatusBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+              <span id="r2RatioStatusBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300">
                 Kalibrasi Volume
               </span>
             </div>
@@ -3468,10 +3553,10 @@
             <div class="flex items-center justify-between text-[11px] gap-2">
               <span class="text-slate-500 font-medium">Preset Cepat:</span>
               <div class="flex gap-1.5">
-                <button type="button" onclick="setR2Preset(60)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono cursor-pointer">60 L</button>
-                <button type="button" onclick="setR2Preset(80)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono cursor-pointer">80 L</button>
-                <button type="button" onclick="setR2Preset(90)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-100 border border-teal-300 text-teal-800 font-mono font-bold cursor-pointer">90 L</button>
-                <button type="button" onclick="setR2Preset(100)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono cursor-pointer">100 L</button>
+                <button type="button" onclick="setR2Preset(60)" class="r2-preset-btn px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono text-xs cursor-pointer">60 L</button>
+                <button type="button" onclick="setR2Preset(80)" class="r2-preset-btn px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono text-xs cursor-pointer">80 L</button>
+                <button type="button" onclick="setR2Preset(90)" class="r2-preset-btn px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono text-xs cursor-pointer">90 L</button>
+                <button type="button" onclick="setR2Preset(100)" class="r2-preset-btn px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono text-xs cursor-pointer">100 L</button>
               </div>
             </div>
           </div>
@@ -3483,8 +3568,8 @@
               <span class="font-bold text-amber-900 flex items-center gap-1.5">
                 <i class="fa-solid fa-scale-balanced text-amber-600"></i> Timbangan Beban Kerja Berbalik Nilai
               </span>
-              <span id="r3BalancePill" class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300">
-                Belum Seimbang
+              <span id="r3BalancePill" class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300">
+                Pilihan: 8 Hari
               </span>
             </div>
 
@@ -3496,7 +3581,7 @@
                 </div>
                 <div class="flex flex-col items-center">
                   <div id="r3Needle" class="text-2xl transition-transform duration-300 transform -rotate-45">⚖️</div>
-                  <span id="r3DiffLabel" class="text-[10px] font-mono text-rose-600 font-bold mt-1">Beban Selisih</span>
+                  <span id="r3DiffLabel" class="text-[10px] font-mono text-slate-600 font-bold mt-1">Beban: 120</span>
                 </div>
                 <div class="text-center p-2 rounded-lg bg-amber-50 border border-amber-200 w-36">
                   <span class="text-[10px] text-amber-800 font-bold block">Regu Terkini</span>
@@ -3522,7 +3607,7 @@
                 <i class="fa-solid fa-satellite-dish text-teal-600"></i> Radar GPS Koridor
               </span>
               <span id="r4ScanStatus" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-200 text-slate-600">
-                Pindai Jarak Sebenarnya
+                Pilih Checkpoint GPS
               </span>
             </div>
 
@@ -3542,7 +3627,7 @@
               <div class="grid grid-cols-4 gap-2">
                 <button type="button" onclick="selectR4Waypoint(4, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">4 km</button>
                 <button type="button" onclick="selectR4Waypoint(5, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">5 km</button>
-                <button type="button" onclick="selectR4Waypoint(6, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-100 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">6 km</button>
+                <button type="button" onclick="selectR4Waypoint(6, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">6 km</button>
                 <button type="button" onclick="selectR4Waypoint(8, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">8 km</button>
               </div>
             </div>
@@ -3555,8 +3640,8 @@
               <span class="font-bold text-emerald-900 flex items-center gap-1.5">
                 <i class="fa-solid fa-layer-group text-emerald-600"></i> Alokasi 3 Strata Kanopi Hutan
               </span>
-              <span id="r5CapacityBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-800 border border-amber-300">
-                Kapasitas: Berproses
+              <span id="r5CapacityBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-300">
+                Total Alokasi: 200 Pohon
               </span>
             </div>
 
@@ -3587,10 +3672,10 @@
                 </div>
               </div>
               <div class="grid grid-cols-4 gap-1.5 pt-1">
-                <button type="button" onclick="setR5Preset(50)" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">50</button>
-                <button type="button" onclick="setR5Preset(60)" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">60</button>
-                <button type="button" onclick="setR5Preset(75)" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">75</button>
-                <button type="button" onclick="setR5Preset(80)" class="py-1.5 rounded-lg bg-white hover:bg-teal-100 border-2 border-teal-400 font-bold text-teal-800 text-xs font-mono shadow-sm cursor-pointer">80</button>
+                <button type="button" onclick="setR5Preset(50)" class="r5-preset-btn py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">50</button>
+                <button type="button" onclick="setR5Preset(60)" class="r5-preset-btn py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">60</button>
+                <button type="button" onclick="setR5Preset(75)" class="r5-preset-btn py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">75</button>
+                <button type="button" onclick="setR5Preset(80)" class="r5-preset-btn py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">80</button>
               </div>
             </div>
           </div>
@@ -3617,18 +3702,12 @@
 
       const badge = document.getElementById('r1FpbBadge');
       const preview = document.getElementById('r1PreviewBox');
-      if (factor === 24) {
-        if (badge) {
-          badge.className = "text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold";
-          badge.innerText = "FPB = 24 (Terbesar!)";
-        }
-        if (preview) preview.innerHTML = `✨ <b>Tepat!</b> $48 \\div 24 = 2$ dan $72 \\div 24 = 3$. Sekarang pasang keping <b>2</b> dan <b>3</b> ke slot!`;
-      } else {
-        if (badge) {
-          badge.className = "text-[11px] font-mono px-2 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-800 font-bold";
-          badge.innerText = `FPB = ${factor}`;
-        }
-        if (preview) preview.innerHTML = `Pembagi ${factor} dapat membagi keduanya, tetapi belum merupakan FPB terbesar (FPB terbesar adalah 24).`;
+      if (badge) {
+        badge.className = "text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold";
+        badge.innerText = `FPB ${factor} Dipilih`;
+      }
+      if (preview) {
+        preview.innerHTML = `FPB <b>${factor}</b> dipilih. Pasang keping angka ke slot rasio ($a : b$).`;
       }
       triggerMathRender();
     }
@@ -3693,15 +3772,17 @@
       const pct = Math.min(100, Math.max(10, Math.round((vol / 120) * 100)));
       if (fill) fill.style.height = `${pct}%`;
 
+      document.querySelectorAll('.r2-preset-btn').forEach(btn => {
+        btn.className = "r2-preset-btn px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono text-xs cursor-pointer";
+        if (btn.innerText.trim() === `${vol} L`) {
+          btn.className = "r2-preset-btn px-2.5 py-1 rounded-lg bg-teal-50 border-2 border-teal-400 text-teal-800 font-mono font-bold text-xs shadow-xs cursor-pointer";
+        }
+      });
+
       const badge = document.getElementById('r2RatioStatusBadge');
       if (badge) {
-        if (vol === 90) {
-          badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
-          badge.innerText = "Proporsi Seimbang (90L)";
-        } else {
-          badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300";
-          badge.innerText = "Kalibrasi Ulang";
-        }
+        badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300";
+        badge.innerText = `Takaran: ${vol} Liter`;
       }
       triggerMathRender();
     }
@@ -3722,34 +3803,19 @@
 
       if (diff === 0) {
         if (needle) needle.className = "text-2xl transition-transform duration-300 transform rotate-0";
-        if (pill) {
-          pill.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
-          pill.innerText = "Seimbang Sempurna (180)";
-        }
-        if (diffLabel) {
-          diffLabel.className = "text-[10px] font-mono text-emerald-700 font-bold mt-1";
-          diffLabel.innerText = "Pas 180 Hari-Satwa";
-        }
       } else if (diff < 0) {
         if (needle) needle.className = "text-2xl transition-transform duration-300 transform -rotate-45";
-        if (pill) {
-          pill.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300";
-          pill.innerText = "Kurang Hari";
-        }
-        if (diffLabel) {
-          diffLabel.className = "text-[10px] font-mono text-rose-600 font-bold mt-1";
-          diffLabel.innerText = `${diff} Beban`;
-        }
       } else {
         if (needle) needle.className = "text-2xl transition-transform duration-300 transform rotate-45";
-        if (pill) {
-          pill.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300";
-          pill.innerText = "Kelebihan Hari";
-        }
-        if (diffLabel) {
-          diffLabel.className = "text-[10px] font-mono text-amber-600 font-bold mt-1";
-          diffLabel.innerText = `+${diff} Beban`;
-        }
+      }
+
+      if (pill) {
+        pill.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300";
+        pill.innerText = `Pilihan: ${days} Hari`;
+      }
+      if (diffLabel) {
+        diffLabel.className = "text-[10px] font-mono text-slate-600 font-bold mt-1";
+        diffLabel.innerText = `Beban: ${currentWorkload}`;
       }
       triggerMathRender();
     }
@@ -3766,13 +3832,8 @@
       if (kmOutput) kmOutput.innerText = `${km} Kilometer`;
       const status = document.getElementById('r4ScanStatus');
       if (status) {
-        if (km === 6) {
-          status.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
-          status.innerText = "✅ Pos Terkunci 6 km";
-        } else {
-          status.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-100 text-rose-800 border border-rose-300";
-          status.innerText = "Koordinat Belum Tepat";
-        }
+        status.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-teal-100 text-teal-800 border border-teal-300";
+        status.innerText = `Pin GPS: ${km} km Terpilih`;
       }
     }
 
@@ -3788,16 +3849,18 @@
       const countEl = document.getElementById('r5MiddleTreeCount');
       if (countEl) countEl.innerText = `${trees} Pohon`;
 
+      document.querySelectorAll('.r5-preset-btn').forEach(btn => {
+        btn.className = "r5-preset-btn py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer";
+        if (btn.innerText.trim() === `${trees}`) {
+          btn.className = "r5-preset-btn py-1.5 rounded-lg bg-teal-50 border-2 border-teal-400 font-bold text-teal-800 text-xs font-mono shadow-xs cursor-pointer";
+        }
+      });
+
       const total = 60 + trees + 100;
       const badge = document.getElementById('r5CapacityBadge');
       if (badge) {
-        if (total === 240) {
-          badge.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 border border-emerald-300";
-          badge.innerText = "Kapasitas: 240/240 (Pas!)";
-        } else {
-          badge.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-800 border border-amber-300";
-          badge.innerText = `Kapasitas: ${total}/240`;
-        }
+        badge.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-300";
+        badge.innerText = `Total Alokasi: ${total} Pohon`;
       }
     }
 
@@ -4195,27 +4258,50 @@
 
       renderJourneyMap();
       triggerMathRender();
+      updateHUD();
     }
 
-    // Pastikan fungsi baru terexport ke lingkup global window
-    window.startNewGameWithDynamicQuestions = startNewGameWithDynamicQuestions;
-    window.startReviewMode = startReviewMode;
-    window.randomizeAllQuestions = randomizeAllQuestions;
-
-    // Helper Modal: Buka dan Tutup dengan Animasi Halus
-    function openModal(modalId) {
+    // Navigasi Pintas Kembali ke Halaman Akhir (Hasil & Lencana)
+    function handleNavToEnding() {
       gameAudio.playSfx('click');
+      // Jika murid belum menyelesaikan misi sampai halaman akhir, beri tahu secara ramah
+      if (!gameState.reboisasiCompleted && !gameState.isReviewMode) {
+        showCustomAlert(
+          "Halaman Akhir Belum Terbuka",
+          "Menu panah memutar ini berfungsi untuk membawa murid kembali ke Halaman Akhir setelah seluruh misi selesai. Tuntaskan seluruh pos di Gerbang Pemadaman dan Reboisasi untuk membuka hasil & koleksi lencana!",
+          "fa-lock"
+        );
+        return;
+      }
+
+      const vid = document.getElementById('prologueVideo');
+      if (vid) vid.pause();
+      if (screenHero) screenHero.classList.add('hidden');
+      if (screenIntro) screenIntro.classList.add('hidden');
+      if (screenIdentity) screenIdentity.classList.add('hidden');
+      if (screenGates) screenGates.classList.add('hidden');
+      if (screenMap) screenMap.classList.add('hidden');
+      if (screenLevel) screenLevel.classList.add('hidden');
+      if (screenEnding) screenEnding.classList.remove('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/13r915My8zJwTLZFeSZSmu1-xdAGflG0i');
+      showEndingScreen();
+      updateHUD();
+      triggerMathRender();
+    }
+
+    function openModal(modalId) {
       const modal = document.getElementById(modalId);
       if (!modal) return;
+      gameAudio.playSfx('click');
       modal.classList.remove('hidden', 'modal-closing');
       modal.classList.add('flex');
       triggerMathRender();
     }
 
     function closeModal(modalId) {
-      gameAudio.playSfx('click');
       const modal = document.getElementById(modalId);
       if (!modal) return;
+      gameAudio.playSfx('click');
       modal.classList.add('modal-closing');
       setTimeout(() => {
         modal.classList.remove('flex', 'modal-closing');
@@ -4223,144 +4309,94 @@
       }, 180);
     }
 
-    // Modal Peringatan / Notifikasi Edukasi Kustom
-    function showCustomAlert(title, message, iconClass = "fa-triangle-exclamation") {
-      gameAudio.playSfx('wrong');
+    function showCustomAlert(title, message, iconClass = 'fa-triangle-exclamation') {
+      const modal = document.getElementById('modalAlert');
+      if (!modal) return;
       const titleEl = document.getElementById('alertTitle');
       const msgEl = document.getElementById('alertMessage');
       const iconEl = document.getElementById('alertIcon');
-
       if (titleEl) titleEl.innerText = title;
-      if (msgEl) msgEl.innerHTML = message;
-      if (iconEl) {
-        iconEl.innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
-      }
+      if (msgEl) msgEl.innerText = message;
+      if (iconEl) iconEl.innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
       openModal('modalAlert');
     }
 
-    // Modal Evaluasi Jawaban Keliru & Opsi Ulangi
     function openWrongRetryModal(explainText, penaltyPoints) {
-      const explainEl = document.getElementById('wrongExplainText');
-      const attemptsEl = document.getElementById('wrongAttemptCountDisplay');
-      const livesEl = document.getElementById('wrongLivesDisplay');
-      const penaltyEl = document.getElementById('wrongPenaltyDisplay');
+      const explainBox = document.getElementById('wrongExplainText');
+      const attemptDisplay = document.getElementById('wrongAttemptCountDisplay');
+      const livesDisplay = document.getElementById('wrongLivesDisplay');
+      const penaltyDisplay = document.getElementById('wrongPenaltyDisplay');
 
-      if (explainEl) explainEl.innerHTML = explainText;
-      if (attemptsEl) attemptsEl.innerText = `Percobaan ke-${gameState.levelAttempts}`;
-      if (livesEl) livesEl.innerText = `${gameState.lives} / 3 ❤️`;
-      if (penaltyEl) penaltyEl.innerText = `-${penaltyPoints} Poin`;
+      if (explainBox) explainBox.innerHTML = explainText;
+      if (attemptDisplay) attemptDisplay.innerText = `Percobaan ke-${gameState.levelAttempts}`;
+      if (livesDisplay) livesDisplay.innerText = `${gameState.lives} / 3 ❤️`;
+      if (penaltyDisplay) penaltyDisplay.innerText = `-${penaltyPoints} Poin`;
 
       openModal('modalWrongRetry');
     }
 
-    // Modal Hadiah Sukses & Penjelasan Konseptual
     function openSuccessClaimModal(explainText, rewardPoints) {
-      const titleEl = document.getElementById('successModalTitle');
-      const explainEl = document.getElementById('successExplainText');
-      const rewardPointsEl = document.getElementById('claimRewardPointsDisplay');
-      const badgeNotifyEl = document.getElementById('perfectBadgeNotify');
+      const explainBox = document.getElementById('successExplainText');
+      const rewardDisplay = document.getElementById('claimRewardPointsDisplay');
+      const badgeNotify = document.getElementById('perfectBadgeNotify');
 
-      if (titleEl) {
-        titleEl.innerText = (gameState.levelAttempts === 0 && !gameState.hintUsedInLevel) 
-          ? "Luar Biasa, Sempurna Sekali!" 
-          : "Hebat, Perhitungan Tepat!";
-      }
-      if (explainEl) explainEl.innerHTML = explainText;
-      if (rewardPointsEl) {
-        if (gameState.hintUsedInLevel) {
-          rewardPointsEl.innerHTML = `+${rewardPoints} Poin <span class="text-xs font-normal text-rose-500 block">(Penalti Petunjuk -${gameState.hintPenaltyInLevel})</span>`;
-        } else {
-          rewardPointsEl.innerText = `+${rewardPoints} Poin`;
-        }
-      }
+      if (explainBox) explainBox.innerHTML = explainText;
+      if (rewardDisplay) rewardDisplay.innerText = `+${rewardPoints} Poin`;
 
-      if (badgeNotifyEl) {
-        if (gameState.levelAttempts === 0 && !gameState.hintUsedInLevel) {
-          badgeNotifyEl.classList.remove('opacity-40');
-          badgeNotifyEl.innerHTML = `
+      const isPerfect = gameState.perfectBadges[gameState.currentGate][gameState.currentLevelIndex];
+      if (badgeNotify) {
+        if (isPerfect) {
+          badgeNotify.innerHTML = `
             <span class="text-[10px] text-emerald-700 font-bold block uppercase tracking-wider">Bonus Prestasi</span>
             <span class="text-xs font-bold text-emerald-800 mt-1 block flex items-center justify-center gap-1">
-              <span>⭐ Lencana Sempurna!</span>
+              <span>⭐ Lencana Sempurna</span>
             </span>
           `;
-        } else if (gameState.hintUsedInLevel) {
-          badgeNotifyEl.classList.add('opacity-70');
-          badgeNotifyEl.innerHTML = `
-            <span class="text-[10px] text-amber-700 font-bold block uppercase tracking-wider">Bantuan Dipakai</span>
-            <span class="text-[11px] font-semibold text-rose-600 mt-1 block">Tanpa Lencana Sempurna</span>
-          `;
         } else {
-          badgeNotifyEl.classList.add('opacity-40');
-          badgeNotifyEl.innerHTML = `
-            <span class="text-[10px] text-slate-500 font-bold block uppercase tracking-wider">Bonus Prestasi</span>
-            <span class="text-[11px] font-semibold text-slate-600 mt-1 block">Tuntaskan 1x Coba</span>
+          badgeNotify.innerHTML = `
+            <span class="text-[10px] text-slate-500 font-bold block uppercase tracking-wider">Lencana</span>
+            <span class="text-[11px] font-semibold text-slate-600 mt-1 block">Level Selesai</span>
           `;
         }
       }
-
-      // Animasi visual lapangan
-      const stream = document.getElementById('streamAnimation');
-      const firePct = document.getElementById('firePercentage');
-      const soilBar = document.getElementById('soilHealthBar');
-      if (stream) stream.classList.remove('hidden');
-      if (firePct) {
-        firePct.innerText = gameState.currentGate === 'reboisasi' ? "100% Subur" : "0% Api Padam";
-        firePct.className = "text-emerald-600 font-bold";
-      }
-      if (soilBar) soilBar.style.width = "100%";
 
       openModal('modalSuccessClaim');
     }
 
-    // Handler Menutup Modal Sukses & Melanjutkan Langkah Permainan
     function handleClaimRewardAndAdvance() {
       closeModal('modalSuccessClaim');
-
       const isReboisasi = gameState.currentGate === 'reboisasi';
-      const isLastLevelOfGate = gameState.currentLevelIndex === 4;
 
-      if (isLastLevelOfGate) {
+      if (gameState.currentLevelIndex === 4) {
         if (!isReboisasi) {
-          // Gerbang Pemadaman Tuntas -> Buka Gerbang Reboisasi
           gameState.gate1Completed = true;
-          gameAudio.playSfx('levelComplete');
-          setTimeout(() => {
-            if (screenLevel) screenLevel.classList.add('hidden');
-            if (screenGates) screenGates.classList.remove('hidden');
-            setAppBackground('https://lh3.googleusercontent.com/d/1IISjhOdEVZK9IXTT2b55CvXKjlTiFi36');
-            renderGatesStatus();
-            showCustomAlert(
-              "Gerbang Reboisasi Terbuka!",
-              "Selamat! Seluruh api telah berhasil dipadamkan dan Mikoriza telah tersadar. Sekarang Gerbang Reboisasi Rimba telah terbuka untuk memulihkan hutan!",
-              "fa-seedling"
-            );
-          }, 300);
+          showCustomAlert(
+            "Gerbang Pemadaman Selesai!",
+            "Luar biasa! Seluruh 5 pos pemadaman berhasil diselesaikan. Gerbang Reboisasi Rimba kini telah TERBUKA!",
+            "fa-door-open"
+          );
+          screenLevel.classList.add('hidden');
+          screenGates.classList.remove('hidden');
+          setAppBackground('https://lh3.googleusercontent.com/d/1IISjhOdEVZK9IXTT2b55CvXKjlTiFi36');
+          renderGatesStatus();
         } else {
-          // Gerbang Reboisasi Tuntas -> Buka Layar Akhir (Epilogue)
           gameState.reboisasiCompleted = true;
-          gameAudio.playSfx('levelComplete');
-          setTimeout(showEndingScreen, 300);
+          showEndingScreen();
         }
       } else {
-        // Pos 1–4 -> Kembali ke Peta Perjalanan agar murid dapat memilih Pos berikutnya secara mandiri
-        setTimeout(() => {
-          if (screenLevel) screenLevel.classList.add('hidden');
-          if (screenMap) screenMap.classList.remove('hidden');
-          setAppBackground('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');
-          renderJourneyMap();
-        }, 200);
+        returnToMapAfterCompletion();
       }
     }
 
     function returnToMapAfterCompletion() {
-      if (screenLevel) screenLevel.classList.add('hidden');
-      if (screenMap) screenMap.classList.remove('hidden');
+      screenLevel.classList.add('hidden');
+      screenMap.classList.remove('hidden');
       setAppBackground('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');
       renderJourneyMap();
+      updateHUD();
     }
 
     function triggerGameOver() {
-      gameAudio.playSfx('wrong');
       const scoreDisplay = document.getElementById('gameOverScoreDisplay');
       if (scoreDisplay) scoreDisplay.innerText = `${gameState.score} Poin`;
       openModal('modalGameOver');
@@ -4368,147 +4404,176 @@
 
     function restartFromBeginning() {
       closeModal('modalGameOver');
-      restartGame();
+      startNewGameWithDynamicQuestions();
     }
 
-    // Petunjuk (Hint) dengan Pengurangan Poin
     function toggleHint() {
-      gameAudio.playSfx('click');
-      gameState.hintUsedInLevel = true;
-      gameState.hintPenaltyInLevel = 50; // Penalti 50 poin saat menjawab benar
-
       const levelList = getCurrentLevelList();
       const level = levelList[gameState.currentLevelIndex];
-      const hintMsg = (level && level.quiz && level.quiz.hint) 
-        ? level.quiz.hint 
-        : "Cermati kembali perbandingan senilai/berbalik nilai atau pembagi FPB pada langkah materi!";
+      if (!level) return;
+
+      if (!gameState.hintUsedInLevel) {
+        gameState.hintUsedInLevel = true;
+        gameState.hintPenaltyInLevel = 40;
+        gameState.score = Math.max(0, gameState.score - 20);
+        updateHUD();
+      }
 
       showCustomAlert(
-        "Petunjuk Rasamala (Ada Penalti)",
-        `<div>
-          <p class="leading-relaxed text-slate-700">${hintMsg}</p>
-          <div class="mt-3 p-2.5 rounded-xl bg-amber-50 border border-amber-300 text-[11px] text-amber-950 font-bold flex items-center justify-between shadow-xs">
-            <span class="flex items-center gap-1.5"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Konsekuensi Bantuan:</span>
-            <span class="text-rose-600 font-mono font-black text-xs">-50 Poin Saat Benar</span>
-          </div>
-          <p class="text-[10px] text-slate-500 mt-1 italic text-center">*Skor maksimum berkurang menjadi 150 poin dan lencana sempurna dibatalkan.</p>
-        </div>`,
+        `Petunjuk: ${level.title}`,
+        `${level.quiz.hint}\n\n(Catatan: Menggunakan petunjuk memotong skor 20 Poin dan penalti poin pada jawaban benar, sehingga lencana sempurna tidak diperoleh.)`,
         "fa-lightbulb"
       );
     }
 
-    // Modals Khusus Informasi & Rujukan
-    function openPetunjukTeknisModal() {
-      openModal('modalPetunjukTeknis');
-    }
-
-    function openLearningGoalsModal() {
-      openModal('modalCPTP');
-    }
-
-    function openDeveloperModal() {
-      openModal('modalDeveloper');
-    }
-
-    function openRasamalaInfoModal() {
-      openModal('modalRasamalaInfo');
-    }
-
-    function openReferensiModal() {
-      openModal('modalReferensi');
-    }
-
+    function openPetunjukTeknisModal() { openModal('modalPetunjukTeknis'); }
+    function openLearningGoalsModal() { openModal('modalCPTP'); }
+    function openDeveloperModal() { openModal('modalDeveloper'); }
+    function openRasamalaInfoModal() { openModal('modalRasamalaInfo'); }
+    function openReferensiModal() { openModal('modalReferensi'); }
     function openLeaderboardModal() {
       const container = document.getElementById('leaderboardListContainer');
       if (container) {
-        const charData = CHARACTERS_DATA[playerProfile.character] || CHARACTERS_DATA['rasamala_guardian'];
-        const currentName = playerProfile.name || "Ksatria Rimba";
-        const currentClass = playerProfile.classGrade || "Fase D";
-
         container.innerHTML = `
-          <div class="p-3 rounded-2xl bg-amber-50 border-2 border-amber-300 flex items-center justify-between shadow-sm">
-            <div class="flex items-center gap-3">
-              <span class="w-7 h-7 rounded-full bg-amber-500 text-white font-black text-xs flex items-center justify-center">1</span>
+          <div class="p-3 bg-amber-50 rounded-2xl border border-amber-200 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-xl bg-amber-500 text-slate-900 font-black font-game text-xs flex items-center justify-center">1</span>
               <div>
-                <p class="font-bold text-slate-800 text-xs sm:text-sm font-game">${currentName} (${currentClass})</p>
-                <p class="text-[10px] text-emerald-700 font-semibold">${charData.name} • ${charData.role}</p>
+                <p class="font-bold text-slate-800 text-xs">${playerProfile.name || 'Petualang Rimba'}</p>
+                <p class="text-[10px] text-slate-500">Kelas ${playerProfile.classGrade || 'VII'}</p>
               </div>
             </div>
-            <div class="text-right">
-              <span class="font-game font-bold text-amber-600 text-sm sm:text-base">${gameState.score} Poin</span>
-              <span class="block text-[9px] text-slate-500">Peringkat Utama</span>
-            </div>
+            <span class="font-game font-bold text-amber-700 text-sm">${gameState.score} Poin</span>
           </div>
-          <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-80">
-            <div class="flex items-center gap-3">
-              <span class="w-7 h-7 rounded-full bg-slate-300 text-slate-700 font-black text-xs flex items-center justify-center">2</span>
+          <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between opacity-80">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-xl bg-slate-300 text-slate-700 font-black font-game text-xs flex items-center justify-center">2</span>
               <div>
-                <p class="font-bold text-slate-800 text-xs">Ahmad Fauzan (VII-C)</p>
-                <p class="text-[10px] text-slate-500">Ranger Elang</p>
+                <p class="font-bold text-slate-800 text-xs">Bintang Nusantara</p>
+                <p class="text-[10px] text-slate-500">Kelas VII-B</p>
               </div>
             </div>
-            <span class="font-game font-bold text-slate-700 text-sm">1840 Poin</span>
+            <span class="font-game font-bold text-slate-700 text-sm">1880 Poin</span>
           </div>
-          <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-80">
-            <div class="flex items-center gap-3">
-              <span class="w-7 h-7 rounded-full bg-slate-300 text-slate-700 font-black text-xs flex items-center justify-center">3</span>
+          <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between opacity-70">
+            <div class="flex items-center gap-2.5">
+              <span class="w-7 h-7 rounded-xl bg-amber-700/60 text-white font-black font-game text-xs flex items-center justify-center">3</span>
               <div>
-                <p class="font-bold text-slate-800 text-xs">Siti Nurhaliza (VII-A)</p>
-                <p class="text-[10px] text-slate-500">Peneliti Botani</p>
+                <p class="font-bold text-slate-800 text-xs">Rimba Lestari</p>
+                <p class="text-[10px] text-slate-500">Kelas VII-A</p>
               </div>
             </div>
-            <span class="font-game font-bold text-slate-700 text-sm">1760 Poin</span>
+            <span class="font-game font-bold text-slate-700 text-sm">1740 Poin</span>
           </div>
         `;
       }
       openModal('modalLeaderboard');
     }
 
-    // Layar Akhir Permainan (Epilogue)
     function showEndingScreen() {
-      if (screenLevel) screenLevel.classList.add('hidden');
-      if (screenMap) screenMap.classList.add('hidden');
-      if (screenEnding) screenEnding.classList.remove('hidden');
+      gameState.reboisasiCompleted = true;
+      gameAudio.playSfx('levelComplete');
+      setAppBackground('https://lh3.googleusercontent.com/d/13r915My8zJwTLZFeSZSmu1-xdAGflG0i');
 
-      setAppBackground('https://lh3.googleusercontent.com/d/1WC77s2bQvxl7PuDJEEe2lmjNtq4pn8Rs');
+      if (screenHero) screenHero.classList.add('hidden');
+      if (screenIntro) screenIntro.classList.add('hidden');
+      if (screenIdentity) screenIdentity.classList.add('hidden');
+      if (screenGates) screenGates.classList.add('hidden');
+      if (screenMap) screenMap.classList.add('hidden');
+      if (screenLevel) screenLevel.classList.add('hidden');
+      if (screenEnding) screenEnding.classList.remove('hidden');
 
       const finalScoreEl = document.getElementById('finalScoreDisplay');
       if (finalScoreEl) finalScoreEl.innerText = `${gameState.score} Poin`;
 
-      // Render Lencana Sempurna
       const badgesContainer = document.getElementById('badgesContainer');
-      const badgeCounter = document.getElementById('perfectBadgeCounter');
+      const counterEl = document.getElementById('perfectBadgeCounter');
 
-      const allBadges = [
-        ...gameState.perfectBadges.pemadaman.map((b, i) => ({ gate: 'Pemadaman', pos: i + 1, earned: b, icon: '🔥' })),
-        ...gameState.perfectBadges.reboisasi.map((b, i) => ({ gate: 'Reboisasi', pos: i + 1, earned: b, icon: '🌱' }))
-      ];
+      let perfectCount = 0;
+      const allBadges = [];
 
-      const totalEarned = allBadges.filter(b => b.earned).length;
-      if (badgeCounter) badgeCounter.innerText = `${totalEarned} / 10 Lencana Sempurna`;
+      ['pemadaman', 'reboisasi'].forEach((gate) => {
+        gameState.perfectBadges[gate].forEach((earned, lIdx) => {
+          if (earned) perfectCount++;
+          const badgeData = (TREE_BADGES[gate] && TREE_BADGES[gate][lIdx]) || {
+            title: `Lencana ${gate === 'pemadaman' ? 'Bara' : 'Tunas'} ${lIdx + 1}`,
+            img: 'https://placehold.co/100x100/059669/ffffff?text=Lencana'
+          };
+          allBadges.push({
+            ...badgeData,
+            earned,
+            label: `${gate === 'pemadaman' ? 'Pos' : 'Pos R'}${lIdx + 1}`
+          });
+        });
+      });
+
+      if (counterEl) counterEl.innerText = `${perfectCount} / 10 Lencana Sempurna`;
 
       if (badgesContainer) {
         badgesContainer.innerHTML = '';
         allBadges.forEach(b => {
-          const badgeDiv = document.createElement('div');
-          badgeDiv.className = `p-2 rounded-xl border text-center transition-all ${
+          const card = document.createElement('div');
+          card.className = `p-2.5 rounded-2xl border text-center flex flex-col items-center justify-between ${
             b.earned
-              ? 'bg-amber-50 border-amber-300 text-amber-900 shadow-sm'
-              : 'bg-slate-100 border-slate-200 text-slate-400 opacity-60'
+              ? 'bg-amber-50/80 border-amber-300 shadow-sm'
+              : 'bg-slate-100/70 border-slate-200 grayscale opacity-60'
           }`;
-          badgeDiv.innerHTML = `
-            <div class="text-xl mb-0.5">${b.earned ? '⭐' : '⚪'}</div>
-            <p class="text-[10px] font-bold font-game leading-tight">${b.gate} P${b.pos}</p>
-            <span class="text-[8px] font-semibold">${b.earned ? 'Sempurna' : 'Tercapai'}</span>
+          card.innerHTML = `
+            <div class="w-14 h-14 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center shadow-xs mb-1.5 overflow-hidden">
+              <img src="${b.img}" alt="${b.title}" class="w-full h-full object-contain" />
+            </div>
+            <span class="text-[10px] font-bold text-slate-800 leading-tight mb-1">${b.title}</span>
+            <span class="text-[9px] font-mono ${b.earned ? 'text-amber-700 font-bold' : 'text-slate-400'}">${b.label}</span>
+            ${
+              b.earned
+                ? `<button onclick="downloadBadgeImage('${b.img}', '${b.title}.png')" class="mt-1.5 w-full py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold transition shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-download mr-1"></i>Unduh
+                  </button>`
+                : `<span class="mt-1.5 text-[9px] text-slate-400 italic">Belum Raih</span>`
+            }
           `;
-          badgesContainer.appendChild(badgeDiv);
+          badgesContainer.appendChild(card);
         });
       }
 
+      updateHUD();
       triggerMathRender();
     }
 
     // Binding semua fungsi ke Window agar tidak mengalami ReferenceError di environment iframe
+    window.goToPrologue = goToPrologue;
+    window.goToIdentity = goToIdentity;
+    window.goToGates = goToGates;
+    window.backToIntro = backToIntro;
+    window.backToIdentity = backToIdentity;
+    window.backToHero = backToHero;
+    window.backToGates = backToGates;
+    window.handleNavHome = handleNavHome;
+    window.handleNavBack = handleNavBack;
+    window.handleNavToEnding = handleNavToEnding;
+    window.selectCharacter = selectCharacter;
+    window.submitIdentityAndGoToGates = submitIdentityAndGoToGates;
+    window.startGate = startGate;
+    window.selectLevelFromMap = selectLevelFromMap;
+    window.switchPhase = switchPhase;
+    window.loadLevel = loadLevel;
+    window.adjustStepperVal = adjustStepperVal;
+    window.adjustBiocharVal = adjustBiocharVal;
+    window.selectR1Factor = selectR1Factor;
+    window.placeR1Token = placeR1Token;
+    window.clearR1Slot = clearR1Slot;
+    window.resetR1Slots = resetR1Slots;
+    window.adjustR2Nutrient = adjustR2Nutrient;
+    window.setR2Preset = setR2Preset;
+    window.updateR3Schedule = updateR3Schedule;
+    window.selectR4Waypoint = selectR4Waypoint;
+    window.adjustR5Canopy = adjustR5Canopy;
+    window.setR5Preset = setR5Preset;
+    window.evaluateAnswer = evaluateAnswer;
+    window.startNewGameWithDynamicQuestions = startNewGameWithDynamicQuestions;
+    window.startReviewMode = startReviewMode;
+    window.randomizeAllQuestions = randomizeAllQuestions;
+    window.downloadBadgeImage = downloadBadgeImage;
     window.openModal = openModal;
     window.closeModal = closeModal;
     window.showCustomAlert = showCustomAlert;
@@ -4526,6 +4591,7 @@
     window.openReferensiModal = openReferensiModal;
     window.openLeaderboardModal = openLeaderboardModal;
     window.showEndingScreen = showEndingScreen;
+    window.toggleStatsSlider = toggleStatsSlider;
   </script>
 </body>
 </html>
