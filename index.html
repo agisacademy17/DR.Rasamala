@@ -128,6 +128,33 @@
       border-color: #6ee7b7;
     }
 
+    /* 3D Prologue Character Cards (Rasamala VS Mikoriza) */
+    .prologue-perspective {
+      perspective: 1100px;
+    }
+    .card-3d-prologue-rasamala {
+      transform: rotateY(7deg) rotateX(3deg) translateZ(0);
+      box-shadow: 0 10px 0 #047857, 0 18px 30px rgba(4, 120, 87, 0.35), 0 0 0 3px rgba(255, 255, 255, 0.95);
+      transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .card-3d-prologue-rasamala:hover {
+      transform: translateY(-8px) scale(1.08) rotateY(0deg) rotateX(0deg);
+      box-shadow: 0 15px 0 #047857, 0 28px 40px rgba(4, 120, 87, 0.45), 0 0 0 3px #34d399;
+    }
+    .card-3d-prologue-mikoriza {
+      transform: rotateY(-7deg) rotateX(3deg) translateZ(0);
+      box-shadow: 0 10px 0 #b91c1c, 0 18px 30px rgba(185, 28, 28, 0.35), 0 0 0 3px rgba(255, 255, 255, 0.95);
+      transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .card-3d-prologue-mikoriza:hover {
+      transform: translateY(-8px) scale(1.08) rotateY(0deg) rotateX(0deg);
+      box-shadow: 0 15px 0 #b91c1c, 0 28px 40px rgba(185, 28, 28, 0.45), 0 0 0 3px #fb7185;
+    }
+    .podium-3d-inner {
+      box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.14), inset 0 -3px 6px rgba(255, 255, 255, 0.6), 0 4px 10px rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+
     /* Portal Gate Hover Animation */
     .portal-gate {
       transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.38s ease;
@@ -380,59 +407,82 @@
     </section>
 
     <!-- SCREEN 2: STORY PROLOGUE -->
-    <section id="screenIntro" class="relative hidden flex flex-col items-center justify-center min-h-[82vh] my-auto text-center space-y-5 py-6 transition-all duration-500 w-full mx-auto">
+    <section id="screenIntro" class="relative hidden flex-col items-center justify-center min-h-[82vh] my-auto text-center space-y-5 py-6 transition-all duration-500 w-full mx-auto">
       <!-- Badge Babak Prolog Sesuai Gambar Referensi -->
       <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-emerald-100/95 border-2 border-emerald-300 text-emerald-900 text-xs sm:text-sm font-bold shadow-md backdrop-blur-sm mx-auto">
         <i class="fa-solid fa-book-open text-emerald-700"></i> Babak Prolog • Kisah Hutan Harapan
       </div>
 
-      <!-- Wadah Dua Kartu Karakter Rasamala VS Mikoriza Sesuai Tangkapan Layar -->
-      <div class="relative w-full max-w-xl py-3 flex items-center justify-center gap-4 sm:gap-6 mx-auto select-none">
+      <!-- Wadah Dua Kartu Karakter Rasamala VS Mikoriza Berbentuk 3D -->
+      <div class="prologue-perspective relative w-full max-w-xl py-4 flex items-center justify-center gap-4 sm:gap-7 mx-auto select-none">
         
-        <!-- Kartu Kiri: Rasamala (Mint Green Interior) -->
-        <div class="w-40 sm:w-48 bg-white/95 backdrop-blur-md rounded-[2rem] p-4 sm:p-5 shadow-2xl border-4 border-white flex flex-col items-center text-center transition-transform hover:scale-105 duration-300">
-          <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-[#c6efce] border border-emerald-200/80 flex items-center justify-center text-5xl sm:text-6xl shadow-inner animate-sway">
-            🌲
+        <!-- Kartu Kiri: Rasamala 3D (Mint Green Interior & 3D Bevel) -->
+        <div class="card-3d-prologue-rasamala w-40 sm:w-48 bg-white/95 backdrop-blur-md rounded-[2.2rem] p-4 sm:p-5 flex flex-col items-center text-center cursor-pointer group">
+          <div class="podium-3d-inner w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-gradient-to-b from-[#e2f8e7] to-[#c6efce] border-2 border-emerald-300/80 flex items-center justify-center p-2 overflow-visible">
+            <div class="absolute -bottom-2 inset-x-3 h-3 bg-emerald-600/25 rounded-full blur-xs pointer-events-none"></div>
+            <img 
+              src="https://lh3.googleusercontent.com/d/1bb6jdkvp4wqs9GdSVbui0-22o9QZaYBK" 
+              alt="Rasamala - Sang Pohon Kuno Pelindung" 
+              class="relative z-10 w-full h-full object-contain animate-sway drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
+              loading="eager"
+              onerror="this.onerror=null; this.src='https://placehold.co/120x120/c6efce/166534?text=Rasamala';"
+            />
           </div>
-          <span class="font-game text-sm sm:text-base font-extrabold text-emerald-950 mt-3 leading-tight">Rasamala</span>
-          <span class="text-[10px] sm:text-[11px] text-slate-600 font-semibold mt-0.5 leading-snug">Sang Pohon Kuno Pelindung</span>
+          <span class="font-game text-sm sm:text-base font-black text-emerald-950 mt-3.5 leading-tight tracking-wide drop-shadow-xs">Rasamala</span>
+          <span class="text-[10px] sm:text-[11px] text-emerald-800 font-bold mt-1 leading-snug bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Sang Pohon Kuno</span>
         </div>
 
-        <!-- Tengah: VS dengan Kupu-Kupu 🦋 -->
-        <div class="flex flex-col items-center justify-center px-1 sm:px-2">
-          <span class="text-2xl sm:text-3xl font-black text-amber-500 drop-shadow-sm font-game">VS</span>
-          <span class="text-2xl sm:text-3xl mt-1 animate-pulse filter drop-shadow">🦋</span>
+        <!-- Tengah: VS dengan Kupu-Kupu 🦋 Bergaya 3D -->
+        <div class="flex flex-col items-center justify-center px-1 sm:px-2 z-10">
+          <span class="text-2xl sm:text-3xl font-black bg-gradient-to-b from-amber-400 to-amber-600 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(217,119,6,0.5)] font-game">VS</span>
+          <span class="text-2xl sm:text-3xl mt-1 animate-pulse filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.3)]">🦋</span>
         </div>
 
-        <!-- Kartu Kanan: Mikoriza (Peach Interior) -->
-        <div class="w-40 sm:w-48 bg-white/95 backdrop-blur-md rounded-[2rem] p-4 sm:p-5 shadow-2xl border-4 border-white ring-2 ring-rose-200/60 flex flex-col items-center text-center transition-transform hover:scale-105 duration-300">
-          <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-[#fed7c7] border border-rose-200/80 flex items-center justify-center text-5xl sm:text-6xl shadow-inner animate-glow-fire">
-            🍄🔥
+        <!-- Kartu Kanan: Mikoriza 3D (Peach Interior & 3D Bevel) -->
+        <div class="card-3d-prologue-mikoriza w-40 sm:w-48 bg-white/95 backdrop-blur-md rounded-[2.2rem] p-4 sm:p-5 flex flex-col items-center text-center cursor-pointer group">
+          <div class="podium-3d-inner w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-gradient-to-b from-[#ffede6] to-[#fed7c7] border-2 border-rose-300/80 flex items-center justify-center p-2 overflow-visible">
+            <div class="absolute -bottom-2 inset-x-3 h-3 bg-rose-600/25 rounded-full blur-xs pointer-events-none"></div>
+            <img 
+              src="https://lh3.googleusercontent.com/d/1zsvl7BeE5c5tuQIF0HvsnkyTaIYKLDSM" 
+              alt="Mikoriza - Jamur Akar Terhasut" 
+              class="relative z-10 w-full h-full object-contain animate-glow-fire drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
+              loading="eager"
+              onerror="this.onerror=null; this.src='https://placehold.co/120x120/fed7c7/991b1b?text=Mikoriza';"
+            />
           </div>
-          <span class="font-game text-sm sm:text-base font-extrabold text-rose-700 mt-3 leading-tight">Mikoriza</span>
-          <span class="text-[10px] sm:text-[11px] text-slate-600 font-semibold mt-0.5 leading-snug">Jamur Akar Terhasut</span>
+          <span class="font-game text-sm sm:text-base font-black text-rose-700 mt-3.5 leading-tight tracking-wide drop-shadow-xs">Mikoriza</span>
+          <span class="text-[10px] sm:text-[11px] text-rose-800 font-bold mt-1 leading-snug bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">Jamur Akar Terhasut</span>
         </div>
 
       </div>
 
-      <div class="max-w-2xl w-full mx-auto bg-white/95 border border-emerald-200 p-6 sm:p-8 rounded-3xl shadow-xl backdrop-blur">
-        <h2 class="font-game text-2xl sm:text-4xl font-extrabold text-slate-800 mb-3">
-          Selamatkan Hutan dari <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-amber-500">Api Keserakahan!</span>
-        </h2>
-        <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-4 text-justify sm:text-center">
-          Dahulu kala, <b>Pohon Rasamala</b> dan jamur <b>Mikoriza</b> bersimbiosis menjaga kesuburan rimba raya pegunungan. Namun, pendatang licik menghasut Mikoriza dengan janji lahan luas tanpa batas. Mikoriza termakan rayuan dan menyulut amukan api membakar lereng hutan!
-          Kini, Rasamala harus memadamkan api dan menyadarkan sahabatnya menggunakan <b>Kekuatan Logika Matematika Perbandingan</b>.
-        </p>
-
-        <div class="bg-amber-50/90 rounded-2xl p-3.5 border-l-4 border-amber-500 text-left text-xs sm:text-sm text-slate-700 mb-6 italic">
-          "Sahabatku Mikoriza, api tidak akan memberimu makanan sejati, ia hanya membawa abu! Gunakan akal logis perbandingan untuk menyelamatkan tanah leluhur kita!" — Rasamala
+      <!-- Wadah Video Pembuka Kisah Prolog (Aspek Rasio 16:9) -->
+      <div class="max-w-3xl w-full mx-auto bg-white/95 border border-emerald-200 p-4 sm:p-6 rounded-3xl shadow-xl backdrop-blur space-y-3.5">
+        <div class="text-center space-y-1">
+          <h2 class="font-game text-xl sm:text-3xl font-extrabold text-slate-800">
+            Saksikan Kisah: <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-amber-500">Api Keserakahan</span>
+          </h2>
+          <p class="text-slate-500 text-xs sm:text-sm font-medium">
+            Simak video pembuka petualangan sebelum memulai ekspedisi penyelamatan rimba!
+          </p>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
-          <button onclick="backToHero()" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm border border-slate-300 transition">
-            <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Menu
-          </button>
-          <button onclick="goToIdentity()" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-game font-bold text-base tracking-wider shadow-lg shadow-emerald-500/30 hover:scale-105 active:scale-95 transition flex items-center justify-center gap-2">
+        <!-- Frame Video Rasio 16:9 -->
+        <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl border-2 border-emerald-300/80 bg-slate-950 flex items-center justify-center">
+          <video 
+            id="prologueVideo" 
+            controls 
+            playsinline 
+            preload="metadata"
+            class="w-full h-full object-contain bg-black rounded-2xl"
+          >
+            <source src="https://github.com/agisacademy17/video-pembuka-DR.Rasamala/raw/refs/heads/main/DR.%20Rasamala%20(1)%20(1).mp4" type="video/mp4">
+            Browser Anda tidak mendukung pemutar video HTML5.
+          </video>
+        </div>
+
+        <div class="flex justify-center items-center pt-2">
+          <button onclick="goToIdentity()" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-game font-bold text-base tracking-wider shadow-lg shadow-emerald-500/30 hover:scale-105 active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer">
             <span>Daftar Identitas Petualang</span> <i class="fa-solid fa-arrow-right"></i>
           </button>
         </div>
@@ -710,10 +760,7 @@
           </div>
         </div>
 
-        <div class="w-full pt-3 border-t border-emerald-100 flex flex-col sm:flex-row gap-3 justify-center items-center">
-          <button onclick="backToIntro()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs border border-slate-300 transition cursor-pointer">
-            <i class="fa-solid fa-arrow-left mr-1.5"></i> Kembali ke Kisah Prolog
-          </button>
+        <div class="w-full pt-3 border-t border-emerald-100 flex justify-center items-center">
           <button onclick="submitIdentityAndGoToGates()" class="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-teal-700 text-white font-game font-bold text-sm tracking-wide shadow-lg shadow-emerald-500/25 hover:scale-105 active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer">
             <i class="fa-solid fa-door-open"></i> Buka Gerbang Perjalanan
           </button>
@@ -775,12 +822,6 @@
           </div>
         </div>
       </div>
-
-      <div class="pt-4">
-        <button onclick="backToIdentity()" class="px-6 py-2.5 rounded-xl bg-white/90 hover:bg-emerald-50 text-slate-600 text-xs font-semibold border border-slate-200 shadow-sm transition">
-          <i class="fa-solid fa-arrow-left mr-1.5"></i> Kembali ke Identitas & Karakter
-        </button>
-      </div>
     </section>
 
     <!-- SCREEN 4: PETA PERJALANAN -->
@@ -830,12 +871,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="pt-2 flex justify-center items-center w-full">
-        <button onclick="backToGates()" class="px-6 py-2.5 rounded-xl bg-white hover:bg-emerald-50 text-slate-600 text-xs font-semibold border border-slate-200 shadow-sm transition cursor-pointer">
-          <i class="fa-solid fa-arrow-left mr-1.5"></i> Kembali ke Pilihan Gerbang
-        </button>
       </div>
     </section>
 
@@ -1057,8 +1092,13 @@
         </div>
 
         <div class="flex flex-wrap gap-2.5 justify-center items-center w-full">
-          <button onclick="restartGame()" class="flex-1 sm:flex-initial px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-game font-bold text-xs sm:text-sm tracking-wide shadow-lg shadow-emerald-500/25 hover:scale-105 active:scale-95 transition cursor-pointer">
-            <i class="fa-solid fa-rotate-left mr-1.5"></i> Jelajahi Ulang
+          <!-- Tombol Mulai Lagi: Mulai dari awal dengan variasi soal baru yang diacak -->
+          <button onclick="startNewGameWithDynamicQuestions()" class="flex-1 sm:flex-initial px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-game font-bold text-xs sm:text-sm tracking-wide shadow-lg shadow-emerald-500/25 hover:scale-105 active:scale-95 transition cursor-pointer" title="Mulai petualangan dari halaman depan dengan variasi soal baru">
+            <i class="fa-solid fa-arrows-rotate mr-1.5"></i> Mulai Lagi (Tantangan Baru)
+          </button>
+          <!-- Tombol Jelajahi Ulang: Mode Tinjau Level & Jawaban yang telah dipilih -->
+          <button onclick="startReviewMode()" class="flex-1 sm:flex-initial px-6 py-3.5 rounded-2xl bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white font-game font-bold text-xs sm:text-sm tracking-wide shadow-md shadow-teal-500/25 hover:scale-105 active:scale-95 transition cursor-pointer" title="Tinjau kembali tiap level dan jawaban yang telah kamu pilih">
+            <i class="fa-solid fa-book-open-reader mr-1.5"></i> Jelajahi Ulang (Tinjau Jawaban)
           </button>
           <button onclick="openLeaderboardModal()" class="flex-1 sm:flex-initial px-5 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 font-game font-bold text-xs sm:text-sm tracking-wide shadow-md shadow-amber-500/25 hover:scale-105 active:scale-95 transition cursor-pointer">
             <i class="fa-solid fa-trophy mr-1.5 text-amber-900"></i> Papan Peringkat
@@ -1977,7 +2017,7 @@
           correctA: 3,
           correctB: 7,
           explain: "Tepat Sekali! $\\text{FPB}$ dari $18$ dan $42$ adalah $6$. Maka $(18 \\div 6 = 3)$ dan $(42 \\div 6 = 7)$. Bentuk perbandingan paling sederhananya adalah $3 : 7$!",
-          hint: "Cari angka terbesar yang membagi habis $18$ dan $42$ sekaligus (yaitu $6$). Bagilah $18$ dan $42$ dengan $6$!"
+          hint: "Carilah faktor persekutuan terbesar (FPB) yang dapat membagi habis kedua bilangan tersebut, lalu bagilah masing-masing besaran dengan FPB tersebut sampai bentuknya tidak bisa dibagi lagi."
         }
       },
       {
@@ -2035,7 +2075,7 @@
           correctValue: 180,
           tolerance: 0,
           explain: "Luar Biasa Benar! Nilai satuan: $1\\text{ m}^2 = \\frac{60}{15} = 4\\text{ liter}$. Untuk $45\\text{ m}^2$ dibutuhkan $45 \\times 4 = 180\\text{ Liter}$ air!",
-          hint: "Perhatikan: $45\\text{ m}^2$ adalah $3$ kali lipat dari $15\\text{ m}^2$ ($45 \\div 15 = 3$). Maka volume air juga $3 \\times 60 = 180\\text{ Liter}$!"
+          hint: "Gunakan konsep perbandingan senilai: carilah kebutuhan air per $1\\text{ m}^2$ (nilai satuan), atau hitung berapa kali lipat pertambahan luas lahannya lalu kalikan dengan volume air awal."
         }
       },
       {
@@ -2093,7 +2133,7 @@
           `,
           correctValue: 4,
           explain: "Brilian! Beban kerja konstan: $6 \\times 12 = 72\\text{ jam-satwa}$. Jika dikerjakan oleh $18$ satwa, maka waktu $= \\frac{72}{18} = 4\\text{ jam}$!",
-          hint: "Beban kerja tetap: $6 \\times 12 = 72$. Lalu bagi $72$ dengan $18$ satwa!"
+          hint: "Ingat prinsip beban kerja konstan ($a_1 \\times b_1 = a_2 \\times b_2$). Kalikan banyak satwa mula-mula dengan jamnya, lalu bagilah hasil kali tersebut dengan jumlah satwa yang baru."
         }
       },
       {
@@ -2142,7 +2182,7 @@
           `,
           correctValue: 2,
           explain: "Tepat Sekali! $\\text{JS} = 8 \\times 25.000\\text{ cm} = 200.000\\text{ cm}$. Dikonversi ke kilometer: $\\frac{200.000}{100.000} = 2\\text{ km}$!",
-          hint: "Hitung $8 \\times 25.000 = 200.000\\text{ cm}$. Karena $1\\text{ km} = 100.000\\text{ cm}$, maka $200.000 \\div 100.000 = 2$!"
+          hint: "Gunakan rumus $\\text{Jarak Sebenarnya} = \\text{Jarak Peta} \\times \\text{Angka Skala}$. Setelah mendapatkan jarak dalam satuan sentimeter, ubahlah ke kilometer dengan membaginya 100.000."
         }
       },
       {
@@ -2189,7 +2229,7 @@
           `,
           correctValue: 60,
           explain: "Sempurna! Total bagian $= 2 + 3 + 5 = 10$ bagian. Nilai $1$ bagian $= \\frac{120}{10} = 12\\text{ kg}$. Rasio Biochar adalah $5$, maka massanya $= 5 \\times 12\\text{ kg} = 60\\text{ kg}$!",
-          hint: "Jumlahkan rasio: $2 + 3 + 5 = 10$. Nilai $1$ bagian $= \\frac{120}{10} = 12$. Lalu kalikan $12$ dengan angka rasio Biochar ($5$)!"
+          hint: "Jumlahkan terlebih dahulu seluruh angka perbandingan untuk mengetahui total bagian. Tentukan nilai $1$ bagian dengan membagi total massa ramuan dengan total bagian, lalu kalikan dengan angka rasio komponen yang ditanyakan."
         }
       }
     ];
@@ -2242,7 +2282,7 @@
             </div>
           `,
           explain: "Tepat Sekali! $\\text{FPB}$ terbesar dari $48$ dan $72$ adalah $24$. Maka $48 \\div 24 = 2$ bundel dan $72 \\div 24 = 3$ bundel. Bentuk rasio paling sederhananya adalah tepat $2 : 3$!",
-          hint: "Cari bilangan pembagi terbesar yang dapat membagi habis $48$ dan $72$ sekaligus (yaitu $24$), lalu pasang keping angka 2 dan 3!"
+          hint: "Tentukan terlebih dahulu faktor persekutuan terbesar (FPB) dari kedua angka tersebut, lalu bagilah masing-masing populasi bibit dengan FPB tersebut untuk menentukan angka rasio yang terpasang di keranjang."
         }
       },
       {
@@ -2298,7 +2338,7 @@
             </div>
           `,
           explain: "Hebat dan Tepat! Pengali proporsi: $\\frac{60}{12} = 5$. Karena bibit naik $5\\times$, volume nutrisi juga $5 \\times 18\\text{ Liter} = 90\\text{ Liter}$!",
-          hint: "Hitung faktor perbesaran: $60 \\div 12 = 5$. Kalikan volume awal $18\\text{ liter}$ dengan $5$, hasilnya adalah $90\\text{ Liter}$!"
+          hint: "Gunakan perbandingan senilai: carilah faktor kelipatan penambahan bibit ($60 \\div 12$), lalu kalikan volume nutrisi mula-mula dengan faktor kelipatan tersebut."
         }
       },
       {
@@ -2352,7 +2392,7 @@
             </div>
           `,
           explain: "Tepat Sekali! Beban kerja total $= 10 \\times 18 = 180\\text{ hari-satwa}$. Dengan $15$ relawan: $\\frac{180}{15} = 12\\text{ hari kerja}$!",
-          hint: "Beban kerja tetap: $10 \\times 18 = 180$. Geser tuas kalender ke angka $12$ hari!"
+          hint: "Ingat bahwa relawan dan hari berbanding terbalik: perkalian keduanya konstan. Hitung beban acuan ($10 \\times 18$), lalu bagilah dengan $15$ relawan untuk menemukan hari kerja."
         }
       },
       {
@@ -2399,7 +2439,7 @@
             </div>
           `,
           explain: "Brilian! $\\text{JS} = 15 \\times 40.000 = 600.000\\text{ cm}$. Konversi: $600.000\\text{ cm} = 6.000\\text{ m} = 6\\text{ km}$ lintasan koridor hijau!",
-          hint: "Kalikan $15 \\times 40.000 = 600.000\\text{ cm}$. Karena $1\\text{ km} = 100.000\\text{ cm}$, maka jarak sebenarnya adalah $6\\text{ km}$!"
+          hint: "Gunakan rumus $\\text{JS} = \\text{JP} \\times \\text{Skala}$. Kalikan panjang denah dengan angka pembanding skala untuk menghasilkan satuan sentimeter, kemudian bagi dengan $100.000$ untuk mendapatkan jarak dalam kilometer."
         }
       },
       {
@@ -2445,7 +2485,7 @@
             </div>
           `,
           explain: "Sempurna dan Luar Biasa! Total rasio $= 3 + 4 + 5 = 12$ bagian. Nilai $1$ bagian $= \\frac{240}{12} = 20\\text{ pohon}$. Rasio Pohon Buah Sedang adalah $4$, maka $4 \\times 20 = 80\\text{ Pohon Buah Sedang}$!",
-          hint: "Total rasio: $3 + 4 + 5 = 12$. Nilai $1$ bagian $= 240 \\div 12 = 20$. Kalikan $20$ dengan $4 = 80\\text{ pohon}$!"
+          hint: "Hitung total seluruh bagian rasio ($3 + 4 + 5$). Bagilah total pohon ($240$) dengan total bagian untuk memperoleh nilai per $1$ bagian, kemudian kalikan hasilnya dengan angka rasio strata tengah."
         }
       }
     ];
@@ -2458,9 +2498,16 @@
       lives: 3,
       levelAttempts: 0,
       levelSolved: false,
+      hintUsedInLevel: false,
+      hintPenaltyInLevel: 0,
       currentPhase: 'materi',
       gate1Completed: false,
       reboisasiCompleted: false,
+      isReviewMode: false,
+      userAnswers: {
+        pemadaman: {},
+        reboisasi: {}
+      },
       gateProgress: {
         pemadaman: 1,
         reboisasi: 1
@@ -2482,6 +2529,31 @@
     const screenMap = document.getElementById('screenMap');
     const screenLevel = document.getElementById('screenLevel');
     const screenEnding = document.getElementById('screenEnding');
+
+    const prologueVideo = document.getElementById('prologueVideo');
+    if (prologueVideo) {
+      // 1. Saat video mulai diputar: hentikan/jeda musik latar
+      prologueVideo.addEventListener('play', () => {
+        if (gameAudio.bgm) {
+          gameAudio.bgm.pause();
+        }
+      });
+
+      // 2. Saat video selesai berputar: lanjutkan kembali musik latar
+      prologueVideo.addEventListener('ended', () => {
+        if (gameAudio.bgmStarted && !gameAudio.muted) {
+          gameAudio.playBgm();
+        }
+      });
+
+      // 3. Saat video dijeda (pause) di layar prolog: putar kembali musik latar
+      prologueVideo.addEventListener('pause', () => {
+        const screenHero = document.getElementById('screenHero');
+        if (screenHero && screenHero.classList.contains('hidden') && gameAudio.bgmStarted && !gameAudio.muted && !prologueVideo.ended) {
+          gameAudio.playBgm();
+        }
+      });
+    }
 
     const hudLevelDisplay = document.getElementById('hudLevelDisplay');
     const hudScore = document.getElementById('hudScore');
@@ -2586,6 +2658,8 @@
     }
 
     function handleNavHome() {
+      const vid = document.getElementById('prologueVideo');
+      if (vid) vid.pause();
       gameAudio.playSfx('click');
       gameAudio.stopBgm();
       setAppBackground('https://lh3.googleusercontent.com/d/1WC77s2bQvxl7PuDJEEe2lmjNtq4pn8Rs');
@@ -2601,6 +2675,8 @@
     }
 
     function handleNavBack() {
+      const vid = document.getElementById('prologueVideo');
+      if (vid) vid.pause();
       gameAudio.playSfx('click');
       if (screenHero && !screenHero.classList.contains('hidden')) return;
 
@@ -2713,7 +2789,12 @@
     };
 
     function goToIdentity() {
+      const vid = document.getElementById('prologueVideo');
+      if (vid) vid.pause();
       gameAudio.playSfx('click');
+      if (gameAudio.bgmStarted && !gameAudio.muted) {
+        gameAudio.playBgm();
+      }
       setAppBackground('https://lh3.googleusercontent.com/d/1rCzLJYSokWvMhekftO26z8bIcfiui6av');
       screenIntro.classList.add('hidden');
       screenIdentity.classList.remove('hidden');
@@ -2954,14 +3035,72 @@
             ? (isReboisasi ? 'bg-teal-700 border-teal-300 text-white shadow-lg shadow-teal-500/30' : 'bg-amber-600 border-amber-300 text-white shadow-lg shadow-amber-500/30')
             : 'bg-slate-800/90 border-slate-600 text-slate-300';
 
+        // Penentuan ikon level kustom: Gerbang 1 menggunakan gambar spesifik sesuai status pengerjaan
+        let nodeIconContent = '';
+        if (!isReboisasi) {
+          // Gerbang 1: Pemadaman
+          if (isCompleted) {
+            // Setelah level selesai dikerjakan
+            nodeIconContent = `
+              <img 
+                src="https://lh3.googleusercontent.com/d/1cqUqtBCULSUxlDbcvhVjwTu6rJvXXnXM" 
+                alt="Level ${idx + 1} Selesai" 
+                class="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110"
+                loading="eager"
+                onerror="this.onerror=null; this.src='https://placehold.co/100x100/059669/ffffff?text=Selesai';"
+              />
+            `;
+          } else {
+            // Sebelum level selesai dikerjakan (aktif ataupun masih terkunci)
+            nodeIconContent = `
+              <div class="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center">
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1lER-zGMYr3VkjGlHriiNi3DDAK_D4a8t" 
+                  alt="Level ${idx + 1}" 
+                  class="w-full h-full object-contain drop-shadow-md ${isActive ? 'animate-pulse' : 'opacity-70 grayscale'} transition-transform duration-300 group-hover:scale-110"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/ea580c/ffffff?text=Pos+${idx + 1}';"
+                />
+                ${!isUnlocked ? '<span class="absolute inset-0 flex items-center justify-center bg-slate-950/40 rounded-full text-white text-base shadow"><i class="fa-solid fa-lock drop-shadow"></i></span>' : ''}
+              </div>
+            `;
+          }
+        } else {
+          // Gerbang 2: Reboisasi
+          if (isCompleted) {
+            // Setelah level selesai dikerjakan
+            nodeIconContent = `
+              <img 
+                src="https://lh3.googleusercontent.com/d/1cqUqtBCULSUxlDbcvhVjwTu6rJvXXnXM" 
+                alt="Level R${idx + 1} Selesai" 
+                class="w-16 h-16 sm:w-20 sm:h-20 object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110"
+                loading="eager"
+                onerror="this.onerror=null; this.src='https://placehold.co/100x100/059669/ffffff?text=Selesai';"
+              />
+            `;
+          } else {
+            // Sebelum level selesai dikerjakan (aktif ataupun masih terkunci)
+            nodeIconContent = `
+              <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden flex items-center justify-center shadow-inner">
+                <img 
+                  src="https://lh3.googleusercontent.com/d/1SLjOF6UXiLEPKkxq4pjIdZIr4yOI6bHR" 
+                  alt="Level R${idx + 1}" 
+                  class="w-full h-full object-cover rounded-full drop-shadow-md ${isActive ? 'animate-pulse' : 'opacity-70 grayscale'} transition-transform duration-300 group-hover:scale-110"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='https://placehold.co/100x100/059669/ffffff?text=Pos+R${idx + 1}';"
+                />
+                ${!isUnlocked ? '<span class="absolute inset-0 flex items-center justify-center bg-slate-950/40 rounded-full text-white text-base shadow"><i class="fa-solid fa-lock drop-shadow"></i></span>' : ''}
+              </div>
+            `;
+          }
+        }
+
         nodeEl.innerHTML = `
-          <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 ${isCompleted ? 'border-emerald-400 bg-emerald-100 shadow-emerald-500/30' : isActive ? 'border-amber-400 bg-amber-50 animate-pulse shadow-amber-500/40' : 'border-slate-400 bg-slate-200 grayscale opacity-75'} shadow-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+          <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 ${isCompleted ? 'border-emerald-400 bg-emerald-100 shadow-emerald-500/30' : isActive ? 'border-amber-400 bg-amber-50 animate-pulse shadow-amber-500/40' : 'border-slate-400 bg-slate-200 grayscale opacity-75'} shadow-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 overflow-visible p-1">
             <span class="absolute -top-3 w-8 h-8 rounded-full ${badgeNumColor} text-white font-game font-black text-sm flex items-center justify-center border-2 border-white shadow-md z-20">
               ${idx + 1}
             </span>
-            <span class="text-3xl sm:text-4xl drop-shadow-md">
-              ${isCompleted ? '🌲' : isActive ? (isReboisasi ? '🌱' : '🔥') : '🔒'}
-            </span>
+            ${nodeIconContent}
             ${isActive ? '<span class="absolute -inset-2 rounded-full border-2 border-amber-400/80 animate-ping pointer-events-none"></span>' : ''}
           </div>
           <div class="mt-2 px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-game font-bold tracking-wide border ${bannerBgColor} whitespace-nowrap shadow-md">
@@ -3064,6 +3203,8 @@
       const level = levelList[index];
       gameState.levelSolved = false;
       gameState.levelAttempts = 0;
+      gameState.hintUsedInLevel = false;
+      gameState.hintPenaltyInLevel = 0;
 
       const pemadamanBackgroundMap = {
         0: 'https://lh3.googleusercontent.com/d/14JHUHuCusZ9t8QHRQjyMtOe0-41k3ExJ',
@@ -3151,6 +3292,7 @@
         canopyTrees: 40
       };
 
+      // Injeksi komponen interaktif sesuai challengeType
       if (level.challengeType === 'ratio_inputs') {
         interactiveArea.innerHTML = `
           <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200 space-y-3">
@@ -3168,7 +3310,7 @@
                 <input type="number" id="inputRatioB" min="1" max="99" placeholder="b" class="w-16 h-12 text-center text-lg font-bold font-mono rounded-xl border-2 border-teal-300 focus:border-teal-600 focus:outline-none bg-white shadow-inner">
               </div>
             </div>
-            <p class="text-[11px] text-slate-500 text-center italic">Bagi angka dengan FPB terbesarnya ($18 \\div 6$ dan $42 \\div 6$)</p>
+            <p class="text-[11px] text-slate-500 text-center italic">Bagi angka dengan FPB terbesarnya</p>
           </div>
         `;
       } else if (level.challengeType === 'water_slider') {
@@ -3178,14 +3320,14 @@
               <span class="font-bold text-cyan-900"><i class="fa-solid fa-sliders text-cyan-600 mr-1"></i> Katup Pompa Air</span>
               <span class="font-mono font-black text-cyan-700 bg-white px-2.5 py-1 rounded-lg border border-cyan-300 text-sm shadow-sm" id="sliderDisplayVal">100 Liter</span>
             </div>
-            <input type="range" id="waterPumpSlider" min="30" max="250" step="10" value="100" class="w-full h-3 bg-cyan-200 rounded-lg appearance-none cursor-pointer accent-cyan-600" oninput="document.getElementById('sliderDisplayVal').innerText = this.value + ' Liter'">
+            <input type="range" id="waterPumpSlider" min="30" max="300" step="10" value="100" class="w-full h-3 bg-cyan-200 rounded-lg appearance-none cursor-pointer accent-cyan-600" oninput="document.getElementById('sliderDisplayVal').innerText = this.value + ' Liter'">
             <div class="flex justify-between text-[10px] text-slate-400 font-mono">
               <span>30 L</span>
-              <span>100 L</span>
-              <span>180 L</span>
-              <span>250 L</span>
+              <span>120 L</span>
+              <span>200 L</span>
+              <span>300 L</span>
             </div>
-            <p class="text-[11px] text-slate-500 text-center italic">Geser tuas hingga pas dengan kebutuhan air untuk memadamkan $45\\text{ m}^2$ lahan!</p>
+            <p class="text-[11px] text-slate-500 text-center italic">Geser tuas hingga pas dengan kebutuhan air!</p>
           </div>
         `;
       } else if (level.challengeType === 'time_stepper') {
@@ -3196,12 +3338,12 @@
             </span>
             <div class="flex items-center justify-center gap-3">
               <button type="button" onclick="adjustStepperVal(-1)" class="w-10 h-10 rounded-xl bg-white hover:bg-amber-100 border border-amber-300 text-amber-800 font-bold text-lg shadow-sm active:scale-95 transition cursor-pointer">-</button>
-              <input type="number" id="stepperTimeInput" value="8" min="1" max="24" class="w-20 h-12 text-center text-xl font-black font-mono rounded-xl border-2 border-amber-400 bg-white focus:outline-none shadow-inner">
+              <input type="number" id="stepperTimeInput" value="6" min="1" max="30" class="w-20 h-12 text-center text-xl font-black font-mono rounded-xl border-2 border-amber-400 bg-white focus:outline-none shadow-inner">
               <button type="button" onclick="adjustStepperVal(1)" class="w-10 h-10 rounded-xl bg-white hover:bg-amber-100 border border-amber-300 text-amber-800 font-bold text-lg shadow-sm active:scale-95 transition cursor-pointer">+</button>
               <span class="text-sm font-bold text-amber-900">Jam</span>
             </div>
             <div class="text-[11px] text-slate-600 bg-white/80 p-2 rounded-xl border border-amber-200">
-              Formula Konstan: $18\\text{ Satwa} \\times \\text{Waktu} = 72\\text{ Jam-Satwa}$
+              Gunakan konsep perkalian beban konstan: $a_1 \\times b_1 = a_2 \\times b_2$
             </div>
           </div>
         `;
@@ -3216,9 +3358,10 @@
               <input type="number" id="inputRealDistance" step="0.5" placeholder="0" class="w-24 h-11 text-center font-mono font-bold text-lg rounded-xl border-2 border-teal-300 focus:border-teal-600 focus:outline-none bg-white shadow-inner">
               <span class="text-sm font-bold text-slate-700 font-mono">km</span>
             </div>
-            <div class="grid grid-cols-3 gap-1.5 pt-1">
-              <button type="button" onclick="document.getElementById('inputRealDistance').value = '1'" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono font-bold cursor-pointer">1 km</button>
+            <div class="grid grid-cols-4 gap-1.5 pt-1">
+              <button type="button" onclick="document.getElementById('inputRealDistance').value = '1.5'" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono font-bold cursor-pointer">1.5 km</button>
               <button type="button" onclick="document.getElementById('inputRealDistance').value = '2'" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono font-bold cursor-pointer">2 km</button>
+              <button type="button" onclick="document.getElementById('inputRealDistance').value = '3'" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono font-bold cursor-pointer">3 km</button>
               <button type="button" onclick="document.getElementById('inputRealDistance').value = '4'" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono font-bold cursor-pointer">4 km</button>
             </div>
           </div>
@@ -3227,17 +3370,17 @@
         interactiveArea.innerHTML = `
           <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200 space-y-3 text-center">
             <span class="text-xs font-bold text-emerald-900 block">
-              <i class="fa-solid fa-scale-balanced text-emerald-600 mr-1"></i> Takar Dosis Biochar Murni (kg)
+              <i class="fa-solid fa-scale-balanced text-emerald-600 mr-1"></i> Takar Dosis Komponen Terpilih (kg)
             </span>
             <div class="flex items-center justify-center gap-3">
               <button type="button" onclick="adjustBiocharVal(-10)" class="px-2.5 py-1.5 rounded-xl bg-white hover:bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold text-xs shadow-sm active:scale-95 transition cursor-pointer">-10 kg</button>
               <div class="flex items-center gap-1 bg-white border-2 border-emerald-400 px-3 py-1.5 rounded-xl shadow-inner">
-                <input type="number" id="inputBiocharWeight" value="30" step="5" min="5" max="120" class="w-16 text-center text-xl font-black font-mono focus:outline-none bg-transparent">
+                <input type="number" id="inputBiocharWeight" value="30" step="5" min="5" max="150" class="w-16 text-center text-xl font-black font-mono focus:outline-none bg-transparent">
                 <span class="text-xs font-bold text-emerald-800">kg</span>
               </div>
               <button type="button" onclick="adjustBiocharVal(10)" class="px-2.5 py-1.5 rounded-xl bg-white hover:bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold text-xs shadow-sm active:scale-95 transition cursor-pointer">+10 kg</button>
             </div>
-            <p class="text-[11px] text-slate-500 italic">Total $10$ bagian $= 120\\text{ kg}$. Hitung massa untuk $5$ bagian Biochar!</p>
+            <p class="text-[11px] text-slate-500 italic">Hitung nilai 1 bagian terlebih dahulu, lalu kalikan dengan rasio komponen yang ditanyakan!</p>
           </div>
         `;
       } else if (level.challengeType === 'r1_seed_bundles') {
@@ -3245,7 +3388,7 @@
           <div class="bg-emerald-50/80 p-4 rounded-2xl border border-emerald-200 space-y-3.5">
             <div>
               <span class="text-xs font-bold text-emerald-900 flex items-center justify-between">
-                <span><i class="fa-solid fa-scissors text-emerald-600 mr-1"></i> Tahap 1: Pilih Pembagi FPB ($48$ dan $72$)</span>
+                <span><i class="fa-solid fa-scissors text-emerald-600 mr-1"></i> Tahap 1: Pilih Pembagi FPB</span>
                 <span id="r1FpbBadge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-white border border-emerald-300 text-slate-500">Belum dipilih</span>
               </span>
               <div class="grid grid-cols-4 gap-2 mt-2">
@@ -3281,12 +3424,12 @@
                 <button type="button" onclick="placeR1Token(2)" class="w-9 h-9 rounded-lg bg-emerald-600 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">2</button>
                 <button type="button" onclick="placeR1Token(3)" class="w-9 h-9 rounded-lg bg-teal-600 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">3</button>
                 <button type="button" onclick="placeR1Token(4)" class="w-9 h-9 rounded-lg bg-slate-600 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">4</button>
-                <button type="button" onclick="placeR1Token(6)" class="w-9 h-9 rounded-lg bg-slate-600 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">6</button>
+                <button type="button" onclick="placeR1Token(5)" class="w-9 h-9 rounded-lg bg-slate-600 text-white font-bold text-sm shadow hover:scale-105 active:scale-95 transition cursor-pointer">5</button>
                 <button type="button" onclick="resetR1Slots()" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-[10px] font-bold text-slate-600 border border-slate-300 ml-1 cursor-pointer">Reset</button>
               </div>
             </div>
             <div id="r1PreviewBox" class="text-center text-[11px] text-slate-500 italic">
-              Pilih FPB terbesar terlebih dahulu, lalu klik keping angka 2 dan 3 untuk mengisi slot rasio.
+              Pilih FPB terbesar terlebih dahulu, lalu klik keping angka untuk mengisi slot rasio.
             </div>
           </div>
         `;
@@ -3326,8 +3469,9 @@
               <span class="text-slate-500 font-medium">Preset Cepat:</span>
               <div class="flex gap-1.5">
                 <button type="button" onclick="setR2Preset(60)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono cursor-pointer">60 L</button>
+                <button type="button" onclick="setR2Preset(80)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono cursor-pointer">80 L</button>
                 <button type="button" onclick="setR2Preset(90)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-100 border border-teal-300 text-teal-800 font-mono font-bold cursor-pointer">90 L</button>
-                <button type="button" onclick="setR2Preset(108)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono cursor-pointer">108 L</button>
+                <button type="button" onclick="setR2Preset(100)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-slate-700 font-mono cursor-pointer">100 L</button>
               </div>
             </div>
           </div>
@@ -3337,7 +3481,7 @@
           <div class="bg-amber-50/80 p-4 rounded-2xl border border-amber-200 space-y-3.5">
             <div class="flex justify-between items-center text-xs">
               <span class="font-bold text-amber-900 flex items-center gap-1.5">
-                <i class="fa-solid fa-scale-balanced text-amber-600"></i> Timbangan Beban Kerja (Konstan $180$)
+                <i class="fa-solid fa-scale-balanced text-amber-600"></i> Timbangan Beban Kerja Berbalik Nilai
               </span>
               <span id="r3BalancePill" class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300">
                 Belum Seimbang
@@ -3348,24 +3492,24 @@
               <div class="flex items-center justify-between px-2 text-xs">
                 <div class="text-center p-2 rounded-lg bg-slate-50 border border-slate-200 w-36">
                   <span class="text-[10px] text-slate-500 font-bold block">Beban Acuan</span>
-                  <span class="font-mono text-emerald-700 font-bold">$10 \\times 18 = 180$</span>
+                  <span id="r3ReferenceWorkloadDisplay" class="font-mono text-emerald-700 font-bold">$10 \\times 18 = 180$</span>
                 </div>
                 <div class="flex flex-col items-center">
                   <div id="r3Needle" class="text-2xl transition-transform duration-300 transform -rotate-45">⚖️</div>
-                  <span id="r3DiffLabel" class="text-[10px] font-mono text-rose-600 font-bold mt-1">-60 Beban</span>
+                  <span id="r3DiffLabel" class="text-[10px] font-mono text-rose-600 font-bold mt-1">Beban Selisih</span>
                 </div>
                 <div class="text-center p-2 rounded-lg bg-amber-50 border border-amber-200 w-36">
-                  <span class="text-[10px] text-amber-800 font-bold block">Regu $15$ Satwa</span>
+                  <span class="text-[10px] text-amber-800 font-bold block">Regu Terkini</span>
                   <span id="r3CurrentWorkload" class="font-mono text-amber-700 font-black">$15 \\times 8 = 120$</span>
                 </div>
               </div>
 
               <div class="space-y-1.5 pt-2 border-t border-slate-100">
                 <div class="flex justify-between items-center text-xs">
-                  <span class="text-slate-600 font-semibold">Durasi Kerja ($15\\text{ Relawan}$):</span>
+                  <span class="text-slate-600 font-semibold">Durasi Kerja:</span>
                   <span id="r3DaysValDisplay" class="font-mono font-bold text-sm text-amber-800 bg-amber-100 px-2 py-0.5 rounded border border-amber-300">8 Hari</span>
                 </div>
-                <input type="range" id="r3DaysSlider" min="4" max="20" step="1" value="8" class="w-full h-3 bg-amber-200 rounded-lg appearance-none cursor-pointer accent-amber-600" oninput="updateR3Schedule(parseInt(this.value))">
+                <input type="range" id="r3DaysSlider" min="4" max="25" step="1" value="8" class="w-full h-3 bg-amber-200 rounded-lg appearance-none cursor-pointer accent-amber-600" oninput="updateR3Schedule(parseInt(this.value))">
               </div>
             </div>
           </div>
@@ -3375,7 +3519,7 @@
           <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3.5">
             <div class="flex justify-between items-center text-xs">
               <span class="font-bold text-slate-800 flex items-center gap-1.5">
-                <i class="fa-solid fa-satellite-dish text-teal-600"></i> Radar GPS Koridor ($1 : 40.000$)
+                <i class="fa-solid fa-satellite-dish text-teal-600"></i> Radar GPS Koridor
               </span>
               <span id="r4ScanStatus" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-200 text-slate-600">
                 Pindai Jarak Sebenarnya
@@ -3384,8 +3528,8 @@
 
             <div class="bg-slate-900 text-white p-3 rounded-xl space-y-1.5 text-xs font-mono shadow-inner">
               <div class="flex items-center justify-between text-slate-300">
-                <span>1. $15\\text{ cm} \\times 40.000$:</span>
-                <span class="text-amber-300 font-bold">$600.000\\text{ cm}$</span>
+                <span>1. Jarak Sebenarnya (cm):</span>
+                <span class="text-amber-300 font-bold">JP $\\times$ Skala</span>
               </div>
               <div class="flex items-center justify-between text-slate-300 border-t border-slate-800 pt-1">
                 <span>2. Ubah ke KM ($\\div 100.000$):</span>
@@ -3396,10 +3540,10 @@
             <div class="space-y-1.5">
               <span class="text-[11px] font-bold text-slate-700 block">Kunci Titik Checkpoint GPS:</span>
               <div class="grid grid-cols-4 gap-2">
-                <button type="button" onclick="selectR4Waypoint(0.6, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">0,6 km</button>
                 <button type="button" onclick="selectR4Waypoint(4, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">4 km</button>
+                <button type="button" onclick="selectR4Waypoint(5, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">5 km</button>
                 <button type="button" onclick="selectR4Waypoint(6, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-100 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">6 km</button>
-                <button type="button" onclick="selectR4Waypoint(60, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">60 km</button>
+                <button type="button" onclick="selectR4Waypoint(8, this)" class="r4-btn py-2 rounded-xl bg-white hover:bg-teal-50 border-2 border-slate-200 text-xs font-mono font-bold text-slate-700 transition cursor-pointer">8 km</button>
               </div>
             </div>
           </div>
@@ -3409,10 +3553,10 @@
           <div class="bg-emerald-50/80 p-4 rounded-2xl border border-emerald-200 space-y-3.5">
             <div class="flex justify-between items-center text-xs">
               <span class="font-bold text-emerald-900 flex items-center gap-1.5">
-                <i class="fa-solid fa-layer-group text-emerald-600"></i> Alokasi 3 Strata ($3 : 4 : 5 = 12\\text{ Bagian}$)
+                <i class="fa-solid fa-layer-group text-emerald-600"></i> Alokasi 3 Strata Kanopi Hutan
               </span>
               <span id="r5CapacityBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-100 text-amber-800 border border-amber-300">
-                Kapasitas: 200/240
+                Kapasitas: Berproses
               </span>
             </div>
 
@@ -3420,7 +3564,7 @@
               <div class="p-2 rounded-lg bg-emerald-50/60 border border-emerald-200 flex flex-col justify-between">
                 <span class="text-[10px] font-bold text-emerald-800">1. Tajuk Tinggi</span>
                 <span class="text-xl my-1">🌲</span>
-                <span class="font-mono text-xs font-bold text-emerald-700">60 Pohon</span>
+                <span id="r5Strata1Count" class="font-mono text-xs font-bold text-emerald-700">60 Pohon</span>
               </div>
               <div class="p-2 rounded-lg bg-teal-50 border-2 border-teal-400 flex flex-col justify-between shadow-sm">
                 <span class="text-[10px] font-bold text-teal-900">2. Buah Sedang</span>
@@ -3430,7 +3574,7 @@
               <div class="p-2 rounded-lg bg-emerald-50/60 border border-emerald-200 flex flex-col justify-between">
                 <span class="text-[10px] font-bold text-emerald-800">3. Semak Bawah</span>
                 <span class="text-xl my-1">🌿</span>
-                <span class="font-mono text-xs font-bold text-emerald-700">100 Pohon</span>
+                <span id="r5Strata3Count" class="font-mono text-xs font-bold text-emerald-700">100 Pohon</span>
               </div>
             </div>
 
@@ -3443,14 +3587,19 @@
                 </div>
               </div>
               <div class="grid grid-cols-4 gap-1.5 pt-1">
+                <button type="button" onclick="setR5Preset(50)" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">50</button>
                 <button type="button" onclick="setR5Preset(60)" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">60</button>
-                <button type="button" onclick="setR5Preset(70)" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">70</button>
+                <button type="button" onclick="setR5Preset(75)" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">75</button>
                 <button type="button" onclick="setR5Preset(80)" class="py-1.5 rounded-lg bg-white hover:bg-teal-100 border-2 border-teal-400 font-bold text-teal-800 text-xs font-mono shadow-sm cursor-pointer">80</button>
-                <button type="button" onclick="setR5Preset(90)" class="py-1.5 rounded-lg bg-white hover:bg-teal-50 border border-slate-200 text-xs font-mono cursor-pointer">90</button>
               </div>
             </div>
           </div>
         `;
+      }
+
+      // Jika dalam MODE TINJAU: Muat jawaban yang telah dipilih murid dan tampilkan solusi lengkap
+      if (gameState.isReviewMode) {
+        setupReviewModeDisplay(level, index);
       }
 
       switchPhase('materi');
@@ -3792,14 +3941,22 @@
         gameAudio.playSfx('water');
         setTimeout(() => gameAudio.playSfx('correct'), 300);
 
-        let rewardPoints = 200;
+        // Catat jawaban murid untuk Mode Tinjau
+        recordUserAnswer(level);
+
+        let baseReward = 200;
         if (gameState.levelAttempts === 1) {
-          rewardPoints = 120;
+          baseReward = 120;
         } else if (gameState.levelAttempts >= 2) {
-          rewardPoints = 60;
+          baseReward = 60;
         }
 
-        if (gameState.levelAttempts === 0) {
+        // Pengurangan penalti petunjuk jika digunakan sehingga nilai tidak mencapai 200 sempurna
+        const penalty = gameState.hintUsedInLevel ? gameState.hintPenaltyInLevel : 0;
+        const rewardPoints = Math.max(20, baseReward - penalty);
+
+        // Lencana sempurna hanya diperoleh jika tanpa petunjuk dan pada percobaan pertama
+        if (gameState.levelAttempts === 0 && !gameState.hintUsedInLevel) {
           gameState.perfectBadges[gameState.currentGate][gameState.currentLevelIndex] = true;
         }
 
@@ -3840,305 +3997,217 @@
       triggerMathRender();
     }
 
-    function openSuccessClaimModal(explainText, rewardPoints) {
-      const modal = document.getElementById('modalSuccessClaim');
-      const explainEl = document.getElementById('successExplainText');
-      const pointsEl = document.getElementById('claimRewardPointsDisplay');
-      const badgeNotify = document.getElementById('perfectBadgeNotify');
+    // Fungsi mencatat pilihan jawaban murid ke dalam memory gameState
+    function recordUserAnswer(level) {
+      const gateKey = gameState.currentGate;
+      const idx = gameState.currentLevelIndex;
+      let userChoiceDesc = "";
 
-      if (explainEl) explainEl.innerHTML = explainText;
-      if (pointsEl) pointsEl.innerText = `+${rewardPoints} Poin`;
-      if (badgeNotify) {
-        if (gameState.levelAttempts === 0) {
-          badgeNotify.classList.remove('hidden');
-        } else {
-          badgeNotify.classList.add('hidden');
-        }
+      if (level.challengeType === 'ratio_inputs') {
+        const valA = document.getElementById('inputRatioA')?.value;
+        const valB = document.getElementById('inputRatioB')?.value;
+        userChoiceDesc = `${valA} : ${valB}`;
+      } else if (level.challengeType === 'water_slider') {
+        userChoiceDesc = `${document.getElementById('waterPumpSlider')?.value} Liter`;
+      } else if (level.challengeType === 'time_stepper') {
+        userChoiceDesc = `${document.getElementById('stepperTimeInput')?.value} Jam`;
+      } else if (level.challengeType === 'scale_converter') {
+        userChoiceDesc = `${document.getElementById('inputRealDistance')?.value} km`;
+      } else if (level.challengeType === 'mix_balancer') {
+        userChoiceDesc = `${document.getElementById('inputBiocharWeight')?.value} kg`;
+      } else if (level.challengeType === 'r1_seed_bundles') {
+        userChoiceDesc = `FPB ${window.r2InteractiveState.fpbFactor} (Rasio ${window.r2InteractiveState.r1SlotA} : ${window.r2InteractiveState.r1SlotB})`;
+      } else if (level.challengeType === 'r2_nutrient_multiplier') {
+        userChoiceDesc = `${window.r2InteractiveState.nutrientLiters} Liter`;
+      } else if (level.challengeType === 'r3_timeline_schedule') {
+        userChoiceDesc = `${window.r2InteractiveState.scheduleDays} Hari`;
+      } else if (level.challengeType === 'r4_corridor_scanner') {
+        userChoiceDesc = `${window.r2InteractiveState.waypointKm} km`;
+      } else if (level.challengeType === 'r5_strata_allocator') {
+        userChoiceDesc = `${window.r2InteractiveState.canopyTrees} Pohon`;
       }
 
-      if (modal) {
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-      }
-      triggerMathRender();
+      gameState.userAnswers[gateKey][idx] = {
+        chosen: userChoiceDesc,
+        explanation: level.quiz.explain
+      };
     }
 
-    function handleClaimRewardAndAdvance() {
-      closeModal('modalSuccessClaim');
-      returnToMapAfterCompletion();
-    }
+    // Konfigurasi tampilan pada MODE TINJAU
+    function setupReviewModeDisplay(level, index) {
+      const gateKey = gameState.currentGate;
+      const answerData = gameState.userAnswers[gateKey] && gameState.userAnswers[gateKey][index];
+      const submitBtn = document.getElementById('submitAnswerBtn');
+      const nextBtn = document.getElementById('nextLevelBtn');
+      const hintBtn = document.getElementById('hintBtn');
 
-    function returnToMapAfterCompletion() {
-      gameAudio.playSfx('levelComplete');
-      const levelList = getCurrentLevelList();
-      
-      // Jika menyelesaikan level terakhir (Pos 5)
-      if (gameState.currentLevelIndex >= levelList.length - 1) {
-        if (gameState.currentGate === 'pemadaman') {
-          gameState.gate1Completed = true;
-          showCustomAlert(
-            "Gerbang Pemadaman Tuntas!",
-            "Seluruh 5 pos bara api telah berhasil dipadamkan. Mikoriza menyadari kekhilafannya dan bertekad memulihkan rimba. Gerbang II: Reboisasi Rimba kini TERBUKA!"
-          );
-          setAppBackground('https://lh3.googleusercontent.com/d/1IISjhOdEVZK9IXTT2b55CvXKjlTiFi36');
+      if (submitBtn) submitBtn.classList.add('hidden');
+      if (hintBtn) hintBtn.classList.add('hidden');
+
+      if (nextBtn) {
+        nextBtn.classList.remove('hidden');
+        nextBtn.innerHTML = '<i class="fa-solid fa-map mr-1.5"></i> Kembali ke Peta Tinjau';
+        nextBtn.onclick = () => {
           screenLevel.classList.add('hidden');
-          screenGates.classList.remove('hidden');
-          renderGatesStatus();
-        } else {
-          gameState.reboisasiCompleted = true;
-          triggerEndingSequence();
-        }
-      } else {
-        // Kembali ke peta perjalanan agar murid dapat memilih pulau pos berikutnya
-        setAppBackground('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');
-        screenLevel.classList.add('hidden');
-        screenMap.classList.remove('hidden');
-        renderJourneyMap();
+          screenMap.classList.remove('hidden');
+          setAppBackground('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');
+          renderJourneyMap();
+        };
       }
-      triggerMathRender();
+
+      const fb = document.getElementById('answerFeedback');
+      if (fb) {
+        fb.classList.remove('hidden');
+        fb.className = "p-3.5 rounded-2xl bg-teal-50 border-2 border-teal-300 text-xs text-teal-950 font-medium space-y-2 shadow-sm";
+        fb.innerHTML = `
+          <div class="flex items-center gap-2 font-bold text-teal-900 border-b border-teal-200 pb-1.5">
+            <i class="fa-solid fa-clipboard-check text-teal-600 text-sm"></i>
+            <span>Mode Tinjau Hasil: Pos ${index + 1}</span>
+          </div>
+          <p><b>Jawaban yang Anda Masukkan:</b> <span class="font-mono bg-white px-2 py-0.5 rounded border border-teal-300 text-teal-800 font-bold">${answerData ? answerData.chosen : 'Sudah Dituntaskan'}</span></p>
+          <div class="bg-white/80 p-2.5 rounded-xl border border-teal-200 leading-relaxed text-slate-700">
+            <b>Pembahasan Matematis:</b><br>${level.quiz.explain}
+          </div>
+        `;
+      }
     }
 
-    function advanceToNextLevel() {
-      returnToMapAfterCompletion();
+    // GENERATOR SOAL DINAMIS: Mengacak angka & perhitungan di setiap level agar murid berlatih nalar
+    function randomizeAllQuestions() {
+      // 1. Level 1: Rasio Busa : Air
+      const fpbVariantsL1 = [
+        { busa: 18, air: 42, fpb: 6, a: 3, b: 7 },
+        { busa: 24, air: 60, fpb: 12, a: 2, b: 5 },
+        { busa: 20, air: 50, fpb: 10, a: 2, b: 5 },
+        { busa: 16, air: 56, fpb: 8, a: 2, b: 7 },
+        { busa: 27, air: 63, fpb: 9, a: 3, b: 7 }
+      ];
+      const pickL1 = fpbVariantsL1[Math.floor(Math.random() * fpbVariantsL1.length)];
+      LEVELS_PEMADAMAN[0].quiz.question = `Tangki semprot memuat $${pickL1.busa}\\text{ liter}$ konsentrat busa berbanding $${pickL1.air}\\text{ liter}$ air bersih. Masukkan bentuk perbandingan paling sederhana ($a : b$) ke dalam tabung racikan!`;
+      LEVELS_PEMADAMAN[0].quiz.dialog = `Aku menuangkan ${pickL1.busa} botol konsentrat dan kamu punya ${pickL1.air} ember air! Bisakah kau sederhanakan dengan membagi FPB?`;
+      LEVELS_PEMADAMAN[0].quiz.correctA = pickL1.a;
+      LEVELS_PEMADAMAN[0].quiz.correctB = pickL1.b;
+      LEVELS_PEMADAMAN[0].quiz.explain = `Tepat Sekali! $\\text{FPB}$ dari $${pickL1.busa}$ dan $${pickL1.air}$ adalah $${pickL1.fpb}$. Maka $(${pickL1.busa} \\div ${pickL1.fpb} = ${pickL1.a})$ dan $(${pickL1.air} \\div ${pickL1.fpb} = ${pickL1.b})$. Bentuk perbandingan paling sederhananya adalah $${pickL1.a} : ${pickL1.b}$!`;
+      LEVELS_PEMADAMAN[0].quiz.context = `
+        <div class="flex justify-around items-center text-center py-2 bg-slate-900 rounded-xl text-white">
+          <div><span class="text-2xl">🧪</span><p class="font-bold text-amber-300 text-xs mt-1">Konsentrat Busa</p><p class="text-xs font-mono font-bold">$${pickL1.busa}\\text{ Liter}$</p></div>
+          <span class="text-2xl font-black text-slate-400">:</span>
+          <div><span class="text-2xl">💧</span><p class="font-bold text-cyan-300 text-xs mt-1">Air Murni</p><p class="text-xs font-mono font-bold">$${pickL1.air}\\text{ Liter}$</p></div>
+        </div>
+      `;
+
+      // 2. Level 2: Perbandingan Senilai Debit Air
+      const senilaiVariantsL2 = [
+        { l1: 15, air1: 60, l2: 45, ans: 180 },
+        { l1: 20, air1: 80, l2: 50, ans: 200 },
+        { l1: 10, air1: 40, l2: 60, ans: 240 },
+        { l1: 12, air1: 48, l2: 36, ans: 144 }
+      ];
+      const pickL2 = senilaiVariantsL2[Math.floor(Math.random() * senilaiVariantsL2.length)];
+      LEVELS_PEMADAMAN[1].quiz.question = `Untuk memadamkan $${pickL2.l1}\\text{ m}^2$ lahan butuh $${pickL2.air1}\\text{ liter}$ air. Geser tuas pengatur pompa ke jumlah liter air yang tepat untuk memadamkan $${pickL2.l2}\\text{ m}^2$ lahan!`;
+      LEVELS_PEMADAMAN[1].quiz.dialog = `Jika $${pickL2.l1}\\text{ m}^2$ lahan terbakar butuh $${pickL2.air1}\\text{ liter}$ air, atur katup untuk memadamkan $${pickL2.l2}\\text{ m}^2$ lahan!`;
+      LEVELS_PEMADAMAN[1].quiz.correctValue = pickL2.ans;
+      LEVELS_PEMADAMAN[1].quiz.explain = `Luar Biasa Benar! Nilai per satuan luas: $1\\text{ m}^2 = \\frac{${pickL2.air1}}{${pickL2.l1}} = ${pickL2.air1 / pickL2.l1}\\text{ liter}$. Maka untuk $${pickL2.l2}\\text{ m}^2$ dibutuhkan $${pickL2.l2} \\times ${pickL2.air1 / pickL2.l1} = ${pickL2.ans}\\text{ Liter}$ air!`;
+
+      // 3. Level 3: Perbandingan Berbalik Nilai Parit Sekat
+      const berbalikVariantsL3 = [
+        { s1: 6, jam1: 12, s2: 18, ans: 4 },
+        { s1: 8, jam1: 15, s2: 20, ans: 6 },
+        { s1: 5, jam1: 24, s2: 15, ans: 8 },
+        { s1: 4, jam1: 18, s2: 12, ans: 6 }
+      ];
+      const pickL3 = berbalikVariantsL3[Math.floor(Math.random() * berbalikVariantsL3.length)];
+      LEVELS_PEMADAMAN[2].quiz.question = `Jika $${pickL3.s1}$ satwa menyelesaikan parit dalam $${pickL3.jam1}\\text{ jam}$, tentukan berapa jam waktu yang dibutuhkan jika dikerjakan bersama oleh $${pickL3.s2}$ satwa!`;
+      LEVELS_PEMADAMAN[2].quiz.dialog = `Jika $${pickL3.s1}$ satwa butuh $${pickL3.jam1}\\text{ jam}$, hitung berapa jam jika Rasamala mengerahkan $${pickL3.s2}$ satwa!`;
+      LEVELS_PEMADAMAN[2].quiz.correctValue = pickL3.ans;
+      LEVELS_PEMADAMAN[2].quiz.explain = `Brilian! Beban kerja konstan: $${pickL3.s1} \\times ${pickL3.jam1} = ${pickL3.s1 * pickL3.jam1}\\text{ jam-satwa}$. Jika dikerjakan $${pickL3.s2}$ satwa, maka waktu $= \\frac{${pickL3.s1 * pickL3.jam1}}{${pickL3.s2}} = ${pickL3.ans}\\text{ jam}$!`;
+
+      // 4. Level 4: Skala Citra Drone
+      const skalaVariantsL4 = [
+        { jp: 8, skala: 25000, ans: 2 },
+        { jp: 6, skala: 50000, ans: 3 },
+        { jp: 10, skala: 40000, ans: 4 },
+        { jp: 5, skala: 30000, ans: 1.5 }
+      ];
+      const pickL4 = skalaVariantsL4[Math.floor(Math.random() * skalaVariantsL4.length)];
+      LEVELS_PEMADAMAN[3].quiz.question = `Pada peta drone berskala $1 : ${pickL4.skala.toLocaleString('id-ID')}$, jarak pangkalan ke pusat api adalah $${pickL4.jp}\\text{ cm}$. Masukkan jarak sebenarnya dalam satuan kilometer ($\\text{km}$)!`;
+      LEVELS_PEMADAMAN[3].quiz.correctValue = pickL4.ans;
+      LEVELS_PEMADAMAN[3].quiz.explain = `Tepat Sekali! $\\text{JS} = ${pickL4.jp} \\times ${pickL4.skala.toLocaleString('id-ID')}\\text{ cm} = ${(pickL4.jp * pickL4.skala).toLocaleString('id-ID')}\\text{ cm}$. Dikonversi ke kilometer: $\\frac{${pickL4.jp * pickL4.skala}}{100.000} = ${pickL4.ans}\\text{ km}$!`;
+
+      // 5. Level 5: Perbandingan Bertingkat Komponen Gambut
+      const bertingkatVariantsL5 = [
+        { rasio: '2 : 3 : 5', total: 120, totalBagian: 10, targetRasio: 5, ans: 60, comp: 'Biochar' },
+        { rasio: '2 : 3 : 5', total: 150, totalBagian: 10, targetRasio: 5, ans: 75, comp: 'Biochar' },
+        { rasio: '1 : 2 : 3', total: 120, totalBagian: 6, targetRasio: 3, ans: 60, comp: 'Biochar' }
+      ];
+      const pickL5 = bertingkatVariantsL5[Math.floor(Math.random() * bertingkatVariantsL5.length)];
+      LEVELS_PEMADAMAN[4].quiz.question = `Total racikan $${pickL5.total}\\text{ kg}$ dengan perbandingan $\\text{Dolomit} : \\text{Lumpur} : \\text{Biochar} = ${pickL5.rasio}$. Atur takaran massa ${pickL5.comp} murni ($\\text{kg}$) pada alat penimbang!`;
+      LEVELS_PEMADAMAN[4].quiz.correctValue = pickL5.ans;
+      LEVELS_PEMADAMAN[4].quiz.explain = `Sempurna! Total bagian $= ${pickL5.totalBagian}$ bagian. Nilai $1$ bagian $= \\frac{${pickL5.total}}{${pickL5.totalBagian}} = ${pickL5.total / pickL5.totalBagian}\\text{ kg}$. Rasio ${pickL5.comp} adalah $${pickL5.targetRasio}$, maka massanya $= ${pickL5.targetRasio} \\times ${pickL5.total / pickL5.totalBagian} = ${pickL5.ans}\\text{ kg}$!`;
     }
 
-    function openWrongRetryModal(explainText, penaltyPoints) {
-      document.getElementById('wrongPenaltyDisplay').innerText = `-${penaltyPoints} Poin`;
-      document.getElementById('wrongLivesDisplay').innerText = `${gameState.lives} / 3 ❤️`;
-      document.getElementById('wrongAttemptCountDisplay').innerText = `Percobaan ke-${gameState.levelAttempts}`;
-      document.getElementById('wrongExplainText').innerHTML = explainText;
-
-      const modal = document.getElementById('modalWrongRetry');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      triggerMathRender();
-    }
-
-    function triggerGameOver() {
-      gameAudio.playSfx('wrong');
-      document.getElementById('gameOverScoreDisplay').innerText = `${gameState.score} Poin`;
-      const modal = document.getElementById('modalGameOver');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function restartFromBeginning() {
+    // Tombol 1: Mulai petualangan baru dari halaman depan dengan variasi soal segar
+    function startNewGameWithDynamicQuestions() {
       gameAudio.playSfx('click');
-      closeModal('modalGameOver');
+      closeModal('modalEnding');
 
+      // Acak variasi soal untuk sesi belajar baru
+      randomizeAllQuestions();
+
+      // Reset state pemain
       gameState.lives = 3;
       gameState.score = 0;
       gameState.vitality = 100;
       gameState.levelAttempts = 0;
+      gameState.isReviewMode = false;
       gameState.currentGate = 'pemadaman';
       gameState.currentLevelIndex = 0;
       gameState.gate1Completed = false;
       gameState.reboisasiCompleted = false;
-      gameState.gateProgress = {
-        pemadaman: 1,
-        reboisasi: 1
-      };
-      gameState.completedLevels = {
-        pemadaman: [false, false, false, false, false],
-        reboisasi: [false, false, false, false, false]
-      };
-      gameState.perfectBadges = {
-        pemadaman: [false, false, false, false, false],
-        reboisasi: [false, false, false, false, false]
-      };
-
-      const nameInput = document.getElementById('playerNameInput');
-      const classInput = document.getElementById('playerClassInput');
-      if (nameInput) nameInput.value = '';
-      if (classInput) classInput.value = '';
+      gameState.gateProgress = { pemadaman: 1, reboisasi: 1 };
+      gameState.completedLevels = { pemadaman: [false, false, false, false, false], reboisasi: [false, false, false, false, false] };
+      gameState.perfectBadges = { pemadaman: [false, false, false, false, false], reboisasi: [false, false, false, false, false] };
+      gameState.userAnswers = { pemadaman: {}, reboisasi: {} };
 
       updateHUD();
       handleNavHome();
+      showCustomAlert(
+        "Petualangan Baru Dimulai!",
+        "Selamat datang kembali! Angka dan studi kasus pada setiap pos tantangan telah diperbarui secara dinamis untuk mengasah daya nalar matematikamu."
+      );
     }
 
-    function toggleHint() {
+    // Tombol 2: Jelajahi Ulang (Review Mode untuk meninjau kembali level & jawaban murid)
+    function startReviewMode() {
       gameAudio.playSfx('click');
-      const levelList = getCurrentLevelList();
-      const level = levelList[gameState.currentLevelIndex];
-      showCustomAlert("Petunjuk Cerdik Rasamala", level.quiz.hint);
+      gameState.isReviewMode = true;
+
+      // Izinkan akses ke semua pos yang telah diselesaikan
+      setAppBackground('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');
+      if (screenEnding) screenEnding.classList.add('hidden');
+      if (screenLevel) screenLevel.classList.add('hidden');
+      if (screenMap) screenMap.classList.remove('hidden');
+
+      const mapTitle = document.getElementById('mapTitle');
+      const mapDesc = document.getElementById('mapDescription');
+      if (mapTitle) mapTitle.innerHTML = 'Mode Tinjau: <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Catatan Perjalanan & Jawaban</span>';
+      if (mapDesc) mapDesc.innerText = 'Ketuk salah satu pos untuk meninjau kembali jawaban yang kamu pilih serta menyimak konsep penyelesaian matematisnya.';
+
+      renderJourneyMap();
       triggerMathRender();
     }
 
-    function triggerEndingSequence() {
-      setAppBackground('https://lh3.googleusercontent.com/d/13r915My8zJwTLZFeSZSmu1-xdAGflG0i');
-      screenLevel.classList.add('hidden');
-      screenMap.classList.add('hidden');
-      screenGates.classList.add('hidden');
-      screenEnding.classList.remove('hidden');
-      document.getElementById('finalScoreDisplay').innerText = `${gameState.score} Poin`;
+    // Pastikan fungsi baru terexport ke lingkup global window
+    window.startNewGameWithDynamicQuestions = startNewGameWithDynamicQuestions;
+    window.startReviewMode = startReviewMode;
+    window.randomizeAllQuestions = randomizeAllQuestions;
 
-      renderPerfectBadges();
-
-      particles.forEach(p => p.reset('leaf'));
-      gameAudio.playSfx('levelComplete');
-      triggerMathRender();
-    }
-
-    const BADGES_META = [
-      { gate: 'pemadaman', idx: 0, title: 'Alkemis Busa', desc: 'Rasio Busa FPB', icon: '🧪' },
-      { gate: 'pemadaman', idx: 1, title: 'Ksatria Debit', desc: 'Proporsi Senilai Air', icon: '💧' },
-      { gate: 'pemadaman', idx: 2, title: 'Arsitek Parit', desc: 'Beban Berbalik Nilai', icon: '⛏️' },
-      { gate: 'pemadaman', idx: 3, title: 'Pandu Satelit', desc: 'Skala Radar Drone', icon: '🧭' },
-      { gate: 'pemadaman', idx: 4, title: 'Penakluk Bara', desc: 'Rasio Bertingkat Gambut', icon: '⚖️' },
-      { gate: 'reboisasi', idx: 0, title: 'Penyemai Tunas', desc: 'Bundel Bibit FPB', icon: '🌱' },
-      { gate: 'reboisasi', idx: 1, title: 'Pakar Nutrisi', desc: 'Senilai Bio-Organik', icon: '🧪' },
-      { gate: 'reboisasi', idx: 2, title: 'Penyelaras Waktu', desc: 'Neraca Tanam Berbalik', icon: '⏳' },
-      { gate: 'reboisasi', idx: 3, title: 'Pelindung Satwa', desc: 'Skala Koridor Hijau', icon: '🗺️' },
-      { gate: 'reboisasi', idx: 4, title: 'Pelindung Klimaks', desc: 'Alokasi 3 Strata Kanopi', icon: '👑' }
-    ];
-
-    function renderPerfectBadges() {
-      const container = document.getElementById('badgesContainer');
-      const counterEl = document.getElementById('perfectBadgeCounter');
-      if (!container) return;
-
-      container.innerHTML = '';
-      let earnedCount = 0;
-
-      BADGES_META.forEach(badge => {
-        const isPerfect = gameState.perfectBadges[badge.gate][badge.idx];
-        if (isPerfect) earnedCount++;
-
-        const card = document.createElement('div');
-        if (isPerfect) {
-          card.className = "p-2.5 rounded-xl border-2 border-amber-400 bg-gradient-to-b from-amber-50 to-yellow-100 flex flex-col items-center text-center shadow-md relative group transition hover:scale-105";
-          card.innerHTML = `
-            <div class="w-10 h-10 rounded-full bg-amber-400 text-slate-900 flex items-center justify-center text-xl shadow-inner mb-1 animate-pulse">
-              ${badge.icon}
-            </div>
-            <span class="font-game text-[11px] font-bold text-amber-950 leading-tight">${badge.title}</span>
-            <span class="text-[9px] text-amber-800 font-medium">${badge.desc}</span>
-            <span class="mt-1 px-1.5 py-0.5 rounded-full bg-emerald-600 text-white text-[8px] font-black tracking-wider uppercase">
-              Sempurna ⭐
-            </span>
-          `;
-        } else {
-          card.className = "p-2.5 rounded-xl border border-slate-200 bg-slate-50 flex flex-col items-center text-center opacity-50 grayscale transition";
-          card.innerHTML = `
-            <div class="w-10 h-10 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center text-xl mb-1">
-              <i class="fa-solid fa-lock text-sm"></i>
-            </div>
-            <span class="font-game text-[11px] font-bold text-slate-500 leading-tight">${badge.title}</span>
-            <span class="text-[9px] text-slate-400">${badge.desc}</span>
-            <span class="mt-1 px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-500 text-[8px] font-bold">
-              Belum Sempurna
-            </span>
-          `;
-        }
-        container.appendChild(card);
-      });
-
-      if (counterEl) {
-        counterEl.innerText = `${earnedCount} / 10 Lencana Sempurna`;
-      }
-    }
-
-    function openLeaderboardModal() {
+    // Helper Modal: Buka dan Tutup dengan Animasi Halus
+    function openModal(modalId) {
       gameAudio.playSfx('click');
-      const container = document.getElementById('leaderboardListContainer');
-      if (!container) return;
-
-      const mockLeaderboard = [
-        { name: "Dewi Lestari", classGrade: "VII-C", score: 2000, char: "🌲", badges: 10 },
-        { name: "Bima Arya", classGrade: "VII-A", score: 1940, char: "🦅", badges: 9 },
-        { name: "Siti Rahma", classGrade: "VII-B", score: 1880, char: "🧭", badges: 8 },
-        { name: "Farhan Malik", classGrade: "VII-E", score: 1760, char: "🐅", badges: 7 },
-      ];
-
-      const currentPlayer = {
-        name: playerProfile.name || "Petualang Rimba",
-        classGrade: playerProfile.classGrade || "Fase D",
-        score: gameState.score,
-        char: "🌲",
-        badges: Object.values(gameState.perfectBadges).flat().filter(Boolean).length,
-        isCurrent: true
-      };
-
-      const combinedList = [...mockLeaderboard, currentPlayer].sort((a, b) => b.score - a.score);
-
-      container.innerHTML = combinedList.map((player, rank) => {
-        const isCurrent = player.isCurrent;
-        const rankMedal = rank === 0 ? '🥇' : rank === 1 ? '🥈' : rank === 2 ? '🥉' : `#${rank + 1}`;
-        const rowStyle = isCurrent 
-          ? 'bg-emerald-50 border-2 border-emerald-500 shadow-md ring-2 ring-emerald-300' 
-          : 'bg-slate-50 border border-slate-200';
-
-        return `
-          <div class="flex items-center justify-between p-3 rounded-2xl ${rowStyle} transition">
-            <div class="flex items-center gap-2.5">
-              <span class="w-7 text-center font-game font-bold text-sm sm:text-base text-slate-700">${rankMedal}</span>
-              <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-lg shadow-xs">
-                ${player.char}
-              </div>
-              <div class="text-left">
-                <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                  ${player.name}
-                  ${isCurrent ? '<span class="text-[9px] bg-emerald-600 text-white px-1.5 py-0.2 rounded-full font-bold">Kamu</span>' : ''}
-                </span>
-                <span class="text-[10px] text-slate-500 font-medium">Kelas: ${player.classGrade} • ${player.badges} Lencana Sempurna</span>
-              </div>
-            </div>
-            <div class="text-right">
-              <span class="font-game font-bold text-xs sm:text-sm text-amber-700 block">${player.score} Poin</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      const modal = document.getElementById('modalLeaderboard');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function openReferensiModal() {
-      gameAudio.playSfx('click');
-      const modal = document.getElementById('modalReferensi');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function showCustomAlert(title, message) {
-      document.getElementById('alertTitle').innerText = title;
-      document.getElementById('alertMessage').innerText = message;
-      const modal = document.getElementById('modalAlert');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      triggerMathRender();
-    }
-
-    function openLearningGoalsModal() {
-      gameAudio.playSfx('click');
-      const modal = document.getElementById('modalCPTP');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      triggerMathRender();
-    }
-
-    function openPetunjukTeknisModal() {
-      gameAudio.playSfx('click');
-      const modal = document.getElementById('modalPetunjukTeknis');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      triggerMathRender();
-    }
-
-    function openRasamalaInfoModal() {
-      gameAudio.playSfx('click');
-      const modal = document.getElementById('modalRasamalaInfo');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      triggerMathRender();
-    }
-
-    function openDeveloperModal() {
-      gameAudio.playSfx('click');
-      const modal = document.getElementById('modalDeveloper');
-      modal.classList.remove('hidden');
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      modal.classList.remove('hidden', 'modal-closing');
       modal.classList.add('flex');
       triggerMathRender();
     }
@@ -4149,91 +4218,314 @@
       if (!modal) return;
       modal.classList.add('modal-closing');
       setTimeout(() => {
-        modal.classList.remove('modal-closing');
+        modal.classList.remove('flex', 'modal-closing');
         modal.classList.add('hidden');
-        modal.classList.remove('flex');
       }, 180);
     }
 
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeModal('modalPetunjukTeknis');
-        closeModal('modalCPTP');
-        closeModal('modalAlert');
-        closeModal('modalDeveloper');
-        closeModal('modalRasamalaInfo');
-        closeModal('modalGameOver');
-        closeModal('modalLeaderboard');
-        closeModal('modalReferensi');
-        closeModal('modalSuccessClaim');
-        closeModal('modalWrongRetry');
-      }
-    });
+    // Modal Peringatan / Notifikasi Edukasi Kustom
+    function showCustomAlert(title, message, iconClass = "fa-triangle-exclamation") {
+      gameAudio.playSfx('wrong');
+      const titleEl = document.getElementById('alertTitle');
+      const msgEl = document.getElementById('alertMessage');
+      const iconEl = document.getElementById('alertIcon');
 
-    // Explicitly expose functions to window to prevent ReferenceErrors in blob/iframe environments
-    window.goToPrologue = goToPrologue;
-    window.handleNavHome = handleNavHome;
-    window.handleNavBack = handleNavBack;
-    window.goToIdentity = goToIdentity;
-    window.backToIntro = backToIntro;
-    window.backToIdentity = backToIdentity;
-    window.selectCharacter = selectCharacter;
-    window.submitIdentityAndGoToGates = submitIdentityAndGoToGates;
-    window.backToHero = backToHero;
-    window.goToGates = goToGates;
-    window.backToPrologue = backToPrologue;
-    window.backToGates = backToGates;
-    window.startGate = startGate;
-    window.selectLevelFromMap = selectLevelFromMap;
-    window.restartGame = restartGame;
-    window.toggleStatsSlider = toggleStatsSlider;
-    window.switchPhase = switchPhase;
-    window.loadLevel = loadLevel;
-    window.selectR1Factor = selectR1Factor;
-    window.placeR1Token = placeR1Token;
-    window.clearR1Slot = clearR1Slot;
-    window.resetR1Slots = resetR1Slots;
-    window.adjustR2Nutrient = adjustR2Nutrient;
-    window.setR2Preset = setR2Preset;
-    window.updateR3Schedule = updateR3Schedule;
-    window.selectR4Waypoint = selectR4Waypoint;
-    window.adjustR5Canopy = adjustR5Canopy;
-    window.setR5Preset = setR5Preset;
-    window.adjustStepperVal = adjustStepperVal;
-    window.adjustBiocharVal = adjustBiocharVal;
-    window.evaluateAnswer = evaluateAnswer;
+      if (titleEl) titleEl.innerText = title;
+      if (msgEl) msgEl.innerHTML = message;
+      if (iconEl) {
+        iconEl.innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
+      }
+      openModal('modalAlert');
+    }
+
+    // Modal Evaluasi Jawaban Keliru & Opsi Ulangi
+    function openWrongRetryModal(explainText, penaltyPoints) {
+      const explainEl = document.getElementById('wrongExplainText');
+      const attemptsEl = document.getElementById('wrongAttemptCountDisplay');
+      const livesEl = document.getElementById('wrongLivesDisplay');
+      const penaltyEl = document.getElementById('wrongPenaltyDisplay');
+
+      if (explainEl) explainEl.innerHTML = explainText;
+      if (attemptsEl) attemptsEl.innerText = `Percobaan ke-${gameState.levelAttempts}`;
+      if (livesEl) livesEl.innerText = `${gameState.lives} / 3 ❤️`;
+      if (penaltyEl) penaltyEl.innerText = `-${penaltyPoints} Poin`;
+
+      openModal('modalWrongRetry');
+    }
+
+    // Modal Hadiah Sukses & Penjelasan Konseptual
+    function openSuccessClaimModal(explainText, rewardPoints) {
+      const titleEl = document.getElementById('successModalTitle');
+      const explainEl = document.getElementById('successExplainText');
+      const rewardPointsEl = document.getElementById('claimRewardPointsDisplay');
+      const badgeNotifyEl = document.getElementById('perfectBadgeNotify');
+
+      if (titleEl) {
+        titleEl.innerText = (gameState.levelAttempts === 0 && !gameState.hintUsedInLevel) 
+          ? "Luar Biasa, Sempurna Sekali!" 
+          : "Hebat, Perhitungan Tepat!";
+      }
+      if (explainEl) explainEl.innerHTML = explainText;
+      if (rewardPointsEl) {
+        if (gameState.hintUsedInLevel) {
+          rewardPointsEl.innerHTML = `+${rewardPoints} Poin <span class="text-xs font-normal text-rose-500 block">(Penalti Petunjuk -${gameState.hintPenaltyInLevel})</span>`;
+        } else {
+          rewardPointsEl.innerText = `+${rewardPoints} Poin`;
+        }
+      }
+
+      if (badgeNotifyEl) {
+        if (gameState.levelAttempts === 0 && !gameState.hintUsedInLevel) {
+          badgeNotifyEl.classList.remove('opacity-40');
+          badgeNotifyEl.innerHTML = `
+            <span class="text-[10px] text-emerald-700 font-bold block uppercase tracking-wider">Bonus Prestasi</span>
+            <span class="text-xs font-bold text-emerald-800 mt-1 block flex items-center justify-center gap-1">
+              <span>⭐ Lencana Sempurna!</span>
+            </span>
+          `;
+        } else if (gameState.hintUsedInLevel) {
+          badgeNotifyEl.classList.add('opacity-70');
+          badgeNotifyEl.innerHTML = `
+            <span class="text-[10px] text-amber-700 font-bold block uppercase tracking-wider">Bantuan Dipakai</span>
+            <span class="text-[11px] font-semibold text-rose-600 mt-1 block">Tanpa Lencana Sempurna</span>
+          `;
+        } else {
+          badgeNotifyEl.classList.add('opacity-40');
+          badgeNotifyEl.innerHTML = `
+            <span class="text-[10px] text-slate-500 font-bold block uppercase tracking-wider">Bonus Prestasi</span>
+            <span class="text-[11px] font-semibold text-slate-600 mt-1 block">Tuntaskan 1x Coba</span>
+          `;
+        }
+      }
+
+      // Animasi visual lapangan
+      const stream = document.getElementById('streamAnimation');
+      const firePct = document.getElementById('firePercentage');
+      const soilBar = document.getElementById('soilHealthBar');
+      if (stream) stream.classList.remove('hidden');
+      if (firePct) {
+        firePct.innerText = gameState.currentGate === 'reboisasi' ? "100% Subur" : "0% Api Padam";
+        firePct.className = "text-emerald-600 font-bold";
+      }
+      if (soilBar) soilBar.style.width = "100%";
+
+      openModal('modalSuccessClaim');
+    }
+
+    // Handler Menutup Modal Sukses & Melanjutkan Langkah Permainan
+    function handleClaimRewardAndAdvance() {
+      closeModal('modalSuccessClaim');
+
+      const isReboisasi = gameState.currentGate === 'reboisasi';
+      const isLastLevelOfGate = gameState.currentLevelIndex === 4;
+
+      if (isLastLevelOfGate) {
+        if (!isReboisasi) {
+          // Gerbang Pemadaman Tuntas -> Buka Gerbang Reboisasi
+          gameState.gate1Completed = true;
+          gameAudio.playSfx('levelComplete');
+          setTimeout(() => {
+            if (screenLevel) screenLevel.classList.add('hidden');
+            if (screenGates) screenGates.classList.remove('hidden');
+            setAppBackground('https://lh3.googleusercontent.com/d/1IISjhOdEVZK9IXTT2b55CvXKjlTiFi36');
+            renderGatesStatus();
+            showCustomAlert(
+              "Gerbang Reboisasi Terbuka!",
+              "Selamat! Seluruh api telah berhasil dipadamkan dan Mikoriza telah tersadar. Sekarang Gerbang Reboisasi Rimba telah terbuka untuk memulihkan hutan!",
+              "fa-seedling"
+            );
+          }, 300);
+        } else {
+          // Gerbang Reboisasi Tuntas -> Buka Layar Akhir (Epilogue)
+          gameState.reboisasiCompleted = true;
+          gameAudio.playSfx('levelComplete');
+          setTimeout(showEndingScreen, 300);
+        }
+      } else {
+        // Pos 1–4 -> Kembali ke Peta Perjalanan agar murid dapat memilih Pos berikutnya secara mandiri
+        setTimeout(() => {
+          if (screenLevel) screenLevel.classList.add('hidden');
+          if (screenMap) screenMap.classList.remove('hidden');
+          setAppBackground('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');
+          renderJourneyMap();
+        }, 200);
+      }
+    }
+
+    function returnToMapAfterCompletion() {
+      if (screenLevel) screenLevel.classList.add('hidden');
+      if (screenMap) screenMap.classList.remove('hidden');
+      setAppBackground('https://lh3.googleusercontent.com/d/1nDHtqE-Qs5G3w3-jwQKKaMz7FUc0vUPS');
+      renderJourneyMap();
+    }
+
+    function triggerGameOver() {
+      gameAudio.playSfx('wrong');
+      const scoreDisplay = document.getElementById('gameOverScoreDisplay');
+      if (scoreDisplay) scoreDisplay.innerText = `${gameState.score} Poin`;
+      openModal('modalGameOver');
+    }
+
+    function restartFromBeginning() {
+      closeModal('modalGameOver');
+      restartGame();
+    }
+
+    // Petunjuk (Hint) dengan Pengurangan Poin
+    function toggleHint() {
+      gameAudio.playSfx('click');
+      gameState.hintUsedInLevel = true;
+      gameState.hintPenaltyInLevel = 50; // Penalti 50 poin saat menjawab benar
+
+      const levelList = getCurrentLevelList();
+      const level = levelList[gameState.currentLevelIndex];
+      const hintMsg = (level && level.quiz && level.quiz.hint) 
+        ? level.quiz.hint 
+        : "Cermati kembali perbandingan senilai/berbalik nilai atau pembagi FPB pada langkah materi!";
+
+      showCustomAlert(
+        "Petunjuk Rasamala (Ada Penalti)",
+        `<div>
+          <p class="leading-relaxed text-slate-700">${hintMsg}</p>
+          <div class="mt-3 p-2.5 rounded-xl bg-amber-50 border border-amber-300 text-[11px] text-amber-950 font-bold flex items-center justify-between shadow-xs">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Konsekuensi Bantuan:</span>
+            <span class="text-rose-600 font-mono font-black text-xs">-50 Poin Saat Benar</span>
+          </div>
+          <p class="text-[10px] text-slate-500 mt-1 italic text-center">*Skor maksimum berkurang menjadi 150 poin dan lencana sempurna dibatalkan.</p>
+        </div>`,
+        "fa-lightbulb"
+      );
+    }
+
+    // Modals Khusus Informasi & Rujukan
+    function openPetunjukTeknisModal() {
+      openModal('modalPetunjukTeknis');
+    }
+
+    function openLearningGoalsModal() {
+      openModal('modalCPTP');
+    }
+
+    function openDeveloperModal() {
+      openModal('modalDeveloper');
+    }
+
+    function openRasamalaInfoModal() {
+      openModal('modalRasamalaInfo');
+    }
+
+    function openReferensiModal() {
+      openModal('modalReferensi');
+    }
+
+    function openLeaderboardModal() {
+      const container = document.getElementById('leaderboardListContainer');
+      if (container) {
+        const charData = CHARACTERS_DATA[playerProfile.character] || CHARACTERS_DATA['rasamala_guardian'];
+        const currentName = playerProfile.name || "Ksatria Rimba";
+        const currentClass = playerProfile.classGrade || "Fase D";
+
+        container.innerHTML = `
+          <div class="p-3 rounded-2xl bg-amber-50 border-2 border-amber-300 flex items-center justify-between shadow-sm">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-amber-500 text-white font-black text-xs flex items-center justify-center">1</span>
+              <div>
+                <p class="font-bold text-slate-800 text-xs sm:text-sm font-game">${currentName} (${currentClass})</p>
+                <p class="text-[10px] text-emerald-700 font-semibold">${charData.name} • ${charData.role}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="font-game font-bold text-amber-600 text-sm sm:text-base">${gameState.score} Poin</span>
+              <span class="block text-[9px] text-slate-500">Peringkat Utama</span>
+            </div>
+          </div>
+          <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-80">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-slate-300 text-slate-700 font-black text-xs flex items-center justify-center">2</span>
+              <div>
+                <p class="font-bold text-slate-800 text-xs">Ahmad Fauzan (VII-C)</p>
+                <p class="text-[10px] text-slate-500">Ranger Elang</p>
+              </div>
+            </div>
+            <span class="font-game font-bold text-slate-700 text-sm">1840 Poin</span>
+          </div>
+          <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between opacity-80">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-slate-300 text-slate-700 font-black text-xs flex items-center justify-center">3</span>
+              <div>
+                <p class="font-bold text-slate-800 text-xs">Siti Nurhaliza (VII-A)</p>
+                <p class="text-[10px] text-slate-500">Peneliti Botani</p>
+              </div>
+            </div>
+            <span class="font-game font-bold text-slate-700 text-sm">1760 Poin</span>
+          </div>
+        `;
+      }
+      openModal('modalLeaderboard');
+    }
+
+    // Layar Akhir Permainan (Epilogue)
+    function showEndingScreen() {
+      if (screenLevel) screenLevel.classList.add('hidden');
+      if (screenMap) screenMap.classList.add('hidden');
+      if (screenEnding) screenEnding.classList.remove('hidden');
+
+      setAppBackground('https://lh3.googleusercontent.com/d/1WC77s2bQvxl7PuDJEEe2lmjNtq4pn8Rs');
+
+      const finalScoreEl = document.getElementById('finalScoreDisplay');
+      if (finalScoreEl) finalScoreEl.innerText = `${gameState.score} Poin`;
+
+      // Render Lencana Sempurna
+      const badgesContainer = document.getElementById('badgesContainer');
+      const badgeCounter = document.getElementById('perfectBadgeCounter');
+
+      const allBadges = [
+        ...gameState.perfectBadges.pemadaman.map((b, i) => ({ gate: 'Pemadaman', pos: i + 1, earned: b, icon: '🔥' })),
+        ...gameState.perfectBadges.reboisasi.map((b, i) => ({ gate: 'Reboisasi', pos: i + 1, earned: b, icon: '🌱' }))
+      ];
+
+      const totalEarned = allBadges.filter(b => b.earned).length;
+      if (badgeCounter) badgeCounter.innerText = `${totalEarned} / 10 Lencana Sempurna`;
+
+      if (badgesContainer) {
+        badgesContainer.innerHTML = '';
+        allBadges.forEach(b => {
+          const badgeDiv = document.createElement('div');
+          badgeDiv.className = `p-2 rounded-xl border text-center transition-all ${
+            b.earned
+              ? 'bg-amber-50 border-amber-300 text-amber-900 shadow-sm'
+              : 'bg-slate-100 border-slate-200 text-slate-400 opacity-60'
+          }`;
+          badgeDiv.innerHTML = `
+            <div class="text-xl mb-0.5">${b.earned ? '⭐' : '⚪'}</div>
+            <p class="text-[10px] font-bold font-game leading-tight">${b.gate} P${b.pos}</p>
+            <span class="text-[8px] font-semibold">${b.earned ? 'Sempurna' : 'Tercapai'}</span>
+          `;
+          badgesContainer.appendChild(badgeDiv);
+        });
+      }
+
+      triggerMathRender();
+    }
+
+    // Binding semua fungsi ke Window agar tidak mengalami ReferenceError di environment iframe
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.showCustomAlert = showCustomAlert;
+    window.openWrongRetryModal = openWrongRetryModal;
     window.openSuccessClaimModal = openSuccessClaimModal;
     window.handleClaimRewardAndAdvance = handleClaimRewardAndAdvance;
     window.returnToMapAfterCompletion = returnToMapAfterCompletion;
-    window.advanceToNextLevel = advanceToNextLevel;
-    window.openWrongRetryModal = openWrongRetryModal;
     window.triggerGameOver = triggerGameOver;
     window.restartFromBeginning = restartFromBeginning;
     window.toggleHint = toggleHint;
-    window.triggerEndingSequence = triggerEndingSequence;
-    window.renderPerfectBadges = renderPerfectBadges;
-    window.openLeaderboardModal = openLeaderboardModal;
-    window.openReferensiModal = openReferensiModal;
-    window.showCustomAlert = showCustomAlert;
-    window.openLearningGoalsModal = openLearningGoalsModal;
     window.openPetunjukTeknisModal = openPetunjukTeknisModal;
-    window.openRasamalaInfoModal = openRasamalaInfoModal;
+    window.openLearningGoalsModal = openLearningGoalsModal;
     window.openDeveloperModal = openDeveloperModal;
-    window.closeModal = closeModal;
-
-    // Attach click listener directly to the play button
-    const playBtn = document.getElementById('btnPlayHero');
-    if (playBtn) {
-      playBtn.addEventListener('click', goToPrologue);
-    }
-
-    if (document.readyState === 'loading') {
-      window.addEventListener('DOMContentLoaded', () => {
-        setTimeout(triggerMathRender, 300);
-      });
-    } else {
-      setTimeout(triggerMathRender, 300);
-    }
+    window.openRasamalaInfoModal = openRasamalaInfoModal;
+    window.openReferensiModal = openReferensiModal;
+    window.openLeaderboardModal = openLeaderboardModal;
+    window.showEndingScreen = showEndingScreen;
   </script>
 </body>
 </html>
