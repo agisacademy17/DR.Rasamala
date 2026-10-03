@@ -1124,6 +1124,10 @@
         </div>
 
         <div class="flex flex-wrap gap-2.5 justify-center items-center w-full">
+          <!-- Tombol Selesai: Mengembalikan pemain ke halaman paling depan -->
+          <button onclick="handleFinishGame()" class="flex-1 sm:flex-initial px-6 py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 via-rose-600 to-red-600 hover:from-rose-600 hover:to-red-700 text-white font-game font-bold text-xs sm:text-sm tracking-wide shadow-lg shadow-rose-500/25 hover:scale-105 active:scale-95 transition cursor-pointer" title="Selesaikan ekspedisi dan kembali ke halaman utama">
+            <i class="fa-solid fa-flag-checkered mr-1.5"></i> Selesai
+          </button>
           <!-- Tombol Mulai Lagi: Mulai dari awal dengan variasi soal baru yang diacak -->
           <button onclick="startNewGameWithDynamicQuestions()" class="flex-1 sm:flex-initial px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-game font-bold text-xs sm:text-sm tracking-wide shadow-lg shadow-emerald-500/25 hover:scale-105 active:scale-95 transition cursor-pointer" title="Mulai petualangan dari halaman depan dengan variasi soal baru">
             <i class="fa-solid fa-arrows-rotate mr-1.5"></i> Mulai Lagi (Tantangan Baru)
@@ -1726,11 +1730,14 @@
 
       <div class="bg-rose-50/80 rounded-2xl p-3.5 border border-rose-200 text-left my-3">
         <span class="text-[11px] font-bold text-rose-900 block mb-1 flex items-center gap-1.5">
-          <i class="fa-solid fa-circle-xmark text-rose-600"></i> Evaluasi Kesalahan:
+          <i class="fa-solid fa-circle-xmark text-rose-600"></i> Petunjuk Perbaikan:
         </span>
-        <div id="wrongExplainText" class="text-xs text-slate-700 leading-relaxed">
+        <div id="wrongExplainText" class="text-xs text-slate-700 leading-relaxed font-medium">
           <!-- Injected by JS -->
         </div>
+        <p class="text-[10px] text-slate-400 italic mt-2 border-t border-rose-200/70 pt-1.5">
+          *Pembahasan lengkap akan ditampilkan setelah kamu berhasil menyelesaikan tantangan dengan tepat.
+        </p>
       </div>
 
       <!-- Info Nyawa & Penalti Poin -->
@@ -3994,7 +4001,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Rasio $${valA} : ${valB}$ belum paling sederhana atau belum tepat. Sederhanakan kedua kuantitas dengan membaginya menggunakan FPB terbesar hingga menghasilkan rasio paling sederhana $${level.quiz.correctA} : ${level.quiz.correctB}$!`;
+          explainText = "Rasio yang dimasukkan belum tepat atau belum dalam bentuk paling sederhana. Carilah faktor FPB terbesar untuk membagi kedua nilai kuantitas tersebut, lalu coba hitung kembali!";
         }
       } else if (level.challengeType === 'water_slider') {
         const val = parseInt(document.getElementById('waterPumpSlider')?.value);
@@ -4002,7 +4009,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Katup diatur pada $${val}\\text{ Liter}$. Berdasarkan perbandingan senilai, kebutuhan pasokan air yang tepat seharusnya adalah $${level.quiz.correctValue}\\text{ Liter}$!`;
+          explainText = "Takaran pasokan air pada katup pompa belum seimbang dengan luas lahan yang terbakar. Ingat prinsip perbandingan senilai: carilah nilai air per satuan luas, lalu sesuaikan kembali tuas pompa!";
         }
       } else if (level.challengeType === 'time_stepper') {
         const val = parseInt(document.getElementById('stepperTimeInput')?.value);
@@ -4010,7 +4017,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Waktu $${val}\\text{ jam}$ belum tepat. Ingat bahwa banyak pekerja dan durasi berbanding terbalik ($a_1 \\times b_1 = a_2 \\times b_2$). Waktu yang tepat adalah $${level.quiz.correctValue}\\text{ jam}$!`;
+          explainText = "Estimasi durasi waktu pengerjaan parit belum tepat. Ingat bahwa semakin banyak satwa relawan yang membantu, waktu penyelesaian akan semakin singkat (berbalik nilai: $a_1 \\times b_1 = a_2 \\times b_2$). Coba hitung kembali!";
         }
       } else if (level.challengeType === 'scale_converter') {
         const val = parseFloat(document.getElementById('inputRealDistance')?.value);
@@ -4022,7 +4029,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Jarak $${val}\\text{ km}$ belum tepat. Berdasarkan perkalian jarak peta dengan skala peta dan dikonversi ke satuan kilometer, jarak sebenarnya yang tepat adalah $${level.quiz.correctValue}\\text{ km}$!`;
+          explainText = "Kalibrasi jarak sebenarnya belum tepat. Kalikan jarak pada citra peta dengan angka skala, kemudian ubah satuan sentimeter ke dalam kilometer ($1\\text{ km} = 100.000\\text{ cm}$)!";
         }
       } else if (level.challengeType === 'mix_balancer') {
         const val = parseInt(document.getElementById('inputBiocharWeight')?.value);
@@ -4030,7 +4037,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Massa Biochar $${val}\\text{ kg}$ belum tepat. Bagilah total massa ramuan dengan total bagian rasio untuk mencari nilai 1 bagian, lalu kalikan dengan angka rasio komponen. Takaran yang tepat adalah $${level.quiz.correctValue}\\text{ kg}$!`;
+          explainText = "Takaran massa komponen ramuan belum tepat. Jumlahkan seluruh angka perbandingan untuk mencari nilai $1$ bagian, lalu kalikan dengan angka rasio komponen yang ditanyakan!";
         }
       } else if (level.challengeType === 'r1_seed_bundles') {
         const fpb = window.r2InteractiveState.fpbFactor;
@@ -4042,7 +4049,7 @@
           return;
         }
         if (fpb !== 24) {
-          explainText = `Pembagi ${fpb} bukan FPB terbesar untuk $48$ dan $72$. FPB terbesarnya adalah $24$!`;
+          explainText = "Faktor pembagi yang dipilih belum merupakan FPB terbesar dari kedua populasi bibit. Silakan teliti faktor persekutuan terbesar lainnya!";
         } else if (slotA === null || slotB === null) {
           showCustomAlert("Tahap 2 Belum Lengkap", "Pasang kedua keping angka rasio ke dalam Slot Rasamala dan Slot Kaliandra!");
           return;
@@ -4050,7 +4057,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Rasio yang kamu pasang adalah $${slotA} : ${slotB}$. Ingat: $48 \\div 24 = 2$ dan $72 \\div 24 = 3$. Gunakan keping angka 2 dan 3!`;
+          explainText = "Keping angka rasio pada slot belum tepat. Bagilah masing-masing jumlah bibit dengan faktor FPB terpilih untuk menentukan angka rasio yang sesuai!";
         }
       } else if (level.challengeType === 'r2_nutrient_multiplier') {
         const vol = window.r2InteractiveState.nutrientLiters;
@@ -4058,7 +4065,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Volume diatur pada $${vol}\\text{ Liter}$. Karena $60\\text{ bibit} = 5 \\times 12\\text{ bibit}$, kebutuhan nutrisi adalah $5 \\times 18 = 90\\text{ Liter}$!`;
+          explainText = "Volume cairan bio-organik belum sebanding dengan pertambahan bibit tunas. Cermati faktor kelipatan penambahan bibit dan kalikan dengan volume awal!";
         }
       } else if (level.challengeType === 'r3_timeline_schedule') {
         const days = window.r2InteractiveState.scheduleDays;
@@ -4066,7 +4073,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Dengan ${days} hari, beban kerja adalah $15 \\times ${days} = ${15 * days}\\text{ hari-satwa}$. Beban acuan adalah $180$. Maka $\\frac{180}{15} = 12\\text{ hari}$!`;
+          explainText = "Durasi hari ekspedisi belum menyeimbangkan timbangan beban. Ingat bahwa pada perbandingan berbalik nilai, hasil kali jumlah relawan dan hari pengerjaan harus konstan!";
         }
       } else if (level.challengeType === 'r4_corridor_scanner') {
         const km = window.r2InteractiveState.waypointKm;
@@ -4078,7 +4085,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Jarak ${km} km belum tepat. Pada skala $1 : 40.000$, $15\\text{ cm} \\times 40.000 = 600.000\\text{ cm} = 6\\text{ km}$!`;
+          explainText = "Titik jarak kilometer pada radar belum tepat. Hitung panjang lintasan denah dikali angka skala, lalu konversikan dari sentimeter ke kilometer!";
         }
       } else if (level.challengeType === 'r5_strata_allocator') {
         const trees = window.r2InteractiveState.canopyTrees;
@@ -4086,7 +4093,7 @@
           isCorrect = true;
           explainText = level.quiz.explain;
         } else {
-          explainText = `Alokasi ${trees} pohon menghasilkan total ${60 + trees + 100} pohon. $1$ bagian $= \\frac{240}{12} = 20\\text{ pohon}$. Maka strata buah sedang ($4$ bagian) $= 4 \\times 20 = 80\\text{ pohon}$!`;
+          explainText = "Alokasi bibit pohon strata tengah belum tepat. Cari terlebih dahulu nilai $1$ bagian dari total populasi pohon target, kemudian kalikan dengan angka rasio strata tengah!";
         }
       }
 
@@ -4452,6 +4459,12 @@
       showEndingScreen();
       updateHUD();
       triggerMathRender();
+    }
+
+    // Fungsi Tombol Selesai: Menutup sesi dan kembali ke halaman paling depan (Hero)
+    function handleFinishGame() {
+      gameAudio.playSfx('click');
+      handleNavHome();
     }
 
     function openModal(modalId) {
@@ -4970,6 +4983,11 @@
       triggerMathRender();
     }
 
+    function handleFinishGame() {
+      gameAudio.playSfx('click');
+      handleNavHome();
+    }
+
     // Binding semua fungsi ke Window agar tidak mengalami ReferenceError di environment iframe
     window.goToPrologue = goToPrologue;
     window.goToIdentity = goToIdentity;
@@ -4984,6 +5002,7 @@
     window.handleNavHome = handleNavHome;
     window.handleNavBack = handleNavBack;
     window.handleNavToEnding = handleNavToEnding;
+    window.handleFinishGame = handleFinishGame;
     window.selectCharacter = selectCharacter;
     window.submitIdentityAndGoToGates = submitIdentityAndGoToGates;
     window.startGate = startGate;
@@ -5025,6 +5044,7 @@
     window.openReferensiModal = openReferensiModal;
     window.openLeaderboardModal = openLeaderboardModal;
     window.showEndingScreen = showEndingScreen;
+    window.handleFinishGame = handleFinishGame;
     window.toggleStatsSlider = toggleStatsSlider;
   </script>
 </body>
